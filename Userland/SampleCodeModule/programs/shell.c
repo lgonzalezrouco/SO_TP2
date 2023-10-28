@@ -1,6 +1,7 @@
 #include <libasm.h>
 #include <man.h>
 #include <shell.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,6 +42,7 @@ static int  div(char *num, char *div);
 static void fontSize(char *size);
 static void printMem(char *pos);
 static int  getCommandIndex(char *command);
+static void printMemInfo();
 
 static Command commands[QTY_COMMANDS];
 
@@ -67,10 +69,13 @@ void init() {
       .g = (void *)&fontSize, SINGLE_PARAM};
   commands[7] = (Command){
       "printmem",
-      "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en formato hexadecimal enviada por parametro",
+      "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en "
+      "formato hexadecimal enviada por parametro",
       .g = (void *)&printMem, SINGLE_PARAM};
   commands[8] = (Command){"clear", "Limpia toda la pantalla",
 			  .f = (void *)&clear, NO_PARAMS};
+  commands[9] = (Command){"meminfo", "Imprime informacion de la memoria",
+			  .f = (void *)&printMemInfo, NO_PARAMS};
 }
 
 void run_shell() {
@@ -171,4 +176,11 @@ static void man(char *command) {
     printf("%s\n", usages[idx]);
   else
     printErr(INVALID_COMMAND);
+}
+
+static void printMemInfo() {
+  memoryInfo *info = getMemoryInfo();
+  printf("Total memory: %d B\n", info->totalMemory);
+  printf("Used memory: %d B\n", info->usedMemory);
+  printf("Free memory: %d B\n", info->freeMemory);
 }

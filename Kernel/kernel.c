@@ -1,5 +1,6 @@
 #include <interrupts.h>
 #include <lib.h>
+#include <memoryManager.h>
 #include <moduleLoader.h>
 #include <stdint.h>
 #include <video.h>
@@ -37,6 +38,7 @@ void initializeKernelBinary() {
 
 int main() {
   load_idt();
+  initializeMemoryManager();
   ((EntryPoint)sampleCodeModuleAddress)();
   while (1)
     _hlt();

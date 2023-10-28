@@ -12,6 +12,9 @@ GLOBAL playSound
 GLOBAL kaboom
 GLOBAL setFontColor
 GLOBAL getFontColor
+GLOBAL malloc
+GLOBAL free
+GLOBAL getMemoryInfo
 
 read:
     mov rax, 0
@@ -76,5 +79,20 @@ setFontColor:
 
 getFontColor:
     mov rax, 12
+    int 80h
+    ret
+
+malloc:
+    mov rax, 13
+    int 80h
+    ret
+
+free:
+    mov rax, 14
+    int 80h
+    ret
+
+getMemoryInfo:
+    mov rax, 15
     int 80h
     ret

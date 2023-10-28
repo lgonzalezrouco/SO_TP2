@@ -99,4 +99,29 @@ void setFontColor(uint8_t r, uint8_t g, uint8_t b);
  * @return Color
  */
 Color getFontColor();
+
+/**
+ * @brief Reserva memoria dinamicamente
+ * @param size: Cantidad de bytes a reservar
+ * @return Puntero a la memoria reservada
+ */
+void *malloc(uint64_t size);
+
+/**
+ * @brief Libera memoria reservada dinamicamente
+ * @param ptr: Puntero a la memoria a liberar
+ */
+void free(void *ptr);
+
+typedef struct memoryInfo {
+  int totalMemory;
+  int usedMemory;
+  int freeMemory;
+} memoryInfo;
+
+/**
+ * @brief Devuelve informacion sobre el estado de la memoria
+ * @return Informacion sobre el estado de la memoria
+ */
+memoryInfo *getMemoryInfo();
 #endif
