@@ -1,43 +1,49 @@
-# ClangFormat Style Config
+﻿---
+BasedOnStyle: Google
 AlignAfterOpenBracket: Align
-AlignOperands: true
-AlignTrailingComments: true
-AllowAllParametersOfDeclarationOnNextLine: true
-AllowShortBlocksOnASingleLine: false
-AllowShortCaseLabelsOnASingleLine: false
-AllowShortFunctionsOnASingleLine: None
-AllowShortIfStatementsOnASingleLine: false
-AllowShortLoopsOnASingleLine: false
+AlignConsecutiveMacros: 'true'
+AlignConsecutiveDeclarations: 'true'
+AlignEscapedNewlines: Right
+AlignOperands: 'true'
+AlignTrailingComments: 'true'
+AllowAllArgumentsOnNextLine: 'false'
+AllowAllConstructorInitializersOnNextLine: 'false'
+AllowAllParametersOfDeclarationOnNextLine: 'false'
+AllowShortBlocksOnASingleLine: 'false'
+AllowShortCaseLabelsOnASingleLine: 'true'
+AllowShortFunctionsOnASingleLine: All
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLambdasOnASingleLine: Inline
+AllowShortLoopsOnASingleLine: 'false'
 AlwaysBreakAfterReturnType: None
-AlwaysBreakBeforeMultilineStrings: false
-BinPackArguments: true
-BinPackParameters: true
+AlwaysBreakBeforeMultilineStrings: 'false'
+AlwaysBreakTemplateDeclarations: 'No'
+BinPackArguments: 'true'
+BinPackParameters: 'true'
+BreakAfterJavaFieldAnnotations: 'true'
 BreakBeforeBinaryOperators: None
-BreakBeforeBraces: Custom
-BraceWrapping:
-    AfterControlStatement: false
-    AfterFunction: false
-    AfterStruct: false
-    BeforeElse: true
-BreakBeforeTernaryOperators: false
-ColumnLimit: 0
-IndentCaseLabels: true
-IndentWidth: 4
-IndentWrappedFunctionNames: false
-KeepEmptyLinesAtTheStartOfBlocks: false
-Language: Cpp
-MaxEmptyLinesToKeep: 1
-PointerAlignment: Right
-ReflowComments: true
-SortIncludes: true
-SpaceAfterCStyleCast: true
-SpaceBeforeAssignmentOperators: true
+BreakBeforeBraces: Attach
+BreakBeforeTernaryOperators: 'false'
+BreakConstructorInitializers: AfterColon
+BreakInheritanceList: AfterColon
+BreakStringLiterals: 'false'
+ConstructorInitializerAllOnOneLineOrOnePerLine: 'false'
+IncludeBlocks: Regroup
+IndentCaseLabels: 'true'
+KeepEmptyLinesAtTheStartOfBlocks: 'false'
+SortIncludes: 'true'
+SortUsingDeclarations: 'true'
+SpaceBeforeCtorInitializerColon: 'true'
+SpaceBeforeInheritanceColon: 'true'
 SpaceBeforeParens: ControlStatements
-SpaceInEmptyParentheses: false
-SpacesBeforeTrailingComments: 1
-SpacesInCStyleCastParentheses: false
-SpacesInContainerLiterals: false
-SpacesInParentheses: false
-SpacesInSquareBrackets: false
-TabWidth: 4
+SpaceBeforeRangeBasedForLoopColon: 'true'
+SpaceInEmptyParentheses: 'false'
+SpacesInAngles: 'false'
+SpacesInCStyleCastParentheses: 'false'
+SpacesInContainerLiterals: 'false'
+SpacesInParentheses: 'false'
+SpacesInSquareBrackets: 'false'
+TabWidth: '8'
 UseTab: Always
+
+...
