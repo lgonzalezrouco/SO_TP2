@@ -1,6 +1,11 @@
-target remote 192.168.1.20:1234
+set disassembly-flavor intel
+set debuginfod enabled off
+
+target remote localhost:1234
 add-symbol-file Kernel/kernel.elf 0x100000
 add-symbol-file Userland/0000-sampleCodeModule.elf 0x400000
+
+set dir Kernel:Userland:Userland/SampleCodeModule
 
 define src-prof
   dashboard -layout source expressions stack variables
@@ -2281,9 +2286,4 @@ set python print-stack full
 
 python Dashboard.start()
 
-# File variables ---------------------------------------------------------------
-
-# vim: filetype=python
-# Local Variables:
-# mode: python
-# End:
+# vim: ft=python

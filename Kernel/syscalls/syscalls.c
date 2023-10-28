@@ -1,11 +1,13 @@
 #include <color.h>
 #include <keyboard.h>
 #include <lib.h>
+#include <memoryManager.h>
 #include <registers.h>
 #include <speaker.h>
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
+
 /* File Descriptors*/
 #define STDIN  0
 #define STDOUT 1
@@ -13,19 +15,19 @@
 #define KBDIN  3
 
 /* IDs de syscalls */
-#define READ		   0
-#define WRITE		   1
-#define CLEAR		   2
-#define SECONDS		   3
+/* #define READ 0
+#define WRITE 1
+#define CLEAR 2
+#define SECONDS 3
 #define GET_REGISTER_ARRAY 4
-#define SET_FONT_SIZE	   5
-#define GET_RESOLUTION	   6
-#define DRAW_RECT	   7
-#define GET_TICKS	   8
-#define GET_MEMORY	   9
-#define PLAY_SOUND	   10
-#define SET_FONT_COLOR	   11
-#define GET_FONT_COLOR	   12
+#define SET_FONT_SIZE 5
+#define GET_RESOLUTION 6
+#define DRAW_RECT 7
+#define GET_TICKS 8
+#define GET_MEMORY 9
+#define PLAY_SOUND 10
+#define SET_FONT_COLOR 11
+#define GET_FONT_COLOR 12 */
 
 static uint8_t	 syscall_read(uint32_t fd);
 static void	 syscall_write(uint32_t fd, char c);
@@ -41,32 +43,58 @@ static void	 syscall_getMemory(uint64_t pos, uint8_t *vec);
 static void	 syscall_playSound(uint64_t frequency, uint64_t ticks);
 static void	 syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b);
 static uint32_t	 syscall_getFontColor();
+static uint64_t	 syscall_malloc(uint64_t size);
+static void	 syscall_free(uint64_t ptr);
+static uint64_t	 syscall_getMemoryInfo();
 
-uint64_t syscallDispatcher(uint64_t nr, uint64_t arg0, uint64_t arg1,
+typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
+				 uint64_t, uint64_t);
+
+static sysFunctions sysfunctions[] = {
+    (sysFunctions)syscall_read,		 (sysFunctions)syscall_write,
+    (sysFunctions)syscall_clear,	 (sysFunctions)syscall_seconds,
+    (sysFunctions)syscall_registerArray, (sysFunctions)syscall_fontSize,
+    (sysFunctions)syscall_resolution,	 (sysFunctions)syscall_drawRect,
+    (sysFunctions)syscall_getTicks,	 (sysFunctions)syscall_getMemory,
+    (sysFunctions)syscall_playSound,	 (sysFunctions)syscall_setFontColor,
+    (sysFunctions)syscall_getFontColor,	 (sysFunctions)syscall_malloc,
+    (sysFunctions)syscall_free,		 (sysFunctions)syscall_getMemoryInfo};
+
+uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,
 			   uint64_t arg5) {
-  switch (nr) {
-    case READ: return syscall_read((uint32_t)arg0);
-    case WRITE: syscall_write((uint32_t)arg0, (char)arg1); break;
-    case CLEAR: syscall_clear(); break;
-    case SECONDS: return syscall_seconds();
-    case GET_REGISTER_ARRAY:
-      return (uint64_t)syscall_registerArray((uint64_t *)arg0);
-    case SET_FONT_SIZE: syscall_fontSize((uint8_t)arg0); break;
-    case GET_RESOLUTION: return syscall_resolution();
-    case DRAW_RECT:
-      syscall_drawRect((uint16_t)arg0, (uint16_t)arg1, (uint16_t)arg2,
-		       (uint16_t)arg3, (uint32_t)arg4);
-      break;
-    case GET_TICKS: return syscall_getTicks();
-    case GET_MEMORY: syscall_getMemory((uint64_t)arg0, (uint8_t *)arg1); break;
-    case PLAY_SOUND: syscall_playSound(arg0, arg1); break;
-    case SET_FONT_COLOR:
-      syscall_setFontColor((uint8_t)arg0, (uint8_t)arg1, (uint8_t)arg2);
-      break;
-    case GET_FONT_COLOR: return syscall_getFontColor();
+  return sysfunctions[id](arg0, arg1, arg2, arg3, arg4, arg5);
+  /* switch (nr) {
+      case READ:
+	  return syscall_read((uint32_t)arg0);
+      case WRITE:
+	  syscall_write((uint32_t)arg0, (char)arg1);
+	  break;
+      case CLEAR:
+	  syscall_clear();
+	  break;
+      case SECONDS:
+	  return syscall_seconds();
+      case GET_REGISTER_ARRAY:
+	  return (uint64_t)syscall_registerArray((uint64_t *)arg0);
+      case SET_FONT_SIZE:
+	  syscall_fontSize((uint8_t)arg0);
+	  break;
+      case GET_RESOLUTION:
+	  return syscall_resolution();
+      case DRAW_RECT:
+	  syscall_drawRect((uint16_t)arg0, (uint16_t)arg1, (uint16_t)arg2,
+  (uint16_t)arg3, (uint32_t)arg4); break; case GET_TICKS: return
+  syscall_getTicks(); case GET_MEMORY: syscall_getMemory((uint64_t)arg0,
+  (uint8_t *)arg1); break; case PLAY_SOUND: syscall_playSound(arg0, arg1);
+	  break;
+      case SET_FONT_COLOR:
+	  syscall_setFontColor((uint8_t)arg0, (uint8_t)arg1, (uint8_t)arg2);
+	  break;
+      case GET_FONT_COLOR:
+	  return syscall_getFontColor();
   }
-  return 0;
+  return 0; */
 }
 
 // Read char
@@ -143,3 +171,9 @@ static uint32_t syscall_getFontColor() {
   ColorInt c = {color: getFontColor()};
   return c.bits;
 }
+
+static uint64_t syscall_malloc(uint64_t size) { return (uint64_t)malloc(size); }
+
+static void syscall_free(uint64_t ptr) { free((void *)ptr); }
+
+static uint64_t syscall_getMemoryInfo() { return (uint64_t)getMemoryInfo(); }
