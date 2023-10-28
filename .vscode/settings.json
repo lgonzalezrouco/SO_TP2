@@ -2,6 +2,7 @@
   "files.associations": {
     "*.html": "html",
     "stdio.h": "c",
-    "syscalls.h": "c"
+    "syscalls.h": "c",
+    "stdint.h": "c"
   }
 }
