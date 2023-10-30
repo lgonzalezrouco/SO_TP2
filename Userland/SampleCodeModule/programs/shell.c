@@ -78,6 +78,7 @@ void init() {
 			  .f = (void *)&printMemInfo, NO_PARAMS};
 }
 
+
 void run_shell() {
   init();
   int index;
