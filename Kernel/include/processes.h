@@ -8,15 +8,17 @@
 
 #define STACK_SIZE 4096
 
-typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
+typedef enum processStatus {
+    RUNNING, BLOCKED, KILLED, READY
+} processStatus;
 
 typedef struct PCB {
-    uint16_t	pid;
-    uint16_t	parentPid;
-    char	       *name;
-    void	       *basePointer;
-    void	       *stackPointer;
-    uint8_t	priority;
+    uint16_t pid;
+    uint16_t parentPid;
+    char *name;
+    void *basePointer;
+    void *stackPointer;
+    uint8_t priority;
     processStatus status;
 } PCB;
 
