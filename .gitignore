@@ -11,3 +11,6 @@
 *.o
 
 docker.sh
+.idea/
+*.elf
+*.xml

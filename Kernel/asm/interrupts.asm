@@ -18,6 +18,7 @@ GLOBAL _ex00Handler
 GLOBAL _ex06Handler
 GLOBAL _ex0DHandler
 GLOBAL _ex0EHandler
+GLOBAL setup_stack
 
 EXTERN irqDispatcher
 EXTERN syscallDispatcher
@@ -126,6 +127,23 @@ picSlaveMask:
     pop     rbp
     retn
 
+setup_stack:
+	mov r8, rsp
+	mov r9, rbp
+	mov rsp, rdx 	; cargo SP del proceso
+	mov rbp, rdx
+	push 0x0		; el SS
+	push rdx
+	push 0x202
+	push 0x8
+	push rdi
+	mov rdi, rsi	; primer argumento del wrapper, RIP
+	mov rsi, rcx	; segundo argumento del wrapper, args
+	pushState
+	mov rax, rsp
+	mov rsp, r8
+	mov rbp, r9
+	ret
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
