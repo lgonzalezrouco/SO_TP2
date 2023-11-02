@@ -79,4 +79,29 @@ void saveRegisters();
  * interrupcion
  */
 void _hlt();
+
+/**
+ * @brief Copia el strinct src en dest
+ *
+ * @param dest: String destino
+ * @param src: String a copiar
+ */
+void strcpy(char *dest, char *src);
+
+/**
+ * @brief Devuelve la longitud de un string
+ *
+ * @param str: String a medir
+ * @return Longitud del string
+ */
+unsigned int strlen(char *str);
+
+/**
+ * @brief Devuelve la longitud de un array de strings
+ *
+ * @param array: Array de strings a medir
+ * @return Longitud del array
+ */
+unsigned int array_strlen(char **array);
+
 #endif

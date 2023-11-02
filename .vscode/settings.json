@@ -3,6 +3,8 @@
     "*.html": "html",
     "stdio.h": "c",
     "syscalls.h": "c",
-    "stdint.h": "c"
+    "stdint.h": "c",
+    "processes.h": "c",
+    "keyboard.h": "c"
   }
 }

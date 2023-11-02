@@ -88,3 +88,27 @@ int strtoi(char *s, char **end) {
   *end = s;
   return num;
 }
+
+void strcpy(char *dest, char *src) {
+  int i = 0;
+  while (src[i] != 0) {
+    dest[i] = src[i];
+    i++;
+  }
+  dest[i] = 0;
+}
+
+unsigned int strlen(char *str) {
+  unsigned int i = 0;
+  while (str[i] != 0) {
+    i++;
+  }
+  return i;
+}
+
+unsigned int array_strlen(char **array) {
+  int len = 0;
+  while (*(array++) != (void *)0)
+    len++;
+  return len;
+}
