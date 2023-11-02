@@ -6,26 +6,24 @@
 
 #define STACK_SIZE 4096
 
-typedef enum processStatus {
-    RUNNING, BLOCKED, KILLED, READY
-} processStatus;
+typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
 
 typedef struct PCB {
-    uint16_t pid;
-    uint16_t parentPid;
-    char *name;
-    void *basePointer;
-    void *stackPointer;
-    uint8_t priority;
-    uint8_t quantum;
-    processStatus status;
+  uint16_t	pid;
+  uint16_t	parentPid;
+  char	       *name;
+  void	       *basePointer;
+  void	       *stackPointer;
+  uint8_t	priority;
+  uint8_t	quantum;
+  processStatus status;
 } PCB;
 
 void processWrapper(int (*func)(int, char **), char **args);
 
-void initializeProcess(PCB *process, uint16_t pid, uint16_t parentPid,
-                       int (*func)(int, char **), char **args, char *name,
-                       uint8_t priority);
+int initializeProcess(PCB *process, uint16_t pid, uint16_t parentPid,
+		      int (*func)(int, char **), char **args, char *name,
+		      uint8_t priority);
 
 /* int createProcess(uint16_t parentPid, int (*func)(int, char **), char **args,
 		  char *name, uint8_t priority); */
