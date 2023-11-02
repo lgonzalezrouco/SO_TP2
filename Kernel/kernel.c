@@ -2,6 +2,8 @@
 #include <lib.h>
 #include <memoryManager.h>
 #include <moduleLoader.h>
+#include <processes.h>
+#include <scheduler.h>
 #include <stdint.h>
 #include <video.h>
 
@@ -14,10 +16,13 @@ extern uint8_t endOfKernel;
 
 static const uint64_t PageSize = 0x1000;
 
+char *idleArgs[] = {"idle", NULL};
+
 static void *const sampleCodeModuleAddress = (void *)0x400000;
 static void *const sampleDataModuleAddress = (void *)0x500000;
 
 typedef int (*EntryPoint)();
+static int idle(int argc, char **argv);
 
 void clearBSS(void *bssAddress, uint64_t bssSize) {
   memset(bssAddress, 0, bssSize);
@@ -37,9 +42,18 @@ void initializeKernelBinary() {
 }
 
 int main() {
-  load_idt();
   initializeMemoryManager();
-  ((EntryPoint)sampleCodeModuleAddress)();
+  initializeScheduler();
+
+  createProcess(&idle, idleArgs, "idle", 0);
+  load_idt();
+
+  return 0;
+}
+
+static int idle(int argc, char **argv) {
+  char *shellArgs[2] = {"shell", NULL};
+  createProcess(sampleCodeModuleAddress, shellArgs, "shell", 4);
   while (1)
     _hlt();
   return 0;

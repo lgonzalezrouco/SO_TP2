@@ -18,8 +18,14 @@ typedef struct PCB {
   processStatus status;
 } PCB;
 
-int createProcess(uint16_t parentPid, int (*func)(int, char **), char **args,
-		  char *name, uint8_t priority);
+void processWrapper(int (*func)(int, char **), char **args);
+
+void initializeProcess(PCB *process, uint16_t pid, uint16_t parentPid,
+		       int (*func)(int, char **), char **args, char *name,
+		       uint8_t priority);
+
+/* int createProcess(uint16_t parentPid, int (*func)(int, char **), char **args,
+		  char *name, uint8_t priority); */
 
 void *setup_stack(void *wrapper, void *rip, void *rsp, void *args);
 

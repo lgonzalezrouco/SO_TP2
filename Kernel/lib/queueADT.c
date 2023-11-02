@@ -10,23 +10,23 @@ typedef Node *TNode;
 typedef struct QueueCDT {
   TNode first;
   TNode last;
-  int	len;
+  int	size;
 } QueueCDT;
 
 QueueADT createQueueADT() {
   QueueADT queue = (QueueADT)malloc(sizeof(QueueCDT));
   if (queue == NULL)
     return NULL;
-  queue->len = 0;
+  queue->size = 0;
   queue->first = NULL;
   queue->last = NULL;
   return queue;
 }
 
-int isEmpty(QueueADT queue) { return queue->len == 0; }
+int isEmpty(QueueADT queue) { return queue->size == 0; }
 
 PCB *dequeue(QueueADT queue) {
-  if (queue == NULL || queue->len == 0)
+  if (queue == NULL || queue->size == 0)
     return NULL;
 
   TNode node = queue->first;
@@ -37,7 +37,7 @@ PCB *dequeue(QueueADT queue) {
     queue->last = NULL;
 
   free(node);
-  queue->len--;
+  queue->size--;
 
   return process;
 }
