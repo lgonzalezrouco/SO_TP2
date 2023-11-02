@@ -1,8 +1,6 @@
 #ifndef _PROCESSES_H_
 #define _PROCESSES_H_
 
-#include <stdio.h>
-
 #include "MemoryManager.h"
 #include "lib.h"
 
