@@ -12,5 +12,4 @@
 
 docker.sh
 .idea/
-*.elf
-*.xml
+.vscode/

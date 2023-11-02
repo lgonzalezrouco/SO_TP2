@@ -1,38 +1,42 @@
 #include <processes.h>
 
 void processWrapper(int (*func)(int, char **), char **args) {
-  size_t len = array_strlen(args);
-  int	 retValue = func(len, args);
-  // killCurrentProcess(retValue);
+    size_t len = array_strlen(args);
+    int retValue = func(len, args);
+    // killCurrentProcess(retValue);
 }
 
 void initializeProcess(PCB *process, uint16_t pid, uint16_t parentPid,
-		       int (*func)(int, char **), char **args, char *name,
-		       uint8_t priority) {
-  process->pid = pid;
-  process->parentPid = parentPid;
+                       int (*func)(int, char **), char **args, char *name,
+                       uint8_t priority) {
+    process->pid = pid;
+    process->parentPid = parentPid;
 
-  process->basePointer = malloc(STACK_SIZE);
-  if (process->basePointer == NULL) {
-    free(process);
-    return -1;
-  }
+    process->basePointer = malloc(STACK_SIZE);
+    if (process->basePointer == NULL) {
+        free(process);
+        return -1;
+    }
 
-  process->name = malloc(strlen(name) + 1);
-  if (process->name == NULL) {
-    free(process->basePointer);
-    free(process);
-    return -1;
-  }
-  strcpy(process->name, name);
+    process->name = malloc(strlen(name) + 1);
+    if (process->name == NULL) {
+        free(process->basePointer);
+        free(process);
+        return -1;
+    }
+    strcpy(process->name, name);
 
-  process->priority = priority;
+    process->priority = priority;
 
-  process->status = READY;
+    process->status = READY;
 
-  void *stackEnd = (void *)((uint64_t)process->basePointer + STACK_SIZE);
+    process->quantum = 1;
 
-  process->stackPointer = setup_stack(&processWrapper, func, stackEnd, args);
+    void *stackEnd = (void *) ((uint64_t) process->basePointer + STACK_SIZE);
+
+    process->stackPointer = setup_stack(&processWrapper, func, stackEnd, args);
+
+
 }
 
 /* int createProcess(uint16_t parentPid, int (*func)(int, char **), char **args,
