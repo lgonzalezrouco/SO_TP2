@@ -2,12 +2,6 @@
 
 static uint16_t nextPid = 1;
 
-static void strcpy(char *dest, char *src);
-
-static unsigned int strlen(char *str);
-
-static unsigned int array_strlen(char **array);
-
 void processWrapper(int (*func)(int, char **), char **args) {
   size_t len = array_strlen(args);
   int	 retValue = func(len, args);

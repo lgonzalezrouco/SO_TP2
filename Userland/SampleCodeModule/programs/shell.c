@@ -53,6 +53,8 @@ static void printMem(char *pos);
 
 static int getCommandIndex(char *command);
 
+static int getPrefixForMemory(int size);
+
 static void printMemInfo();
 
 static Command commands[QTY_COMMANDS];
@@ -185,9 +187,44 @@ static void man(char *command) {
     printErr(INVALID_COMMAND);
 }
 
+static int getPrefixForMemory(int size) {
+  int prefix = 0;
+  while ((size /= 1024) > 0)
+    prefix++;
+  return prefix;
+}
+
 static void printMemInfo() {
   memoryInfo *info = getMemoryInfo();
+
   printf("Total memory: %d B\n", info->totalMemory);
   printf("Used memory: %d B\n", info->usedMemory);
   printf("Free memory: %d B\n", info->freeMemory);
+
+  /* int prefix = getPrefixForMemory(info->totalMemory);
+
+  switch(prefix) {
+    case 0: printf("Total memory: %d B\n", info->totalMemory); break;
+    case 1: printf("Total memory: %d KB\n", info->totalMemory / 1024); break;
+    case 2: printf("Total memory: %d MB\n", info->totalMemory / 1024 / 1024);
+  break; default: printf("ERROR\n"); break;
+  }
+
+  prefix = getPrefixForMemory(info->usedMemory);
+
+  switch(prefix) {
+    case 0: printf("Used memory: %d B\n", info->usedMemory); break;
+    case 1: printf("Used memory: %d KB\n", info->usedMemory / 1024); break;
+    case 2: printf("Used memory: %d MB\n", info->usedMemory / 1024 / 1024);
+  break; default: printf("ERROR\n"); break;
+  }
+
+  prefix = getPrefixForMemory(info->freeMemory);
+
+  switch(prefix) {
+    case 0: printf("Free memory: %d B\n", info->freeMemory); break;
+    case 1: printf("Free memory: %d KB\n", info->freeMemory / 1024); break;
+    case 2: printf("Free memory: %d MB\n", info->freeMemory / 1024 / 1024);
+  break; default: printf("ERROR\n"); break;
+  } */
 }

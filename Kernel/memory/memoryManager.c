@@ -1,6 +1,6 @@
 #include <memoryManager.h>
 
-#define HEAP_SIZE    ((size_t)(2 * 1024))
+#define HEAP_SIZE    ((size_t)(128 * 1024 * 1024))
 #define HEAP_ADDRESS (0x600000)
 
 typedef struct Node  // This is the structure of a free Node
