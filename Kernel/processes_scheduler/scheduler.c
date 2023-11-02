@@ -11,6 +11,21 @@ int	 quantumRemaining = 0;
 QueueADT queues[PRIORITY_LEVELS];
 int	 processesQty = 0;
 
+static PCB *getNextProcess() {
+  PCB *process = NULL;
+  int  nextPid = IDLE_PID;
+
+  for (int i = PRIORITY_LEVELS - 1; i >= 0 && process == NULL; i--) {
+    if (!isEmpty(queues[i]))
+      process = dequeue(queues[i]);
+  }
+
+  if (process != NULL)
+    nextPid = process->pid;
+
+  return processes[nextPid];
+}
+
 void initializeScheduler() {
   for (int i = 0; i < PRIORITY_LEVELS; i++)
     queues[i] = createQueueADT();
