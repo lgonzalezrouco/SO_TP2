@@ -5,13 +5,13 @@
 
 PCB	*processes[MAX_PROCESSES];
 PCB	*currentProcess = NULL;
-int	 quantumRemaining = 0;
+uint16_t quantumRemaining = 0;
 QueueADT queues[PRIORITY_LEVELS];
 int	 processesQty = 0;
 
 static PCB *getNextProcess() {
-  PCB *process = NULL;
-  int  nextPid = IDLE_PID;
+  PCB	  *process = NULL;
+  uint16_t nextPid = IDLE_PID;
 
   for (int i = PRIORITY_LEVELS - 1; i >= 0 && process == NULL; i--) {
     if (!isEmpty(queues[i]))
@@ -31,7 +31,7 @@ void initializeScheduler() {
     processes[i] = NULL;
 }
 
-void includeTerminal(int pid) {
+void includeTerminal(uint16_t pid) {
   currentProcess = getProcess(pid);
   currentProcess->status = RUNNING;
   forceChangeOfProcess(currentProcess->stack->current);
@@ -70,8 +70,9 @@ void *schedule(void *currentSP) {
     if (currentProcess->status == RUNNING)
       currentProcess->status = READY;
 
-    int newPriority = currentProcess->priority > 0 ? currentProcess->priority -
-  1 : currentProcess->priority; setPriority(currentProcess->pid, newPriority);
+    uint16_t newPriority = currentProcess->priority > 0 ?
+  currentProcess->priority -1 : currentProcess->priority;
+    setPriority(currentProcess->pid, newPriority);
     // multiplica el quantum por 2 cada vez que se termina el quantum asignado
     currentProcess->quantum *= 2;
   }
@@ -83,7 +84,7 @@ void *schedule(void *currentSP) {
   return currentProcess->stack->current; */
 }
 
-int setPriority(uint16_t pid, int newPriority) {
+int setPriority(uint16_t pid, uint16_t newPriority) {
   PCB *process = processes[pid];
   if (process == NULL || pid == IDLE_PID)
     return -1;

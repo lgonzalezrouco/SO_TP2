@@ -25,8 +25,8 @@ typedef struct PCB {
   uint16_t	parentPid;
   char	       *name;
   memoryBlock  *stack;
-  uint8_t	priority;
-  uint8_t	quantum;
+  uint16_t	priority;
+  uint16_t	quantum;
   processStatus status;
 } PCB;
 

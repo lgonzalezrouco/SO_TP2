@@ -1,6 +1,7 @@
 #ifndef _SCHEDULER_H_
 #define _SCHEDULER_H_
 
+#include "lib.h"
 #include "queueADT.h"
 #include "types.h"
 
@@ -18,7 +19,7 @@ PCB *getProcess(uint16_t pid);
 
 uint16_t getCurrentPid();
 
-int setPriority(uint16_t pid, int newPriority);
+int setPriority(uint16_t pid, uint16_t newPriority);
 
 void *schedule(void *currentSP);
 
