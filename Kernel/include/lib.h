@@ -2,6 +2,7 @@
 #define _LIB_H
 
 #include <stdint.h>
+#include <types.h>
 
 /**
  * @brief  Escribe 'character' en una direccion de memoria 'length' veces
@@ -103,5 +104,25 @@ unsigned int strlen(char *str);
  * @return Longitud del array
  */
 unsigned int array_strlen(char **array);
+
+/**
+ * @brief Fuerza un timer
+ */
+void forceTimerTick();
+
+/**
+ * @brief Devuelve el valor de la variable 'errno'
+ *
+ * @return Valor de errno
+ */
+uint64_t *setup_stack(uint64_t *stackStart, ProcessCode code, char **args,
+		      void *processWrapper);
+
+/**
+ * @brief Fuerza un cambio de proceso
+ *
+ * @param RSP: Puntero al stack del proceso
+ */
+void forceChangeOfProcess(uint64_t *RSP);
 
 #endif

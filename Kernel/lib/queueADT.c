@@ -61,6 +61,38 @@ void enqueue(QueueADT queue, PCB *process) {
   queue->last = node;
 }
 
+PCB *removeByPid(QueueADT queue, uint16_t pid) {
+  if (queue == NULL || queue->size == 0)
+    return NULL;
+
+  TNode node = queue->first;
+  TNode prev = NULL;
+  PCB  *process = NULL;
+
+  while (node != NULL && node->process->pid != pid) {
+    prev = node;
+    node = node->next;
+  }
+
+  if (node == NULL)
+    return NULL;
+
+  process = node->process;
+
+  if (prev == NULL)
+    queue->first = node->next;
+  else
+    prev->next = node->next;
+
+  if (node == queue->last)
+    queue->last = prev;
+
+  free(node);
+  queue->size--;
+
+  return process;
+}
+
 static void freeRec(TNode node) {
   if (node == NULL)
     return;

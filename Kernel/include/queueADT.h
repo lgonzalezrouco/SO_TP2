@@ -1,8 +1,8 @@
 #ifndef _QUEUE_ADT_H_
 #define _QUEUE_ADT_H_
 
-#include <memoryManager.h>
-#include <processes.h>
+#include "memoryManager.h"
+#include "types.h"
 
 typedef struct QueueCDT *QueueADT;
 
@@ -34,6 +34,15 @@ PCB *dequeue(QueueADT queue);
  * @param process
  */
 void enqueue(QueueADT queue, PCB *process);
+
+/**
+ * @brief Remueve un elemento especifico de la cola por su pid
+ *
+ * @param queue
+ * @param pid
+ * @return PCB*
+ */
+PCB *removeByPid(QueueADT queue, uint16_t pid);
 
 /**
  * @brief Libera la memoria de la cola

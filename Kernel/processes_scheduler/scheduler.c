@@ -3,8 +3,6 @@
 #define MAX_PROCESSES 128
 #define IDLE_PID      0
 
-static uint16_t nextPid = 0;
-
 PCB	*processes[MAX_PROCESSES];
 PCB	*currentProcess = NULL;
 int	 quantumRemaining = 0;
@@ -29,40 +27,51 @@ static PCB *getNextProcess() {
 void initializeScheduler() {
   for (int i = 0; i < PRIORITY_LEVELS; i++)
     queues[i] = createQueueADT();
-  for (int i = 0; i < MAX_PROCESSES; i++)  // todo esto es necesario?
+  for (int i = 0; i < MAX_PROCESSES; i++)
     processes[i] = NULL;
 }
 
-int createProcess(int (*func)(int, char **), char **args, char *name,
-		  uint8_t priority) {
-  if (processesQty >= MAX_PROCESSES)
-    return -1;
-  PCB *process = (PCB *)malloc(sizeof(PCB));
-  if (initializeProcess(process, nextPid,
-			currentProcess == NULL ? 0 : currentProcess->pid, func,
-			args, name, priority) != 0)
-    return -1;
-
-  enqueue(queues[priority], process);
-  processes[nextPid] = process;
-
-  while (processes[nextPid] != NULL)
-    nextPid = (nextPid + 1) % MAX_PROCESSES;
-
-  processesQty++;
-
-  return process->pid;
+void includeTerminal(int pid) {
+  currentProcess = getProcess(pid);
+  currentProcess->status = RUNNING;
+  forceChangeOfProcess(currentProcess->stack->current);
 }
 
+void addProcess(PCB *process) {
+  enqueue(queues[process->priority], process);
+  processesQty++;
+}
+
+PCB *removeProcess(PCB *process) {
+  PCB *removed = removeByPid(queues[process->priority], process->pid);
+  processesQty--;
+  return removed;
+}
+
+PCB *getProcess(uint16_t pid) { return processes[pid]; }
+
+uint16_t getCurrentPid() { return currentProcess->pid; }
+
 void *schedule(void *currentSP) {
-  quantumRemaining--;
-  if (!processesQty || quantumRemaining > 0)
+  return currentSP;
+  /* static int firstTime = 1;
+
+  if (!processesQty || quantumRemaining > 0) {
+    quantumRemaining--;
     return currentSP;
+  }
 
   if (currentProcess != NULL) {
+    if(!firstTime)
+      currentProcess->stack->current = currentSP;
+    else
+      firstTime = 0;
+
     if (currentProcess->status == RUNNING)
       currentProcess->status = READY;
-    setPriority(currentProcess->pid, currentProcess->priority - 1);
+
+    int newPriority = currentProcess->priority > 0 ? currentProcess->priority -
+  1 : currentProcess->priority; setPriority(currentProcess->pid, newPriority);
     // multiplica el quantum por 2 cada vez que se termina el quantum asignado
     currentProcess->quantum *= 2;
   }
@@ -71,7 +80,7 @@ void *schedule(void *currentSP) {
   quantumRemaining = nextProcess->quantum;
   nextProcess->status = RUNNING;
   currentProcess = nextProcess;
-  return currentProcess->stackPointer;
+  return currentProcess->stack->current; */
 }
 
 int setPriority(uint16_t pid, int newPriority) {
