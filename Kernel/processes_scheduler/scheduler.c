@@ -1,7 +1,5 @@
 #include <scheduler.h>
 
-#define IDLE_PID 0
-
 PCB	*processes[MAX_PROCESSES];
 PCB	*currentProcess = NULL;
 uint16_t quantumRemaining = 0;
@@ -24,6 +22,7 @@ static PCB *getNextProcess() {
 }
 
 void initializeScheduler() {
+  resetPIDCounter();
   for (int i = 0; i < PRIORITY_LEVELS; i++)
     queues[i] = createQueueADT();
   for (int i = 0; i < MAX_PROCESSES; i++)

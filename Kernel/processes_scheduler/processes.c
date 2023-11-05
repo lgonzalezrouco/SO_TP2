@@ -6,6 +6,8 @@ static void   freeProcess(PCB *process);
 static char **allocArguments(char **args);
 static void freeProcessInfo(processInfo *info);
 
+void resetPIDCounter() { nextPid = 0; }
+
 void processWrapper(ProcessCode function, char **args) {
   size_t len = array_strlen(args);
   function(len, args);
@@ -64,7 +66,7 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
 int killProcess(uint16_t pid) {
   PCB *process = getProcess(pid);
 
-  if (process == NULL)
+  if (process == NULL || process->pid == IDLE_PID || process->pid == SHELL_PID)
     return -1;
 
   if (getProcess(process->parentPid) == NULL || process->status == ZOMBIE) {

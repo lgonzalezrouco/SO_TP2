@@ -61,6 +61,8 @@ static void ps();
 
 static void testProcesses();
 
+static void kill(char *pid);
+
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *)&help, NO_PARAMS},
     {"man", "Manual de uso de los comandos", .g = (void *)&man, SINGLE_PARAM},
@@ -86,7 +88,8 @@ static Command commands[] = {
     {"ps", "Imprime la lista de todos los procesos con sus propiedades",
      .f = (void *)&ps, NO_PARAMS},
     {"test-proc", "Testea la creación de procesos", .f = (void *)&testProcesses,
-     NO_PARAMS}};
+     NO_PARAMS},
+    {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM}};
 
 void run_shell() {
   int index;
@@ -257,4 +260,9 @@ static void testProcesses() {
   char *helpArgs[] = {"help", NULL};
   int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test",
 			    (uint8_t)6);
+}
+
+static void kill(char *pid) {
+  if(killProcess((uint16_t)atoi(pid)) == -1)
+    printErr("No se pudo matar el proceso\n");
 }

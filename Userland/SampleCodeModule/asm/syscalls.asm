@@ -18,6 +18,7 @@ GLOBAL getMemoryInfo
 GLOBAL getProcessesInfo
 GLOBAL freeProcessesInfo
 GLOBAL createProcess
+GLOBAL killProcess
 
 read:
     mov rax, 0
@@ -112,5 +113,10 @@ freeProcessesInfo:
 
 createProcess:
     mov rax, 18
+    int 80h
+    ret
+
+killProcess:
+    mov rax, 19
     int 80h
     ret

@@ -9,6 +9,8 @@
 
 #define STACK_SIZE 4096
 
+void resetPIDCounter();
+
 void processWrapper(ProcessCode code, char **args);
 
 int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,

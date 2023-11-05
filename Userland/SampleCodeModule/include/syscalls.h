@@ -176,4 +176,12 @@ void freeProcessesInfo(processInfo **infoArray);
 int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
 		  uint8_t priority);
 
+/**
+ * @brief Mata a un proceso
+ * 
+ * @param pid: PID del proceso a matar
+ * @return 0 si se pudo matar, -1 si no
+ */
+int killProcess(uint16_t pid);
+
 #endif
