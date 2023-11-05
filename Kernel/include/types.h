@@ -24,6 +24,7 @@ typedef struct PCB {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
+  char         **argv;
   memoryBlock  *stack;
   uint16_t	priority;
   uint16_t	quantum;

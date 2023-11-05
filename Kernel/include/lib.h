@@ -111,14 +111,6 @@ unsigned int array_strlen(char **array);
 void forceTimerTick();
 
 /**
- * @brief Devuelve el valor de la variable 'errno'
- *
- * @return Valor de errno
- */
-uint64_t *setup_stack(uint64_t *stackStart, ProcessCode code, char **args,
-		      void *processWrapper);
-
-/**
  * @brief Fuerza un cambio de proceso
  *
  * @param RSP: Puntero al stack del proceso

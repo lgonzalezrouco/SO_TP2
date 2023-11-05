@@ -39,11 +39,13 @@ void includeTerminal(uint16_t pid) {
 
 void addProcess(PCB *process) {
   enqueue(queues[process->priority], process);
+  processes[process->pid] = process;
   processesQty++;
 }
 
 PCB *removeProcess(PCB *process) {
   PCB *removed = removeByPid(queues[process->priority], process->pid);
+  processes[process->pid] = NULL;
   processesQty--;
   return removed;
 }
@@ -53,8 +55,7 @@ PCB *getProcess(uint16_t pid) { return processes[pid]; }
 uint16_t getCurrentPid() { return currentProcess->pid; }
 
 void *schedule(void *currentSP) {
-  return currentSP;
-  /* static int firstTime = 1;
+  static int firstTime = 1;
 
   if (!processesQty || quantumRemaining > 0) {
     quantumRemaining--;
@@ -81,7 +82,7 @@ void *schedule(void *currentSP) {
   quantumRemaining = nextProcess->quantum;
   nextProcess->status = RUNNING;
   currentProcess = nextProcess;
-  return currentProcess->stack->current; */
+  return currentProcess->stack->current;
 }
 
 int setPriority(uint16_t pid, uint16_t newPriority) {

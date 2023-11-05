@@ -5,6 +5,7 @@
 #include "lib.h"
 #include "scheduler.h"
 #include "types.h"
+#include "interrupts.h"
 
 #define STACK_SIZE 4096
 

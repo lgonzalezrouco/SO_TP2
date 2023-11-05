@@ -130,33 +130,22 @@ picSlaveMask:
     pop     rbp
     retn
 
-setup_stack:				; RDI EL STACK - RSI CODE - RDX ARGS - R10 WRAPPER
-	mov r8, rsp 			; preservo viejo RSP
-	mov rsp, rdi
-	push 0x0 				; el SS
-	push rdi 				; el RSP
-	push 0x202 				; el RFLAGS
-	push 0x8 ; el CS
-
-	push rcx 				; el RIP ahora es el wrapper.
-
-	push 0x0 				; el RAX
-	push 0x1 				; rbx
-    push 0x2 				; rcx
-    push 0x3 				; rdx
-    push 0x4 				; rbp
-    push rsi 				; RDI->PRIMER ARGUMENTO WRAPPER (code)
-    push rdx 				; RSI->SEGUNDO ARGUMENTO WRAPPER. (args del code)
-    push 0x7 				; r8
-    push 0x8 				; r9
-    push 0x9 				; r10
-    push 0x10 				; r11
-    push 0x11 				; r12
-    push 0x12 				; r13
-    push 0x13 				; r14
-    push 0x14 				; r15
-	mov rax, rsp 			; el RSP
-	mov rsp, r8 			; restauro el RSP
+setup_stack:
+	mov r8, rsp 	; Preservar rsp
+	mov r9, rbp		; Preservar rbp
+	mov rsp, rdx 	; Carga sp del proceso
+	mov rbp, rdx
+	push 0x0
+	push rdx
+	push 0x202
+	push 0x8
+	push rdi
+	mov rdi, rsi 		; Primer argumento de wrapper, RIP
+	mov rsi, rcx		; Segundo argumento, args
+	pushState
+	mov rax, rsp
+	mov rsp, r8
+	mov rbp, r9
 	ret
 
 ;8254 Timer (Timer Tick)
