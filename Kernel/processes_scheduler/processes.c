@@ -72,17 +72,20 @@ int killProcess(uint16_t pid)
 
     if (getProcess(process->parentPid) == NULL || process->status == ZOMBIE)
     {
-        process->status = KILLED;
-        removeProcess(process);
+        setStatus(pid, KILLED);
         freeProcess(process);
     }
     else
-        process->status = ZOMBIE;
+        setStatus(pid, ZOMBIE);
 
     if (process->pid == getCurrentPid())
         forceTimerTick();
 
     return 0;
+}
+
+int killCurrentProcess(){
+    return killProcess(getCurrentPid());
 }
 
 int idle(int argc, char **argv)

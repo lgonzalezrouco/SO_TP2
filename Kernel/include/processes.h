@@ -18,6 +18,8 @@ int killProcess(uint16_t pid);
 
 int idle(int argc, char **argv);
 
+int killCurrentProcess();
+
 processInfo *getProcessInfo(PCB *process);
 
 processInfo **getProcessesInfo();

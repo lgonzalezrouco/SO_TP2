@@ -26,4 +26,6 @@ void *schedule(void *currentSP);
 
 int getProcessesQty();
 
+int setStatus(uint16_t pid, processStatus newStatus);
+
 #endif

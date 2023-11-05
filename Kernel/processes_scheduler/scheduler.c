@@ -111,4 +111,26 @@ int setPriority(uint16_t pid, uint16_t newPriority)
   return newPriority;
 }
 
+int setStatus(uint16_t pid, processStatus newStatus)
+{
+  PCB *process = processes[pid];
+  if (process == NULL || pid == IDLE_PID || process->status == ZOMBIE)
+    return -1;
+
+  if (newStatus > 4 || newStatus < 0)
+    return -1;
+
+  if(process->status == newStatus)
+    return newStatus;
+
+  if(newStatus == KILLED)
+    removeProcess(process);
+  
+  if(newStatus == BLOCKED || newStatus == ZOMBIE) // todo ver bien que hacer con los bloqueados
+    removeByPid(queues[process->priority], process->pid);
+
+  process->status = newStatus;
+  return newStatus;
+}
+
 int getProcessesQty() { return processesQty; }
