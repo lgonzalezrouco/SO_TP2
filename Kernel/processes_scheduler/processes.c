@@ -4,6 +4,7 @@ static uint16_t nextPid = 0;
 
 static void   freeProcess(PCB *process);
 static char **allocArguments(char **args);
+static void freeProcessInfo(processInfo *info);
 
 void processWrapper(ProcessCode function, char **args) {
   size_t len = array_strlen(args);
@@ -143,4 +144,18 @@ processInfo **getProcessesInfo() {
   }
   info[i] = NULL;
   return info;
+}
+
+static void freeProcessInfo(processInfo *info) {
+  free(info->name);
+  free(info);
+}
+
+void freeProcessesInfo(processInfo **infoArray) {
+  int i = 0;
+  while (infoArray[i] != NULL) {
+    freeProcessInfo(infoArray[i]);
+    i++;
+  }
+  free(infoArray);
 }

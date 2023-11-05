@@ -160,6 +160,12 @@ memoryInfo *getMemoryInfo();
 processInfo **getProcessesInfo();
 
 /**
+ * @brief Libera la memoria reservada para la informacion de los procesos
+ * @param infoArray: Informacion de los procesos
+ */
+void freeProcessesInfo(processInfo **infoArray);
+
+/**
  * @brief Crea un proceso
  * @param parentPid: PID del proceso padre
  * @param code: Codigo del proceso

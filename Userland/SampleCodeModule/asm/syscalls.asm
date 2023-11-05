@@ -16,6 +16,7 @@ GLOBAL malloc
 GLOBAL free
 GLOBAL getMemoryInfo
 GLOBAL getProcessesInfo
+GLOBAL freeProcessesInfo
 GLOBAL createProcess
 
 read:
@@ -104,7 +105,12 @@ getProcessesInfo:
     int 80h
     ret
 
-createProcess:
+freeProcessesInfo:
     mov rax, 17
+    int 80h
+    ret
+
+createProcess:
+    mov rax, 18
     int 80h
     ret

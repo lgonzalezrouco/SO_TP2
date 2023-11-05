@@ -250,6 +250,7 @@ static void ps() {
     putchar('\n');
     i++;
   }
+  freeProcessesInfo(info);
 }
 
 static void testProcesses() {

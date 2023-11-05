@@ -24,4 +24,6 @@ processInfo *getProcessInfo(PCB *process);
 
 processInfo **getProcessesInfo();
 
+void freeProcessesInfo(processInfo **infoArray);
+
 #endif
