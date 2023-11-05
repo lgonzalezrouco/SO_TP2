@@ -58,6 +58,8 @@ static void printMemInfo();
 
 static void ps();
 
+static void testProcesses();
+
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *)&help, NO_PARAMS},
     {"man", "Manual de uso de los comandos", .g = (void *)&man, SINGLE_PARAM},
@@ -75,6 +77,7 @@ static Command commands[] = {
     {"clear", "Limpia toda la pantalla", .f = (void *)&clear, NO_PARAMS},
     {"meminfo", "Imprime informacion de la memoria", .f = (void *)&printMemInfo, NO_PARAMS},
     {"ps", "Imprime la lista de todos los procesos con sus propiedades", .f = (void * )&ps, NO_PARAMS},
+    {"test-proc", "Testea la creación de procesos", .f = (void *)&testProcesses, NO_PARAMS}
 };
 
 void run_shell() {
@@ -221,7 +224,7 @@ static void ps() {
     int i = 0;
 
     // Encabezados de la tabla
-    printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tCURRENT STACK\t\t\tSTACK SIZE\t\t\tNAME\n");
+    printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
 
     while (info[i] != NULL) {
         printf("%d\t\t\t\t\t", info[i]->pid);
@@ -244,11 +247,16 @@ static void ps() {
                 printf("UNKNOWN\t\t");
                 break;
         }
-        printf("0x%x\t\t\t\t\t", info[i]->stack->base);
-        printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
-        printf("%d\t\t\t\t\t\t\t\t\t", info[i]->stack->size);
+        printf("0x%x\t\t\t\t\t", info[i]->base);
+        printf("0x%x\t\t\t\t\t\t\t\t", info[i]->current);
         printf("%s", info[i]->name);
         putchar('\n');
         i++;
     }
 }
+
+static void testProcesses(){
+    char *helpArgs[] = {"help", NULL};
+    int pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test", (uint8_t)6);
+}
+

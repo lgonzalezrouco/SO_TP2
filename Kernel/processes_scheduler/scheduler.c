@@ -120,13 +120,13 @@ int setStatus(uint16_t pid, processStatus newStatus)
   if (newStatus > 4 || newStatus < 0)
     return -1;
 
-  if(process->status == newStatus)
+  if (process->status == newStatus)
     return newStatus;
 
-  if(newStatus == KILLED)
+  if (newStatus == KILLED)
     removeProcess(process);
-  
-  if(newStatus == BLOCKED || newStatus == ZOMBIE) // todo ver bien que hacer con los bloqueados
+
+  if (newStatus == BLOCKED || newStatus == ZOMBIE) // todo ver bien que hacer con los bloqueados
     removeByPid(queues[process->priority], process->pid);
 
   process->status = newStatus;

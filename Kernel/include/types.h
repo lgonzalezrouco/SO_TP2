@@ -35,7 +35,8 @@ typedef struct processInfo {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
-  memoryBlock  *stack;
+  uint64_t *base;
+  uint64_t *current;
   uint16_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND

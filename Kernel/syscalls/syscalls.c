@@ -49,6 +49,7 @@ static void	 syscall_free(uint64_t ptr);
 static uint64_t	 syscall_getMemoryInfo();
 //static processInfo * syscall_getProcessInfo();
 static processInfo ** syscall_getProcessesInfo();
+static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
@@ -62,7 +63,7 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions)syscall_playSound,	 (sysFunctions)syscall_setFontColor,
     (sysFunctions)syscall_getFontColor,	 (sysFunctions)syscall_malloc,
     (sysFunctions)syscall_free,		 (sysFunctions)syscall_getMemoryInfo,
-    (sysFunctions)syscall_getProcessesInfo};
+    (sysFunctions)syscall_getProcessesInfo, (sysFunctions)syscall_createProcess};
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,
@@ -185,3 +186,7 @@ static uint64_t syscall_getMemoryInfo() { return (uint64_t)getMemoryInfo(); }
 //static processInfo * syscall_getProcessInfo() { return (processInfo *)getProcessInfo(); }
 
 static processInfo ** syscall_getProcessesInfo() { return (processInfo **)getProcessesInfo(); }
+
+static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority) { 
+  return (uint64_t) createProcess(parentPid, code, args, name, priority); 
+}

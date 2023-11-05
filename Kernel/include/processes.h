@@ -11,8 +11,7 @@
 
 void processWrapper(ProcessCode code, char **args);
 
-int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
-		  uint8_t priority);
+int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority);
 
 int killProcess(uint16_t pid);
 

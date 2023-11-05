@@ -63,8 +63,7 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
     return process->pid;
 }
 
-int killProcess(uint16_t pid)
-{
+int killProcess(uint16_t pid) {
     PCB *process = getProcess(pid);
 
     if (process == NULL)
@@ -84,7 +83,8 @@ int killProcess(uint16_t pid)
     return 0;
 }
 
-int killCurrentProcess(){
+int killCurrentProcess()
+{
     return killProcess(getCurrentPid());
 }
 
@@ -128,14 +128,19 @@ static char **allocArguments(char **args)
 processInfo *getProcessInfo(PCB *process)
 {
     processInfo *info = malloc(sizeof(processInfo));
+    if(info == NULL)
+        return NULL;
     info->pid = process->pid;
     info->parentPid = process->parentPid;
     info->name = malloc(strlen(process->name) + 1);
+    if(info->name == NULL)
+    {
+        free(info);
+        return NULL;
+    }
     strcpy(info->name, process->name);
-    info->stack = malloc(sizeof(memoryBlock));
-    info->stack->base = process->stack->base;
-    info->stack->current = process->stack->current;
-    info->stack->size = process->stack->size;
+    info->base = process->stack->base;
+    info->current = process->stack->current;
     info->priority = process->priority;
     info->status = process->status;
     return info;

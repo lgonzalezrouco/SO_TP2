@@ -140,7 +140,8 @@ typedef struct processInfo {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
-  memoryBlock  *stack;
+  uint64_t *base;
+  uint64_t *current;
   uint16_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND
@@ -157,4 +158,15 @@ memoryInfo *getMemoryInfo();
  * @return Informacion sobre los procesos
  */
 processInfo **getProcessesInfo();
+
+/**
+ * @brief Crea un proceso
+ * @param parentPid: PID del proceso padre
+ * @param code: Codigo del proceso
+ * @param args: Argumentos del proceso
+ * @param name: Nombre del proceso
+ * @param priority: Prioridad del proceso
+ */
+int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority);
+
 #endif
