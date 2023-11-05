@@ -24,7 +24,7 @@ typedef struct PCB {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
-  char         **argv;
+  char	      **argv;
   memoryBlock  *stack;
   uint16_t	priority;
   uint16_t	quantum;
@@ -35,8 +35,8 @@ typedef struct processInfo {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
-  uint64_t *base;
-  uint64_t *current;
+  uint64_t     *base;
+  uint64_t     *current;
   uint16_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND

@@ -48,9 +48,9 @@ int main() {
   initializeScheduler();
 
   createProcess(0, (ProcessCode)&idle, idleArgs, "idle", 0);
-  int shPid = createProcess(0, (ProcessCode)sampleCodeModuleAddress, shellArgs,
+  int shellPid = createProcess(0, (ProcessCode)sampleCodeModuleAddress, shellArgs,
 			    "shell", PRIORITY_LEVELS - 1);
 
-  includeTerminal(shPid);
+  startShell(shellPid);
   return 0;
 }

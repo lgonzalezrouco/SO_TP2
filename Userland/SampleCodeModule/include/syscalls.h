@@ -2,8 +2,8 @@
 #define _SYSCALLS_H
 
 #include <color.h>
-#include <stdint.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /**
  * @brief Escribe a partir del descriptor recibido un caracter
@@ -140,8 +140,8 @@ typedef struct processInfo {
   uint16_t	pid;
   uint16_t	parentPid;
   char	       *name;
-  uint64_t *base;
-  uint64_t *current;
+  uint64_t     *base;
+  uint64_t     *current;
   uint16_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND
@@ -167,6 +167,7 @@ processInfo **getProcessesInfo();
  * @param name: Nombre del proceso
  * @param priority: Prioridad del proceso
  */
-int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority);
+int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
+		  uint8_t priority);
 
 #endif

@@ -4,7 +4,7 @@
 #include "test_util.h"
 
 typedef struct P_rq {
-  int32_t    pid;
+  int32_t	     pid;
   enum processStatus state;
 } p_rq;
 
