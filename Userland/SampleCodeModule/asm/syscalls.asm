@@ -15,6 +15,7 @@ GLOBAL getFontColor
 GLOBAL malloc
 GLOBAL free
 GLOBAL getMemoryInfo
+GLOBAL getProcessesInfo
 
 read:
     mov rax, 0
@@ -94,5 +95,10 @@ free:
 
 getMemoryInfo:
     mov rax, 15
+    int 80h
+    ret
+
+getProcessesInfo:
+    mov rax, 16
     int 80h
     ret

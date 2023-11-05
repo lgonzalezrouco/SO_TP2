@@ -7,6 +7,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
+#include <processes.h>
 
 /* File Descriptors*/
 #define STDIN  0
@@ -46,6 +47,8 @@ static uint32_t	 syscall_getFontColor();
 static uint64_t	 syscall_malloc(uint64_t size);
 static void	 syscall_free(uint64_t ptr);
 static uint64_t	 syscall_getMemoryInfo();
+//static processInfo * syscall_getProcessInfo();
+static processInfo ** syscall_getProcessesInfo();
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
@@ -58,7 +61,8 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions)syscall_getTicks,	 (sysFunctions)syscall_getMemory,
     (sysFunctions)syscall_playSound,	 (sysFunctions)syscall_setFontColor,
     (sysFunctions)syscall_getFontColor,	 (sysFunctions)syscall_malloc,
-    (sysFunctions)syscall_free,		 (sysFunctions)syscall_getMemoryInfo};
+    (sysFunctions)syscall_free,		 (sysFunctions)syscall_getMemoryInfo,
+    (sysFunctions)syscall_getProcessesInfo};
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,
@@ -177,3 +181,7 @@ static uint64_t syscall_malloc(uint64_t size) { return (uint64_t)malloc(size); }
 static void syscall_free(uint64_t ptr) { free((void *)ptr); }
 
 static uint64_t syscall_getMemoryInfo() { return (uint64_t)getMemoryInfo(); }
+
+//static processInfo * syscall_getProcessInfo() { return (processInfo *)getProcessInfo(); }
+
+static processInfo ** syscall_getProcessesInfo() { return (processInfo **)getProcessesInfo(); }

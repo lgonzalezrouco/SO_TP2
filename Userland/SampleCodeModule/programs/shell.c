@@ -56,6 +56,8 @@ static int getPrefixForMemory(int size);
 
 static void printMemInfo();
 
+static void ps();
+
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *)&help, NO_PARAMS},
     {"man", "Manual de uso de los comandos", .g = (void *)&man, SINGLE_PARAM},
@@ -72,6 +74,7 @@ static Command commands[] = {
      .g = (void *)&printMem, SINGLE_PARAM},
     {"clear", "Limpia toda la pantalla", .f = (void *)&clear, NO_PARAMS},
     {"meminfo", "Imprime informacion de la memoria", .f = (void *)&printMemInfo, NO_PARAMS},
+    {"ps", "Imprime la lista de todos los procesos con sus propiedades", .f = (void * )&ps, NO_PARAMS},
 };
 
 void run_shell() {
@@ -211,4 +214,41 @@ static void printMemInfo() {
       case 2: printf("Free memory: %d MB\n", info->freeMemory / 1024 / 1024);
     break; default: printf("ERROR\n"); break;
     } */
+}
+
+static void ps() {
+    processInfo **info = getProcessesInfo();
+    int i = 0;
+
+    // Encabezados de la tabla
+    printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tCURRENT STACK\t\t\tSTACK SIZE\t\t\tNAME\n");
+
+    while (info[i] != NULL) {
+        printf("%d\t\t\t\t\t", info[i]->pid);
+        printf("%d\t\t\t\t\t\t\t\t\t\t\t\t", info[i]->parentPid);
+        printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
+        switch (info[i]->status) {
+            case 0:
+                printf("RUNNING\t\t");
+                break;
+            case 1:
+                printf("BLOCKED\t\t");
+                break;
+            case 3:
+                printf("READY\t\t\t\t");
+                break;
+            case 4:
+                printf("ZOMBIE\t\t\t");
+                break;
+            default:
+                printf("UNKNOWN\t\t");
+                break;
+        }
+        printf("0x%x\t\t\t\t\t", info[i]->stack->base);
+        printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
+        printf("%d\t\t\t\t\t\t\t\t\t", info[i]->stack->size);
+        printf("%s", info[i]->name);
+        putchar('\n');
+        i++;
+    }
 }
