@@ -57,7 +57,7 @@ TNode addNodeAtLast(LinkedListADT list, TNode node);
  * @param node
  * @return La data del nodo eliminado
  */
-void *removeNode(LinkedListADT list, TNode node);
+void *removeNode(LinkedListADT list, PCB * process);
 
 /**
  * @param list
