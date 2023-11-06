@@ -87,18 +87,22 @@ TNode addProcessAtLast(LinkedListADT list, PCB *process) {
   return addNodeAtLast(list, newNode);
 }
 
-void *removeNode(LinkedListADT list, TNode node) {
-  if (list == NULL || node == NULL)
+void *removeNode(LinkedListADT list, PCB *process) {
+  if (list == NULL || process == NULL)
     return NULL;
 
-  if (list->first == node)
-    list->first = node->next;
+  TNode nodeToRemove = list->first;
+  while (nodeToRemove != NULL && nodeToRemove->process != process)
+    nodeToRemove = nodeToRemove->next;
+
+  if (list->first == nodeToRemove)
+    list->first = nodeToRemove->next;
   else
-    node->prev->next = node->next;
+    nodeToRemove->prev->next = nodeToRemove->next;
 
   list->len--;
-  void *process = node->process;
-  free(node);
+  void *process = nodeToRemove->process;
+  free(nodeToRemove);
 
   return process;
 }
