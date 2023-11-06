@@ -69,7 +69,7 @@ void *schedule(void *currentSP) {
     if (currentProcess->status == RUNNING)
       currentProcess->status = READY;
 
-    uint16_t newPriority = currentProcess->priority > 0 ?
+    uint8_t newPriority = currentProcess->priority > 0 ?
 			       currentProcess->priority - 1 :
 			       currentProcess->priority;
     setPriority(currentProcess->pid, newPriority);
@@ -84,13 +84,20 @@ void *schedule(void *currentSP) {
   return currentProcess->stack->current;
 }
 
-int setPriority(uint16_t pid, uint16_t newPriority) {
+int setPriority(uint16_t pid, uint8_t newPriority) {
   PCB *process = processes[pid];
-  if (process == NULL || pid == IDLE_PID)
-    return -1;
 
-  if (newPriority >= PRIORITY_LEVELS - 1 || newPriority < 0)
-    return -1;
+  if (process == NULL)
+    return NOT_FOUND;
+  
+  if (pid == IDLE_PID)
+    return INVALID_PROCESS;
+
+  if(process->priority == newPriority)
+    return SAME_PRIORITY;
+
+  if (newPriority >= PRIORITY_LEVELS || newPriority < 0)
+    return INVALID_PRIORITY;
 
   if (process->status == READY || process->status == RUNNING) {
     dequeue(queues[process->priority]);
@@ -115,8 +122,7 @@ int setStatus(uint16_t pid, processStatus newStatus) {
   if (newStatus == KILLED)
     removeProcess(process);
 
-  if (newStatus == BLOCKED ||
-      newStatus == ZOMBIE)  // todo ver bien que hacer con los bloqueados
+  if (newStatus == BLOCKED || newStatus == ZOMBIE)  // todo ver bien que hacer con los bloqueados
     removeByPid(queues[process->priority], process->pid);
 
   process->status = newStatus;

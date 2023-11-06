@@ -23,7 +23,7 @@ PCB *getProcess(uint16_t pid);
 
 uint16_t getCurrentPid();
 
-int setPriority(uint16_t pid, uint16_t newPriority);
+int setPriority(uint16_t pid, uint8_t newPriority);
 
 void *schedule(void *currentSP);
 

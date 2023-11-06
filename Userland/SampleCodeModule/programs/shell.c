@@ -63,6 +63,8 @@ static void testProcesses();
 
 static void kill(char *pid);
 
+static void nice(char* pid, char* priority);
+
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *)&help, NO_PARAMS},
     {"man", "Manual de uso de los comandos", .g = (void *)&man, SINGLE_PARAM},
@@ -89,7 +91,8 @@ static Command commands[] = {
      .f = (void *)&ps, NO_PARAMS},
     {"test-proc", "Testea la creación de procesos", .f = (void *)&testProcesses,
      NO_PARAMS},
-    {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM}};
+    {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM},
+    {"nice", "Cambia la prioridad de un proceso", .h = (void *)&nice, DUAL_PARAM},};
 
 void run_shell() {
   int index;
@@ -262,7 +265,35 @@ static void testProcesses() {
 			    (uint8_t)6);
 }
 
+
 static void kill(char *pid) {
-  if(killProcess((uint16_t)atoi(pid)) == -1)
-    printErr("No se pudo matar el proceso\n");
+  int result = killProcess((uint16_t)atoi(pid));
+  if (result == NOT_FOUND){
+    printErr("Es inexistente el proceso con pid ");
+    printf("%s\n", pid);
+  }
+  else if (result == INVALID_PROCESS){
+    printErr("No se puede matar al proceso con pid ");
+    printf("%s\n", pid);
+  }
+  else
+    printf("Se mato al proceso con pid %s\n", pid);
+}
+
+static void nice(char* pid, char* priority) {
+  int result = setPriority((uint16_t)atoi(pid), (uint8_t)atoi(priority));
+  if(result == NOT_FOUND){
+    printErr("Es inexistente el proceso con pid ");
+    printf("%s\n", pid);
+  }
+  else if(result == INVALID_PROCESS){
+    printErr("No se puede cambiar la prioridad al proceso con pid ");
+    printf("%s\n", pid);
+  }
+  else if(result == INVALID_PRIORITY)
+    printErr("La prioridad ingresada es invalida, debe ser entre 0 y 6\n");
+  else if(result == SAME_PRIORITY)
+    printErr("La prioridad ingresada es la misma que la actual\n");
+  else
+    printf("Se cambio la prioridad del proceso %s a %s\n", pid, priority);
 }

@@ -4,6 +4,11 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#define INVALID_PROCESS -1
+#define NOT_FOUND -2
+#define INVALID_PRIORITY -3
+#define SAME_PRIORITY -4
+
 typedef enum processStatus {
   RUNNING,
   BLOCKED,
@@ -26,7 +31,7 @@ typedef struct PCB {
   char	       *name;
   char	      **argv;
   memoryBlock  *stack;
-  uint16_t	priority;
+  uint8_t	priority;
   uint16_t	quantum;
   processStatus status;
 } PCB;
@@ -37,7 +42,7 @@ typedef struct processInfo {
   char	       *name;
   uint64_t     *base;
   uint64_t     *current;
-  uint16_t	priority;
+  uint8_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND
 } processInfo;

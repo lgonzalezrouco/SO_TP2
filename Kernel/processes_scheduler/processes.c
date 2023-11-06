@@ -66,12 +66,15 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
 int killProcess(uint16_t pid) {
   PCB *process = getProcess(pid);
 
-  if (process == NULL || process->pid == IDLE_PID || process->pid == SHELL_PID)
-    return -1;
+  if (process == NULL)
+    return NOT_FOUND;
+
+  if (process->pid == IDLE_PID || process->pid == SHELL_PID)
+    return INVALID_PROCESS;
 
   if (getProcess(process->parentPid) == NULL || process->status == ZOMBIE) {
-    setStatus(pid, KILLED);
-    freeProcess(process);
+    if(setStatus(pid, KILLED)!=-1)
+      freeProcess(process);
   } else
     setStatus(pid, ZOMBIE);
 

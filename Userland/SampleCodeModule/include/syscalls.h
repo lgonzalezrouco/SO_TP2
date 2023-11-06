@@ -142,7 +142,7 @@ typedef struct processInfo {
   char	       *name;
   uint64_t     *base;
   uint64_t     *current;
-  uint16_t	priority;
+  uint8_t	priority;
   processStatus status;
   // todo agregar FOREGROUND o BACKGROUND
 } processInfo;
@@ -183,5 +183,13 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
  * @return 0 si se pudo matar, -1 si no
  */
 int killProcess(uint16_t pid);
+
+/**
+ * @brief Cambia la prioridad de un proceso
+ * 
+ * @param pid: PID del proceso a cambiar la prioridad
+ * @param priority: Nueva prioridad
+*/
+int setPriority(uint16_t pid, uint8_t priority);
 
 #endif
