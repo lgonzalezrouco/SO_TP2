@@ -1,16 +1,16 @@
 #include <scheduler.h>
 
-PCB	*processes[MAX_PROCESSES];
-PCB	*currentProcess = NULL;
-uint16_t quantumRemaining = 0;
-QueueADT queues[PRIORITY_LEVELS];
-int	 processesQty = 0;
+PCB	      *processes[MAX_PROCESSES];
+PCB	      *currentProcess = NULL;
+int16_t	       quantumRemaining = 0;
+QueueADT       queues[PRIORITY_LEVELS];
+int	       processesQty = 0;
 
 static PCB *getNextProcess() {
   PCB	  *process = NULL;
   uint16_t nextPid = IDLE_PID;
 
-  for (int i = PRIORITY_LEVELS - 1; i >= 0 && process == NULL; i--) {
+  for (int i = PRIORITY_LEVELS - 1; i >= 1 && process == NULL; i--) {
     if (!isEmpty(queues[i]))
       process = dequeue(queues[i]);
   }
@@ -32,6 +32,8 @@ void initializeScheduler() {
 void startShell(uint16_t pid) {
   currentProcess = getProcess(pid);
   currentProcess->status = RUNNING;
+  quantumRemaining = currentProcess->quantum;
+  removeByPid(queues[currentProcess->priority], currentProcess->pid);
   forceChangeOfProcess(currentProcess->stack->current);
 }
 
@@ -42,7 +44,9 @@ void addProcess(PCB *process) {
 }
 
 PCB *removeProcess(PCB *process) {
-  PCB *removed = removeByPid(queues[process->priority], process->pid);
+  if (process->status != ZOMBIE && process->status != BLOCKED)
+    removeByPid(queues[process->priority], process->pid);
+  PCB *removed = processes[process->pid];
   processes[process->pid] = NULL;
   processesQty--;
   return removed;
@@ -53,9 +57,9 @@ PCB *getProcess(uint16_t pid) { return processes[pid]; }
 uint16_t getCurrentPid() { return currentProcess->pid; }
 
 void *schedule(void *currentSP) {
-  static int firstTime = 1;
+  /* static int firstTime = 1;
 
-  if (!processesQty || quantumRemaining > 0) {
+  if (!processesQty || quantumRemaining > 0) { // no termino el quantum
     quantumRemaining--;
     return currentSP;
   }
@@ -69,14 +73,21 @@ void *schedule(void *currentSP) {
     if (currentProcess->status == RUNNING)
       currentProcess->status = READY;
 
-    uint8_t newPriority = currentProcess->priority > 0 ?
+    uint8_t newPriority = currentProcess->priority > 1 ?
 			       currentProcess->priority - 1 :
 			       currentProcess->priority;
     setPriority(currentProcess->pid, newPriority);
     // multiplica el quantum por 2 cada vez que se termina el quantum asignado
     currentProcess->quantum *= 2;
+  } */
+
+  if (quantumRemaining > 0 && currentProcess->status != ZOMBIE &&
+      currentProcess->status != BLOCKED && currentProcess->status != KILLED) {
+    quantumRemaining--;
+    return currentSP;
   }
 
+  stopProcess(currentSP);
   PCB *nextProcess = getNextProcess();
   quantumRemaining = nextProcess->quantum;
   nextProcess->status = RUNNING;
@@ -84,23 +95,41 @@ void *schedule(void *currentSP) {
   return currentProcess->stack->current;
 }
 
+void stopProcess(void *currentSP) {
+  if (currentSP == NULL)
+    return;
+
+  currentProcess->stack->current = currentSP;
+  if (currentProcess->pid == IDLE_PID)
+    return;
+
+  if (currentProcess->status == RUNNING) {
+    currentProcess->status = READY;
+    currentProcess->priority = currentProcess->priority > 1 ?
+				   currentProcess->priority - 1 :
+				   currentProcess->priority;
+    enqueue(queues[currentProcess->priority], currentProcess);
+    currentProcess->quantum *= 2;
+  }
+}
+
 int setPriority(uint16_t pid, uint8_t newPriority) {
   PCB *process = processes[pid];
 
   if (process == NULL)
     return NOT_FOUND;
-  
+
   if (pid == IDLE_PID)
     return INVALID_PROCESS;
 
-  if(process->priority == newPriority)
+  if (process->priority == newPriority)
     return SAME_PRIORITY;
 
   if (newPriority >= PRIORITY_LEVELS || newPriority < 0)
     return INVALID_PRIORITY;
 
   if (process->status == READY || process->status == RUNNING) {
-    dequeue(queues[process->priority]);
+    removeByPid(queues[process->priority], process->pid);
     enqueue(queues[newPriority], process);
   }
 
@@ -119,11 +148,14 @@ int setStatus(uint16_t pid, processStatus newStatus) {
   if (process->status == newStatus)
     return newStatus;
 
-  if (newStatus == KILLED)
-    removeProcess(process);
-
-  if (newStatus == BLOCKED || newStatus == ZOMBIE)  // todo ver bien que hacer con los bloqueados
-    removeByPid(queues[process->priority], process->pid);
+  switch (newStatus) {
+    case KILLED: removeProcess(process); break;
+    case BLOCKED:  // todo ver bien que hacer con los bloqueados
+    case ZOMBIE: removeByPid(queues[process->priority], process->pid); break;
+    case RUNNING: break;
+    case READY: break;
+    default: break;
+  }
 
   process->status = newStatus;
   return newStatus;

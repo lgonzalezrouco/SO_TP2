@@ -4,7 +4,7 @@ static uint16_t nextPid = 0;
 
 static void   freeProcess(PCB *process);
 static char **allocArguments(char **args);
-static void freeProcessInfo(processInfo *info);
+static void   freeProcessInfo(processInfo *info);
 
 void resetPIDCounter() { nextPid = 0; }
 
@@ -73,7 +73,7 @@ int killProcess(uint16_t pid) {
     return INVALID_PROCESS;
 
   if (getProcess(process->parentPid) == NULL || process->status == ZOMBIE) {
-    if(setStatus(pid, KILLED)!=-1)
+    if (setStatus(pid, KILLED) != -1)
       freeProcess(process);
   } else
     setStatus(pid, ZOMBIE);

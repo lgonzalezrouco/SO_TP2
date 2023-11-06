@@ -49,12 +49,12 @@ static void	 syscall_free(uint64_t ptr);
 static uint64_t	 syscall_getMemoryInfo();
 // static processInfo * syscall_getProcessInfo();
 static processInfo **syscall_getProcessesInfo();
-static void syscall_freeProcessesInfo(uint64_t infoArray);
+static void	     syscall_freeProcessesInfo(uint64_t infoArray);
 static uint64_t	     syscall_createProcess(uint16_t parentPid, ProcessCode code,
 					   char **args, char *name,
 					   uint8_t priority);
-static uint64_t syscall_killProcess(uint16_t pid);
-static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority);
+static uint64_t	     syscall_killProcess(uint16_t pid);
+static uint64_t	     syscall_setPriority(uint16_t pid, uint8_t priority);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
@@ -76,10 +76,10 @@ static sysFunctions sysfunctions[] = {(sysFunctions)syscall_read,
 				      (sysFunctions)syscall_free,
 				      (sysFunctions)syscall_getMemoryInfo,
 				      (sysFunctions)syscall_getProcessesInfo,
-              (sysFunctions)syscall_freeProcessesInfo,
+				      (sysFunctions)syscall_freeProcessesInfo,
 				      (sysFunctions)syscall_createProcess,
-              (sysFunctions)syscall_killProcess,
-              (sysFunctions)syscall_setPriority};
+				      (sysFunctions)syscall_killProcess,
+				      (sysFunctions)syscall_setPriority};
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,

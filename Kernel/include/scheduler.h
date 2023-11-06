@@ -2,14 +2,14 @@
 #define _SCHEDULER_H_
 
 #include "lib.h"
+#include "processes.h"
 #include "queueADT.h"
 #include "types.h"
-#include "processes.h"
 
 #define MAX_PROCESSES	128
 #define PRIORITY_LEVELS 7
-#define IDLE_PID	    0
-#define SHELL_PID       1
+#define IDLE_PID	0
+#define SHELL_PID	1
 
 void initializeScheduler();
 
@@ -26,6 +26,8 @@ uint16_t getCurrentPid();
 int setPriority(uint16_t pid, uint8_t newPriority);
 
 void *schedule(void *currentSP);
+
+void stopProcess(void *currentSP);
 
 int getProcessesQty();
 

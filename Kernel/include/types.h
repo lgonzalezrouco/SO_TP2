@@ -4,10 +4,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#define INVALID_PROCESS -1
-#define NOT_FOUND -2
+#define INVALID_PROCESS	 -1
+#define NOT_FOUND	 -2
 #define INVALID_PRIORITY -3
-#define SAME_PRIORITY -4
+#define SAME_PRIORITY	 -4
 
 typedef enum processStatus {
   RUNNING,

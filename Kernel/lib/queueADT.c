@@ -59,6 +59,8 @@ void enqueue(QueueADT queue, PCB *process) {
     queue->last->next = node;
 
   queue->last = node;
+
+  queue->size++;
 }
 
 PCB *removeByPid(QueueADT queue, uint16_t pid) {
