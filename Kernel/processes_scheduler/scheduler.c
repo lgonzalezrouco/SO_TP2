@@ -44,6 +44,8 @@ void addProcess(PCB *process) {
 }
 
 PCB *removeProcess(PCB *process) {
+  if (process == NULL)
+    return NOT_FOUND;
   if (process->status != ZOMBIE && process->status != BLOCKED)
     removeByPid(queues[process->priority], process->pid);
   PCB *removed = processes[process->pid];

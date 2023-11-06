@@ -7,6 +7,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syscalls.h>
+#include <test_processes.h>
+
 
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
@@ -89,11 +91,13 @@ static Command commands[] = {
      NO_PARAMS},
     {"ps", "Imprime la lista de todos los procesos con sus propiedades",
      .f = (void *)&ps, NO_PARAMS},
-    {"test-proc", "Testea la creación de procesos", .f = (void *)&testProcesses,
+    {"test-proc", "Testea la creacion de procesos", .f = (void *)&testProcesses,
      NO_PARAMS},
     {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM},
     {"nice", "Cambia la prioridad de un proceso", .h = (void *)&nice,
      DUAL_PARAM},
+    {"t", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *)&test_processes,
+     SINGLE_PARAM},
 };
 
 void run_shell() {
@@ -242,8 +246,16 @@ static void ps() {
       "PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
 
   while (info[i] != NULL) {
-    printf("%d\t\t\t\t\t", info[i]->pid);
-    printf("%d\t\t\t\t\t\t\t\t\t\t\t\t", info[i]->parentPid);
+    printf("%d\t\t\t", info[i]->pid);
+    if(info[i]->pid < 100)
+      printf("\t");
+    if(info[i]->pid < 10)
+      printf("\t");
+    printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->parentPid);
+    if(info[i]->parentPid < 100)
+      printf("\t");
+    if(info[i]->parentPid < 10)
+      printf("\t");
     printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
     switch (info[i]->status) {
       case 0: printf("RUNNING\t\t"); break;
@@ -262,9 +274,9 @@ static void ps() {
 }
 
 static void testProcesses() {
-  char *helpArgs[] = {"help", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test",
-			    (uint8_t)6);
+  //char *helpArgs[] = {"help", NULL};
+  //int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test", (uint8_t)6);
+  test_processes(); // TODO en un futuro llamar a esta funcion
 }
 
 static void kill(char *pid) {
