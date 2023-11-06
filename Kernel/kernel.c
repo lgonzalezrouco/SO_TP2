@@ -47,9 +47,9 @@ int main() {
   initializeMemoryManager();
   initializeScheduler();
 
-  createProcess(0, (ProcessCode)&idle, idleArgs, "idle", 0);
+  createProcess(0, (ProcessCode)&idle, idleArgs, "idle", IDLE_PRIORITY);
   int shellPid = createProcess(0, (ProcessCode)sampleCodeModuleAddress,
-			       shellArgs, "shell", PRIORITY_LEVELS - 1);
+			       shellArgs, "shell", MAX_PRIORITY);
 
   startShell(shellPid);
   return 0;

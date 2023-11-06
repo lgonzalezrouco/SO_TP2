@@ -21,7 +21,7 @@ LinkedListADT createLinkedListADT();
  * @param data
  * @return El nodo agregado
  */
-TNode addDataAtStart(LinkedListADT list, void *data);
+TNode addProcessAtStart(LinkedListADT list, PCB *data);
 
 /**
  * @brief Crea un nodo y lo agrega al final de la lista
@@ -30,7 +30,7 @@ TNode addDataAtStart(LinkedListADT list, void *data);
  * @param data
  * @return El nodo agregado
  */
-TNode addDataAtLast(LinkedListADT list, void *data);
+TNode addProcessAtLast(LinkedListADT list, PCB *data);
 
 /**
  * @brief Agrega un nodo al principio de la lista
@@ -57,7 +57,7 @@ TNode addNodeAtLast(LinkedListADT list, TNode node);
  * @param node
  * @return La data del nodo eliminado
  */
-void *removeNode(LinkedListADT list, PCB * process);
+PCB *removeNode(LinkedListADT list, PCB * process);
 
 /**
  * @param list
@@ -98,7 +98,7 @@ int hasNext(LinkedListADT list);
  * @param list
  * @return El siguiente elemento
  */
-void *next(LinkedListADT list);
+PCB *next(LinkedListADT list);
 
 /**
  * @brief Libera la memoria de la lista

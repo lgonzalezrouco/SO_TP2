@@ -4,10 +4,10 @@
 #include "lib.h"
 #include "processes.h"
 #include "queueADT.h"
+#include "linkedListADT.h"
 #include "types.h"
 
 #define MAX_PROCESSES	128
-#define PRIORITY_LEVELS 7
 #define IDLE_PID	0
 #define SHELL_PID	1
 
@@ -32,5 +32,7 @@ void stopProcess(void *currentSP);
 int getProcessesQty();
 
 int setStatus(uint16_t pid, processStatus newStatus);
+
+void yield();
 
 #endif
