@@ -9,7 +9,7 @@ void resetPIDCounter() { nextPid = 0; }
 
 void processWrapper(ProcessCode function, char **args) {
   size_t len = array_strlen(args);
-  int retValue = function(len, args);
+  int	 retValue = function(len, args);
   killProcess(getCurrentPid(), retValue);
 }
 
@@ -50,6 +50,8 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   process->quantum = 1;
   process->priority = priority;
   process->retValue = 0;
+
+  process->zombieChildren = createQueueADT();
 
   process->argv = allocArguments(args);
 

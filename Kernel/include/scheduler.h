@@ -4,12 +4,11 @@
 #include "lib.h"
 #include "processes.h"
 #include "queueADT.h"
-#include "linkedListADT.h"
 #include "types.h"
 
-#define MAX_PROCESSES	128
-#define IDLE_PID	0
-#define SHELL_PID	1
+#define MAX_PROCESSES 128
+#define IDLE_PID      0
+#define SHELL_PID     1
 
 void initializeScheduler();
 
