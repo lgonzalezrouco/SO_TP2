@@ -24,6 +24,8 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
 
   process->parentPid = parentPid;
 
+  process->pidToWait = -1;
+
   process->name = malloc(strlen(name) + 1);
   if (process->name == NULL) {
     free(process);
@@ -163,4 +165,25 @@ void freeProcessesInfo(processInfo **infoArray) {
     i++;
   }
   free(infoArray);
+}
+
+int waitpid(uint16_t pid){
+  PCB *child = getProcess(pid);
+
+  if(child == NULL)
+    return NOT_FOUND;
+
+  if(child->parentPid != getCurrentPid())
+    return INVALID_PROCESS;
+
+  PCB *parent = getProcess(child->parentPid);
+  parent->pidToWait = pid;
+
+  if(child->status != ZOMBIE){
+    setStatus(child->parentPid, BLOCKED);
+    yield();
+  }
+
+  removeNode(parent->zombieChildren, child);
+  ki
 }
