@@ -2,8 +2,9 @@
 
 static uint16_t nextPid = 0;
 
-static char **allocArguments(char **args);
-static void   freeProcessInfo(processInfo *info);
+static char	  **allocArguments(char **args);
+static void	    freeProcessInfo(processInfo *info);
+static processInfo *getProcessInfo(PCB *process);
 
 void resetPIDCounter() { nextPid = 0; }
 
@@ -53,8 +54,6 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   process->priority = priority;
   process->retValue = 0;
 
-  process->zombieChildren = createQueueADT();
-
   process->argv = allocArguments(args);
 
   void *stackEnd = (void *)((uint64_t)process->stack->base + STACK_SIZE);
@@ -66,29 +65,6 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
 
   return process->pid;
 }
-
-/* int killProcess(uint16_t pid) {
-  PCB *process = getProcess(pid);
-
-  if (process == NULL)
-    return NOT_FOUND;
-
-  if (process->pid == IDLE_PID || process->pid == SHELL_PID)
-    return INVALID_PROCESS;
-
-  if (getProcess(process->parentPid) == NULL || process->status == ZOMBIE) {
-    if (setStatus(pid, KILLED) != -1)
-      freeProcess(process);
-  } else
-    setStatus(pid, ZOMBIE);
-
-  if (process->pid == getCurrentPid())
-    forceTimerTick();
-
-  return 0;
-} */
-
-int killCurrentProcess() { return killProcess(getCurrentPid()); }
 
 int idle(int argc, char **argv) {
   while (1)
@@ -102,6 +78,28 @@ void freeProcess(PCB *process) {
   free(process->stack);
   free(process->name);
   free(process);
+}
+
+processInfo **getProcessesInfo() {
+  processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
+  int		i = 0;
+  PCB	       *process = NULL;
+  for (int j = 0; j < MAX_PROCESSES; j++) {
+    process = getProcess(j);
+    if (process != NULL)
+      info[i++] = getProcessInfo(process);
+  }
+  info[i] = NULL;
+  return info;
+}
+
+void freeProcessesInfo(processInfo **infoArray) {
+  int i = 0;
+  while (infoArray[i] != NULL) {
+    freeProcessInfo(infoArray[i]);
+    i++;
+  }
+  free(infoArray);
 }
 
 static char **allocArguments(char **args) {
@@ -123,7 +121,7 @@ static char **allocArguments(char **args) {
   return newArgsArray;
 }
 
-processInfo *getProcessInfo(PCB *process) {
+static processInfo *getProcessInfo(PCB *process) {
   processInfo *info = malloc(sizeof(processInfo));
   if (info == NULL)
     return NULL;
@@ -142,50 +140,7 @@ processInfo *getProcessInfo(PCB *process) {
   return info;
 }
 
-processInfo **getProcessesInfo() {
-  processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
-  int		i = 0;
-  PCB	       *process = NULL;
-  for (int j = 0; j < MAX_PROCESSES; j++) {
-    process = getProcess(j);
-    if (process != NULL)
-      info[i++] = getProcessInfo(process);
-  }
-  info[i] = NULL;
-  return info;
-}
-
 static void freeProcessInfo(processInfo *info) {
   free(info->name);
   free(info);
-}
-
-void freeProcessesInfo(processInfo **infoArray) {
-  int i = 0;
-  while (infoArray[i] != NULL) {
-    freeProcessInfo(infoArray[i]);
-    i++;
-  }
-  free(infoArray);
-}
-
-int waitpid(uint16_t pid){
-  PCB *child = getProcess(pid);
-
-  if(child == NULL)
-    return NOT_FOUND;
-
-  if(child->parentPid != getCurrentPid())
-    return INVALID_PROCESS;
-
-  PCB *parent = getProcess(child->parentPid);
-  parent->pidToWait = pid;
-
-  if(child->status != ZOMBIE){
-    setStatus(child->parentPid, BLOCKED);
-    yield();
-  }
-
-  removeNode(parent->zombieChildren, child);
-  ki
 }

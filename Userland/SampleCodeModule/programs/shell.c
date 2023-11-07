@@ -9,7 +9,6 @@
 #include <syscalls.h>
 #include <test_processes.h>
 
-
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
 #define QTY_BYTES	  32 /* Cantidad de bytes de respuesta del printmem */
@@ -96,8 +95,8 @@ static Command commands[] = {
     {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM},
     {"nice", "Cambia la prioridad de un proceso", .h = (void *)&nice,
      DUAL_PARAM},
-    {"t", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *)&test_processes,
-     SINGLE_PARAM},
+    {"t", "Corre el test de procesos, ingresar cantidad de procesos",
+     .g = (void *)&test_processes, SINGLE_PARAM},
 };
 
 void run_shell() {
@@ -247,21 +246,20 @@ static void ps() {
 
   while (info[i] != NULL) {
     printf("%d\t\t\t", info[i]->pid);
-    if(info[i]->pid < 100)
+    if (info[i]->pid < 100)
       printf("\t");
-    if(info[i]->pid < 10)
+    if (info[i]->pid < 10)
       printf("\t");
     printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->parentPid);
-    if(info[i]->parentPid < 100)
+    if (info[i]->parentPid < 100)
       printf("\t");
-    if(info[i]->parentPid < 10)
+    if (info[i]->parentPid < 10)
       printf("\t");
     printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
     switch (info[i]->status) {
       case 0: printf("RUNNING\t\t"); break;
       case 1: printf("BLOCKED\t\t"); break;
       case 3: printf("READY\t\t\t\t"); break;
-      case 4: printf("ZOMBIE\t\t\t"); break;
       default: printf("UNKNOWN\t\t"); break;
     }
     printf("0x%x\t\t\t\t\t", info[i]->base);
@@ -274,9 +272,10 @@ static void ps() {
 }
 
 static void testProcesses() {
-  //char *helpArgs[] = {"help", NULL};
-  //int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test", (uint8_t)6);
-  test_processes(); // TODO en un futuro llamar a esta funcion
+  // char *helpArgs[] = {"help", NULL};
+  // int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs,
+  // "test", (uint8_t)6);
+  test_processes();  // TODO en un futuro llamar a esta funcion
 }
 
 static void kill(char *pid) {

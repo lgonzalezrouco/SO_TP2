@@ -214,7 +214,7 @@ static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code,
 }
 
 static uint64_t syscall_killProcess(uint16_t pid) {
-  return (uint64_t)killProcess(pid);
+  return (uint64_t)killProcess(pid, -1);
 }
 
 static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority) {

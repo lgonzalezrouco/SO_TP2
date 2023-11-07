@@ -16,22 +16,26 @@ void startShell(uint16_t pid);
 
 void addProcess(PCB *process);
 
-PCB *removeProcess(PCB *process);
-
 PCB *getProcess(uint16_t pid);
 
 uint16_t getCurrentPid();
 
-int setPriority(uint16_t pid, uint8_t newPriority);
-
 void *schedule(void *currentSP);
 
-void stopProcess(void *currentSP);
+void blockProcess(uint16_t pid);
+
+void unblockProcess(uint16_t pid);
+
+int setPriority(uint16_t pid, uint8_t newPriority);
 
 int getProcessesQty();
 
-int setStatus(uint16_t pid, processStatus newStatus);
+int killCurrentProcess(int retValue);
+
+int killProcess(uint16_t pid, int retValue);
 
 void yield();
+
+int waitpid(uint16_t pid);
 
 #endif

@@ -2,7 +2,6 @@
 #define _LIB_H
 
 #include <stdint.h>
-#include <types.h>
 
 /**
  * @brief  Escribe 'character' en una direccion de memoria 'length' veces
