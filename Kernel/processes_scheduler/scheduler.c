@@ -49,7 +49,7 @@ void *schedule(void *currentSP) {
 
   if (currentProcess->status != BLOCKED)
     setStatus(currentProcess->pid, READY);
-
+    
   PCB *nextProcess = getNextProcess();
   setStatus(nextProcess->pid, RUNNING);
   return currentProcess->stack->current;
@@ -91,7 +91,7 @@ int setPriority(uint16_t pid, uint8_t newPriority) {
   if (pid == IDLE_PID)
     return INVALID_PROCESS;
 
-  if (process->priority == newPriority)
+  if (process->priority == newPriority && process->status != RUNNING)
     return SAME_PRIORITY;
 
   if (newPriority > MAX_PRIORITY || newPriority < MIN_PRIORITY)
@@ -185,7 +185,7 @@ static PCB *getNextProcess() {
   if (process != NULL)
     nextPid = process->pid;
 
-  return processes[nextPid];
+  return getProcess(nextPid);
 }
 
 static int setStatus(uint16_t pid, processStatus newStatus) {
