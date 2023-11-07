@@ -79,6 +79,7 @@ void freeProcess(PCB *process) {
   free(process->stack->base);
   free(process->stack);
   free(process->name);
+  free(process->argv);
   free(process);
 }
 
