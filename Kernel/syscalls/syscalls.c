@@ -55,6 +55,7 @@ static uint64_t	     syscall_createProcess(uint16_t parentPid, ProcessCode code,
 					   uint8_t priority);
 static uint64_t	     syscall_killProcess(uint16_t pid);
 static uint64_t	     syscall_setPriority(uint16_t pid, uint8_t priority);
+static uint64_t	     syscall_waitpid(uint16_t pid);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
@@ -79,7 +80,8 @@ static sysFunctions sysfunctions[] = {(sysFunctions)syscall_read,
 				      (sysFunctions)syscall_freeProcessesInfo,
 				      (sysFunctions)syscall_createProcess,
 				      (sysFunctions)syscall_killProcess,
-				      (sysFunctions)syscall_setPriority};
+				      (sysFunctions)syscall_setPriority,
+				      (sysFunctions)syscall_waitpid};
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,
@@ -220,3 +222,5 @@ static uint64_t syscall_killProcess(uint16_t pid) {
 static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority) {
   return (uint64_t)setPriority(pid, priority);
 }
+
+static uint64_t syscall_waitpid(uint16_t pid) { return (uint64_t)waitpid(pid); }

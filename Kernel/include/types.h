@@ -43,6 +43,7 @@ typedef struct PCB {
   uint16_t	quantum;
   processStatus status;
   int		retValue;
+  int		childRetValue;
 } PCB;
 
 typedef struct processInfo {

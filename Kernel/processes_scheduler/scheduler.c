@@ -132,7 +132,11 @@ int killProcess(uint16_t pid,
   else
     currentProcess = NULL;
 
-  // todo avisar al padre que termino si hizo waitpid con mi pid
+  PCB *parent = getProcess(process->parentPid);
+  if (parent->pidToWait == pid) {
+    parent->childRetValue = retValue;
+    unblockProcess(parent->pid);
+  }
 
   processes[process->pid] = NULL;
   processesQty--;
@@ -155,16 +159,15 @@ int waitpid(uint16_t pid) {
   if (child == NULL)
     return NOT_FOUND;
 
-  if (child->parentPid != getCurrentPid())
-    return INVALID_PROCESS;
-
   PCB *parent = getProcess(child->parentPid);
   parent->pidToWait = pid;
 
   setStatus(child->parentPid, BLOCKED);
-  yield();
 
-  return child->retValue;
+  if (child->parentPid == getCurrentPid())
+    yield();
+
+  return parent->childRetValue;
 }
 
 static void killChildren(uint16_t parentPid) {

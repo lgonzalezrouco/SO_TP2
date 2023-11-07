@@ -213,13 +213,13 @@ static void printMemInfo() {
 
 static void ps() {
   char *psArgs[] = {"ps", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&printProcesses, psArgs, "ps", (uint8_t)6);
+  int	pid = createProcess((uint16_t)1, (ProcessCode)&printProcesses, psArgs,
+			    "ps", (uint8_t)6);
   if (pid != -1)
     waitpid((uint16_t)pid);
 }
 
-static void printProcesses(){
-  
+static void printProcesses() {
   processInfo **info = getProcessesInfo();
   int		i = 0;
 

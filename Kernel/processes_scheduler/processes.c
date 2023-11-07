@@ -53,7 +53,8 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   process->quantum = 1;
   priority = priority > MAX_PRIORITY ? MAX_PRIORITY : priority;
   process->priority = priority;
-  process->retValue = 0;
+  process->retValue = -1;
+  process->childRetValue = -1;
 
   process->argv = allocArguments(args);
 
