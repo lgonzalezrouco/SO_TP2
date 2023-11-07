@@ -192,4 +192,10 @@ int killProcess(uint16_t pid);
  */
 int setPriority(uint16_t pid, uint8_t priority);
 
+/**
+ * @brief Espera a que termine un proceso
+ * @return PID del proceso actual
+ */
+uint16_t waitpid();
+
 #endif

@@ -60,6 +60,8 @@ static void printMemInfo();
 
 static void ps();
 
+static void printProcesses();
+
 static void testProcesses();
 
 static void kill(char *pid);
@@ -207,36 +209,17 @@ static void printMemInfo() {
   printf("Total memory: %d B\n", info->totalMemory);
   printf("Used memory: %d B\n", info->usedMemory);
   printf("Free memory: %d B\n", info->freeMemory);
-
-  /* int prefix = getPrefixForMemory(info->totalMemory);
-
-  switch(prefix) {
-    case 0: printf("Total memory: %d B\n", info->totalMemory); break;
-    case 1: printf("Total memory: %d KB\n", info->totalMemory / 1024); break;
-    case 2: printf("Total memory: %d MB\n", info->totalMemory / 1024 / 1024);
-  break; default: printf("ERROR\n"); break;
-  }
-
-  prefix = getPrefixForMemory(info->usedMemory);
-
-  switch(prefix) {
-    case 0: printf("Used memory: %d B\n", info->usedMemory); break;
-    case 1: printf("Used memory: %d KB\n", info->usedMemory / 1024); break;
-    case 2: printf("Used memory: %d MB\n", info->usedMemory / 1024 / 1024);
-  break; default: printf("ERROR\n"); break;
-  }
-
-  prefix = getPrefixForMemory(info->freeMemory);
-
-  switch(prefix) {
-    case 0: printf("Free memory: %d B\n", info->freeMemory); break;
-    case 1: printf("Free memory: %d KB\n", info->freeMemory / 1024); break;
-    case 2: printf("Free memory: %d MB\n", info->freeMemory / 1024 / 1024);
-  break; default: printf("ERROR\n"); break;
-  } */
 }
 
 static void ps() {
+  char *psArgs[] = {"ps", NULL};
+  int	pid = createProcess((uint16_t)1, (ProcessCode)&printProcesses, psArgs, "ps", (uint8_t)6);
+  if (pid != -1)
+    waitpid((uint16_t)pid);
+}
+
+static void printProcesses(){
+  
   processInfo **info = getProcessesInfo();
   int		i = 0;
 

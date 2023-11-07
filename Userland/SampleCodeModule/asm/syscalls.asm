@@ -20,6 +20,7 @@ GLOBAL freeProcessesInfo
 GLOBAL createProcess
 GLOBAL killProcess
 GLOBAL setPriority
+GLOBAL waitpid
 
 read:
     mov rax, 0
@@ -124,5 +125,10 @@ killProcess:
 
 setPriority:
     mov rax, 20
+    int 80h
+    ret
+
+waitpid:
+    mov rax, 21
     int 80h
     ret
