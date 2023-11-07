@@ -7,6 +7,7 @@
 #include "types.h"
 
 #define MAX_PROCESSES 128
+#define MAX_QUANTUM   64
 #define IDLE_PID      0
 #define SHELL_PID     1
 

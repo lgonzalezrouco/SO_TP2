@@ -51,6 +51,7 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   process->stack->size = STACK_SIZE;
   process->status = READY;
   process->quantum = 1;
+  priority = priority > MAX_PRIORITY ? MAX_PRIORITY : priority;
   process->priority = priority;
   process->retValue = 0;
 

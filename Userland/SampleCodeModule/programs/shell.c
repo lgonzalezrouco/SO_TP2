@@ -273,8 +273,8 @@ static void ps() {
 
 static void testProcesses() {
   char *helpArgs[] = {"help", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs,
-  "test", (uint8_t)6);
+  int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test",
+			    (uint8_t)6);
   // test_processes();  // TODO en un futuro llamar a esta funcion
 }
 
