@@ -46,14 +46,12 @@ void *schedule(void *currentSP) {
 
     currentProcess->stack->current = currentSP;
 
-    if (currentProcess->status != BLOCKED)
-        setStatus(currentProcess->pid, READY);
-
-    PCB *nextProcess = getNextProcess();
-    printf("Current process: %s\n", currentProcess->name);
-    printf("Next process: %s\n", nextProcess->name);
-    setStatus(nextProcess->pid, RUNNING);
-    return currentProcess->stack->current;
+  if (currentProcess->status != BLOCKED)
+    setStatus(currentProcess->pid, READY);
+    
+  PCB *nextProcess = getNextProcess();
+  setStatus(nextProcess->pid, RUNNING);
+  return currentProcess->stack->current;
 }
 
 void blockProcess(uint16_t pid) {
@@ -92,8 +90,8 @@ int setPriority(uint16_t pid, uint8_t newPriority) {
     if (pid == IDLE_PID)
         return INVALID_PROCESS;
 
-    if (process->priority == newPriority)
-        return SAME_PRIORITY;
+  if (process->priority == newPriority && process->status != RUNNING)
+    return SAME_PRIORITY;
 
     if (newPriority > MAX_PRIORITY || newPriority < MIN_PRIORITY)
         return INVALID_PRIORITY;
@@ -187,7 +185,7 @@ static PCB *getNextProcess() {
     if (process != NULL)
         nextPid = process->pid;
 
-    return processes[nextPid];
+  return getProcess(nextPid);
 }
 
 static int setStatus(uint16_t pid, processStatus newStatus) {
