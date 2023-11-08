@@ -13,29 +13,29 @@
 
 void initializeScheduler();
 
-void startShell(uint16_t pid);
+void startShell(int16_t pid);
 
 void addProcess(PCB *process);
 
-PCB *getProcess(uint16_t pid);
+PCB *getProcess(int16_t pid);
 
-uint16_t getCurrentPid();
+int16_t getCurrentPid();
 
 void *schedule(void *currentSP);
 
-int toggleBlockProcess(uint16_t pid);
+int toggleBlockProcess(int16_t pid);
 
-int setPriority(uint16_t pid, uint8_t newPriority);
+int setPriority(int16_t pid, uint8_t newPriority);
 
 int getProcessesQty();
 
 int killCurrentProcess(int retValue);
 
-int killProcess(uint16_t pid, int retValue);
+int killProcess(int16_t pid, int retValue);
 
 void yield();
 
-int waitpid(uint16_t pid);
+int waitpid(int16_t pid);
 
 int16_t getNextPid();
 

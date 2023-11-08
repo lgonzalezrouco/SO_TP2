@@ -52,13 +52,13 @@ static uint64_t	 syscall_getMemoryInfo();
 // static processInfo * syscall_getProcessInfo();
 static PCB    **syscall_getProcessesInfo();
 static void	syscall_freeProcessesInfo(uint64_t infoArray);
-static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code,
+static uint64_t syscall_createProcess(int16_t parentPid, ProcessCode code,
 				      char **args, char *name,
 				      uint8_t priority);
-static uint64_t syscall_killProcess(uint16_t pid);
-static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority);
-static uint64_t syscall_waitpid(uint16_t pid);
-static uint64_t syscall_toggleBlock(uint16_t pid);
+static uint64_t syscall_killProcess(int16_t pid);
+static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
+static uint64_t syscall_waitpid(int16_t pid);
+static uint64_t syscall_toggleBlock(int16_t pid);
 static uint64_t syscall_getPid();
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
@@ -184,23 +184,23 @@ static void syscall_freeProcessesInfo(uint64_t infoArray) {
   freeProcessesInfo((PCB **)infoArray);
 }
 
-static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code,
+static uint64_t syscall_createProcess(int16_t parentPid, ProcessCode code,
 				      char **args, char *name,
 				      uint8_t priority) {
   return (uint64_t)createProcess(parentPid, code, args, name, priority);
 }
 
-static uint64_t syscall_killProcess(uint16_t pid) {
+static uint64_t syscall_killProcess(int16_t pid) {
   return (uint64_t)killProcess(pid, -1);
 }
 
-static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority) {
+static uint64_t syscall_setPriority(int16_t pid, uint8_t priority) {
   return (uint64_t)setPriority(pid, priority);
 }
 
-static uint64_t syscall_waitpid(uint16_t pid) { return (uint64_t)waitpid(pid); }
+static uint64_t syscall_waitpid(int16_t pid) { return (uint64_t)waitpid(pid); }
 
-static uint64_t syscall_toggleBlock(uint16_t pid) {
+static uint64_t syscall_toggleBlock(int16_t pid) {
   // si esta bloqueado lo desbloquea, si no lo bloquea
   return (uint64_t)toggleBlockProcess(pid);
 }

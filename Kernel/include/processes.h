@@ -13,7 +13,7 @@ void resetPIDCounter();
 
 void processWrapper(ProcessCode code, char **args);
 
-int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
 		  uint8_t priority);
 
 int idle(int argc, char **argv);

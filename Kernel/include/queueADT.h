@@ -42,7 +42,7 @@ void enqueue(QueueADT queue, PCB *process);
  * @param pid
  * @return PCB*
  */
-PCB *removeByPid(QueueADT queue, uint16_t pid);
+PCB *removeByPid(QueueADT queue, int16_t pid);
 
 /**
  * @brief Libera la memoria de la cola

@@ -34,9 +34,9 @@ typedef struct memoryBlock {
 } memoryBlock;
 
 typedef struct PCB {
-  uint16_t	pid;
-  uint16_t	parentPid;
-  uint16_t	pidToWait;
+  int16_t	pid;
+  int16_t	parentPid;
+  int16_t	pidToWait;
   char	       *name;
   char	      **argv;
   memoryBlock  *stack;
@@ -46,16 +46,5 @@ typedef struct PCB {
   int		retValue;
   int		childRetValue;
 } PCB;
-
-typedef struct processInfo {
-  uint16_t	pid;
-  uint16_t	parentPid;
-  char	       *name;
-  uint64_t     *base;
-  uint64_t     *current;
-  uint8_t	priority;
-  processStatus status;
-  // todo agregar FOREGROUND o BACKGROUND
-} processInfo;
 
 #endif

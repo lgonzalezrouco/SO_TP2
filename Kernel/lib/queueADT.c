@@ -65,7 +65,7 @@ void enqueue(QueueADT queue, PCB *process) {
   queue->size++;
 }
 
-PCB *removeByPid(QueueADT queue, uint16_t pid) {
+PCB *removeByPid(QueueADT queue, int16_t pid) {
   if (queue == NULL || queue->size == 0)
     return NULL;
 

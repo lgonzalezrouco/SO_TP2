@@ -141,7 +141,7 @@ void freeProcessesInfo(PCB **infoArray);
  * @param name: Nombre del proceso
  * @param priority: Prioridad del proceso
  */
-int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
 		  uint8_t priority);
 
 /**
@@ -150,7 +150,7 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
  * @param pid: PID del proceso a matar
  * @return 0 si se pudo matar, -1 si no
  */
-int killProcess(uint16_t pid);
+int killProcess(int16_t pid);
 
 /**
  * @brief Cambia la prioridad de un proceso
@@ -158,23 +158,23 @@ int killProcess(uint16_t pid);
  * @param pid: PID del proceso a cambiar la prioridad
  * @param priority: Nueva prioridad
  */
-int setPriority(uint16_t pid, uint8_t priority);
+int setPriority(int16_t pid, uint8_t priority);
 
 /**
  * @brief Espera a que termine un proceso
  * @return PID del proceso actual
  */
-uint16_t waitpid(uint16_t pid);
+int waitpid(int16_t pid);
 
 /**
  * @brief Bloquea o desbloquea un proceso
  */
-int toggleBlockProcess(uint16_t pid);
+int toggleBlockProcess(int16_t pid);
 
 /**
  * @brief Devuelve el PID del proceso actual
  * @return PID del proceso actual
  */
-uint16_t getPid();
+int16_t getPid();
 
 #endif

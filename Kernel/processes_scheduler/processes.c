@@ -2,7 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
 
-static uint16_t nextPid = 0;
+static int16_t nextPid = 0;
 
 static char **allocArguments(char **args);
 
@@ -14,7 +14,7 @@ void processWrapper(ProcessCode function, char **args) {
   killProcess(getCurrentPid(), retValue);
 }
 
-int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
 		  uint8_t priority) {
   PCB *process = (PCB *)malloc(sizeof(PCB));
   if (process == NULL)

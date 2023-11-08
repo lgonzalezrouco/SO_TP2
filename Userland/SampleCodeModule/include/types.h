@@ -37,9 +37,9 @@ typedef struct memoryBlock {
 } memoryBlock;
 
 typedef struct PCB {
-  uint16_t	pid;
-  uint16_t	parentPid;
-  uint16_t	pidToWait;
+  int16_t	pid;
+  int16_t	parentPid;
+  int16_t	pidToWait;
   char	       *name;
   char	      **argv;
   memoryBlock  *stack;

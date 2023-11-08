@@ -216,18 +216,18 @@ static void printMemInfo() {
 
 static void ps() {
   char *psArgs[] = {"ps", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&printProcesses, psArgs,
+  int	pid = createProcess((int16_t)1, (ProcessCode)&printProcesses, psArgs,
 			    "ps", (uint8_t)5);
   if (pid != -1)
-    waitpid((uint16_t)pid);
+    waitpid((int16_t)pid);
 }
 
 static void help() {
   char *helpArgs[] = {"help", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&printHelp, helpArgs,
+  int	pid = createProcess((int16_t)1, (ProcessCode)&printHelp, helpArgs,
 			    "help", (uint8_t)6);
   if (pid != -1)
-    waitpid((uint16_t)pid);
+    waitpid((int16_t)pid);
 }
 
 static void printProcesses() {
@@ -272,12 +272,12 @@ static void printProcesses() {
 
 static void testProcesses() {
   char *helpArgs[] = {"loop", NULL};
-  createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
+  createProcess((int16_t)1, (ProcessCode)&endless_loop, helpArgs,
 		"endless_loop", (uint8_t)6);
 }
 
 static void kill(char *pid) {
-  int result = killProcess((uint16_t)atoi(pid));
+  int result = killProcess((int16_t)atoi(pid));
   if (result == NOT_FOUND) {
     printErr("Es inexistente el proceso con pid ");
     printf("%s\n", pid);
@@ -289,7 +289,7 @@ static void kill(char *pid) {
 }
 
 static void nice(char *pid, char *priority) {
-  int result = setPriority((uint16_t)atoi(pid), (uint8_t)atoi(priority));
+  int result = setPriority((int16_t)atoi(pid), (uint8_t)atoi(priority));
   if (result == NOT_FOUND) {
     printErr("Es inexistente el proceso con pid ");
     printf("%s\n", pid);
@@ -305,7 +305,7 @@ static void nice(char *pid, char *priority) {
 }
 
 static void toggleBlock(char *pid) {
-  int result = toggleBlockProcess((uint16_t)atoi(pid));
+  int result = toggleBlockProcess((int16_t)atoi(pid));
   if (result == NOT_FOUND) {
     printErr("Es inexistente el proceso con pid ");
     printf("%s\n", pid);
