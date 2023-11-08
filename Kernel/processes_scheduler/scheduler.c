@@ -9,11 +9,11 @@ QueueADT queues[PRIORITY_LEVELS];
 int	 processesQty = 0;
 
 static PCB *getNextProcess();
-static void killChildren(uint16_t parentPid);
-static int  blockProcess(uint16_t pid);
-static int  unblockProcess(uint16_t pid);
-static void runProcess(uint16_t pid);
-static void stopProcess(uint16_t pid);
+static void killChildren(int16_t parentPid);
+static int  blockProcess(int16_t pid);
+static int  unblockProcess(int16_t pid);
+static void runProcess(int16_t pid);
+static void stopProcess(int16_t pid);
 
 void initializeScheduler() {
   resetPIDCounter();
@@ -23,7 +23,7 @@ void initializeScheduler() {
     processes[i] = NULL;
 }
 
-void startShell(uint16_t pid) {
+void startShell(int16_t pid) {
   currentProcess = getProcess(pid);
   currentProcess->status = RUNNING;
   quantumRemaining = currentProcess->quantum;
@@ -37,9 +37,9 @@ void addProcess(PCB *process) {
   processesQty++;
 }
 
-PCB *getProcess(uint16_t pid) { return processes[pid]; }
+PCB *getProcess(int16_t pid) { return processes[pid]; }
 
-uint16_t getCurrentPid() { return currentProcess->pid; }
+int16_t getCurrentPid() { return currentProcess->pid; }
 
 void *schedule(void *currentSP) {
   if (quantumRemaining > 0) {
@@ -60,7 +60,7 @@ void *schedule(void *currentSP) {
   return currentProcess->stack->current;
 }
 
-int toggleBlockProcess(uint16_t pid) {
+int toggleBlockProcess(int16_t pid) {
   PCB *process = getProcess(pid);
 
   if (process == NULL)
@@ -72,7 +72,7 @@ int toggleBlockProcess(uint16_t pid) {
     return blockProcess(pid);
 }
 
-int setPriority(uint16_t pid, uint8_t newPriority) {
+int setPriority(int16_t pid, uint8_t newPriority) {
   PCB *process = getProcess(pid);
 
   if (process == NULL)
@@ -102,9 +102,9 @@ int killCurrentProcess(int retValue) {
   return killProcess(getCurrentPid(), retValue);
 }
 
-int killProcess(uint16_t pid, int retValue) {
+int killProcess(int16_t pid, int retValue) {
   PCB	  *process = getProcess(pid);
-  uint16_t currentPid = getCurrentPid();
+  int16_t currentPid = getCurrentPid();
 
   if (process == NULL)
     return NOT_FOUND;
@@ -141,7 +141,7 @@ void yield() {
   forceTimerTick();
 }
 
-int waitpid(uint16_t pid) {
+int waitpid(int16_t pid) {
   PCB *child = getProcess(pid);
 
   if (child == NULL)
@@ -177,14 +177,14 @@ static PCB *getNextProcess() {
   return process == NULL ? getProcess(IDLE_PID) : process;
 }
 
-static void killChildren(uint16_t parentPid) {
+static void killChildren(int16_t parentPid) {
   for (int i = 0; i < MAX_PROCESSES; i++) {
     if (processes[i] != NULL && processes[i]->parentPid == parentPid)
       killProcess(processes[i]->pid, -1);
   }
 }
 
-static int blockProcess(uint16_t pid) {
+static int blockProcess(int16_t pid) {
   PCB *process = getProcess(pid);
 
   if (process == NULL)
@@ -206,7 +206,7 @@ static int blockProcess(uint16_t pid) {
   return SUCCESS;
 }
 
-static int unblockProcess(uint16_t pid) {
+static int unblockProcess(int16_t pid) {
   PCB *process = getProcess(pid);
 
   if (process == NULL)
@@ -223,14 +223,14 @@ static int unblockProcess(uint16_t pid) {
   return SUCCESS;
 }
 
-static void runProcess(uint16_t pid) {
+static void runProcess(int16_t pid) {
   PCB *process = getProcess(pid);
   process->status = RUNNING;
   quantumRemaining = process->quantum;
   currentProcess = process;
 }
 
-static void stopProcess(uint16_t pid) {
+static void stopProcess(int16_t pid) {
   PCB *process = getProcess(pid);
   process->status = READY;
   removeByPid(queues[process->priority], process->pid);
