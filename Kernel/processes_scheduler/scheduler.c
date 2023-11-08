@@ -10,6 +10,8 @@ int	 processesQty = 0;
 static PCB *getNextProcess();
 static int  setStatus(uint16_t pid, processStatus newStatus);
 static void killChildren(uint16_t parentPid);
+static int blockProcess(uint16_t pid);
+static int unblockProcess(uint16_t pid);
 
 void initializeScheduler() {
   resetPIDCounter();
@@ -56,31 +58,16 @@ void *schedule(void *currentSP) {
   return currentProcess->stack->current;
 }
 
-void blockProcess(uint16_t pid) {
+int toggleBlockProcess(uint16_t pid) {
   PCB *process = getProcess(pid);
 
   if (process == NULL)
-    return;
+    return NOT_FOUND;
 
   if (process->status == BLOCKED)
-    return;
-  else if (process->status == RUNNING) {
-    setStatus(pid, BLOCKED);
-    yield();
-  } else if (process->status == READY)
-    setStatus(pid, BLOCKED);
-}
-
-void unblockProcess(uint16_t pid) {
-  PCB *process = getProcess(pid);
-
-  if (process == NULL)
-    return;
-
-  if (process->status == READY || process->status == RUNNING)
-    return;
-  else if (process->status == BLOCKED)
-    setStatus(pid, READY);
+    return unblockProcess(pid);
+  else
+    return blockProcess(pid);
 }
 
 int setPriority(uint16_t pid, uint8_t newPriority) {
@@ -95,7 +82,7 @@ int setPriority(uint16_t pid, uint8_t newPriority) {
   if (process->priority == newPriority && process->status != RUNNING)
     return SAME_PRIORITY;
 
-  if (newPriority > MAX_PRIORITY || newPriority < MIN_PRIORITY)
+  if (newPriority > (PRIORITY_LEVELS - 1) || newPriority < MIN_PRIORITY)
     return INVALID_PRIORITY;
 
   if (process->status == READY || process->status == BLOCKED)
@@ -113,8 +100,7 @@ int killCurrentProcess(int retValue) {
   return killProcess(getCurrentPid(), retValue);
 }
 
-int killProcess(uint16_t pid,
-		int	 retValue) {	 // todo pasarle el retValue al padre
+int killProcess(uint16_t pid, int	retValue) {
   PCB	  *process = getProcess(pid);
   uint16_t currentPid = getCurrentPid();
 
@@ -131,7 +117,7 @@ int killProcess(uint16_t pid,
     removeByPid(queues[process->priority], process->pid);
   else
     currentProcess = NULL;
-
+    
   PCB *parent = getProcess(process->parentPid);
   if (parent->pidToWait == pid) {
     parent->childRetValue = retValue;
@@ -144,7 +130,7 @@ int killProcess(uint16_t pid,
 
   if (pid == currentPid)
     yield();
-
+    
   return 0;
 }
 
@@ -168,6 +154,44 @@ int waitpid(uint16_t pid) {
     yield();
 
   return parent->childRetValue;
+}
+
+int16_t getNextPid () {
+  for (int i = 0; i < MAX_PROCESSES; i++) {
+    if (processes[i] == NULL)
+      return i;
+  }
+  return INVALID_PID;
+}
+
+static int blockProcess(uint16_t pid) {
+  PCB *process = getProcess(pid);
+
+  if (process == NULL)
+    return NOT_FOUND;
+
+  if (process->status == BLOCKED)
+    return unblockProcess(pid);
+  else if (process->status == RUNNING) {
+    int result = setStatus(pid, BLOCKED);
+    yield();
+    return result;
+  } else if (process->status == READY)
+    return setStatus(pid, BLOCKED);
+  return SUCCESS;
+}
+
+static int unblockProcess(uint16_t pid) {
+  PCB *process = getProcess(pid);
+
+  if (process == NULL)
+    return NOT_FOUND;
+
+  if (process->status == READY || process->status == RUNNING)
+    return SAME_STATUS;
+  else if (process->status == BLOCKED)
+    return setStatus(pid, READY);
+  return SUCCESS;
 }
 
 static void killChildren(uint16_t parentPid) {

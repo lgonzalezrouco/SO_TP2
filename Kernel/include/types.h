@@ -5,7 +5,8 @@
 #include <stdint.h>
 
 typedef enum status {
-  SAME_STATUS = -6,
+  INVALID_PID = -7,
+  SAME_STATUS,
   INVALID_STATUS,
   SAME_PRIORITY,
   INVALID_PRIORITY,

@@ -23,9 +23,7 @@ uint16_t getCurrentPid();
 
 void *schedule(void *currentSP);
 
-void blockProcess(uint16_t pid);
-
-void unblockProcess(uint16_t pid);
+int toggleBlockProcess(uint16_t pid);
 
 int setPriority(uint16_t pid, uint8_t newPriority);
 
@@ -38,5 +36,7 @@ int killProcess(uint16_t pid, int retValue);
 void yield();
 
 int waitpid(uint16_t pid);
+
+int16_t getNextPid();
 
 #endif

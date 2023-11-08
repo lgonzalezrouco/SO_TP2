@@ -20,8 +20,12 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   if (process == NULL)
     return -1;
 
-  process->pid = nextPid;
-  nextPid++;
+  
+  process->pid = getNextPid();
+  if(process->pid == INVALID_PID) {
+    free(process);
+    return -1;
+  }
 
   process->parentPid = parentPid;
 
@@ -85,13 +89,17 @@ void freeProcess(PCB *process) {
 
 processInfo **getProcessesInfo() {
   processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
+  
   int		i = 0;
   PCB	       *process = NULL;
   for (int j = 0; j < MAX_PROCESSES; j++) {
     process = getProcess(j);
-    if (process != NULL)
-      info[i++] = getProcessInfo(process);
+    if (process != NULL){
+      info[i] = getProcessInfo(process);
+      i++;
+    }
   }
+
   info[i] = NULL;
   return info;
 }

@@ -8,6 +8,8 @@
 #include <string.h>
 #include <syscalls.h>
 #include <test_processes.h>
+#include <test_util.h>
+#include <types.h>
 
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
@@ -58,8 +60,6 @@ static int getPrefixForMemory(int size);
 
 static void printMemInfo();
 
-static void ps();
-
 static void printProcesses();
 
 static void testProcesses();
@@ -67,6 +67,10 @@ static void testProcesses();
 static void kill(char *pid);
 
 static void nice(char *pid, char *priority);
+
+static void ps();
+
+static void toggleBlock(char *pid);
 
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *)&help, NO_PARAMS},
@@ -99,6 +103,8 @@ static Command commands[] = {
      DUAL_PARAM},
     {"t", "Corre el test de procesos, ingresar cantidad de procesos",
      .g = (void *)&test_processes, SINGLE_PARAM},
+    {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *)&toggleBlock,
+     SINGLE_PARAM},
 };
 
 void run_shell() {
@@ -224,8 +230,7 @@ static void printProcesses() {
   int		i = 0;
 
   // Encabezados de la tabla
-  printf(
-      "PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
+  printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
 
   while (info[i] != NULL) {
     printf("%d\t\t\t", info[i]->pid);
@@ -255,9 +260,9 @@ static void printProcesses() {
 }
 
 static void testProcesses() {
-  char *helpArgs[] = {"help", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&help, helpArgs, "test",
-			    (uint8_t)6);
+  char *helpArgs[] = {"loop", NULL};
+  int	pid = createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
+			    "endless_loop", (uint8_t)6);
   // test_processes();  // TODO en un futuro llamar a esta funcion
 }
 
@@ -287,4 +292,16 @@ static void nice(char *pid, char *priority) {
     printErr("La prioridad ingresada es la misma que la actual\n");
   else
     printf("Se cambio la prioridad del proceso %s a %s\n", pid, priority);
+}
+
+static void toggleBlock(char *pid) {
+  int result = toggleBlockProcess((uint16_t)atoi(pid));
+  if (result == NOT_FOUND) {
+    printErr("Es inexistente el proceso con pid ");
+    printf("%s\n", pid);
+  } else if (result == INVALID_PROCESS) {
+    printErr("No se puede bloquear al proceso con pid ");
+    printf("%s\n", pid);
+  } else
+    printf("Se bloqueo al proceso con pid %s\n", pid);
 }
