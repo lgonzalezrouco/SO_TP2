@@ -230,6 +230,9 @@ static void ps() {
 
 static void printProcesses() {
   processInfo **info = getProcessesInfo();
+  if(info == NULL)
+    return;
+
   int		i = 0;
 
   // Encabezados de la tabla

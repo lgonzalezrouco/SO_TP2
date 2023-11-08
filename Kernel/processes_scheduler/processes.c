@@ -91,6 +91,8 @@ void freeProcess(PCB *process) {
 
 processInfo **getProcessesInfo() {
   processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
+  if(info == NULL)
+    return NULL;
   
   int		i = 0;
   PCB	       *process = NULL;
