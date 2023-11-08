@@ -20,8 +20,8 @@ int idle(int argc, char **argv);
 
 void freeProcess(PCB *process);
 
-processInfo **getProcessesInfo();
+PCB **getProcessesInfo();
 
-void freeProcessesInfo(processInfo **infoArray);
+void freeProcessesInfo(PCB **infoArray);
 
 #endif

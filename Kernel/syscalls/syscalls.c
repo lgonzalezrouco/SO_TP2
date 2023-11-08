@@ -50,16 +50,16 @@ static uint64_t	 syscall_malloc(uint64_t size);
 static void	 syscall_free(uint64_t ptr);
 static uint64_t	 syscall_getMemoryInfo();
 // static processInfo * syscall_getProcessInfo();
-static processInfo **syscall_getProcessesInfo();
-static void	     syscall_freeProcessesInfo(uint64_t infoArray);
-static uint64_t	     syscall_createProcess(uint16_t parentPid, ProcessCode code,
-					   char **args, char *name,
-					   uint8_t priority);
-static uint64_t	     syscall_killProcess(uint16_t pid);
-static uint64_t	     syscall_setPriority(uint16_t pid, uint8_t priority);
-static uint64_t	     syscall_waitpid(uint16_t pid);
-static uint64_t	     syscall_toggleBlock(uint16_t pid);
-static uint64_t	     syscall_unblock(uint16_t pid);
+static PCB    **syscall_getProcessesInfo();
+static void	syscall_freeProcessesInfo(uint64_t infoArray);
+static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code,
+				      char **args, char *name,
+				      uint8_t priority);
+static uint64_t syscall_killProcess(uint16_t pid);
+static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority);
+static uint64_t syscall_waitpid(uint16_t pid);
+static uint64_t syscall_toggleBlock(uint16_t pid);
+static uint64_t syscall_unblock(uint16_t pid);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
@@ -177,12 +177,10 @@ static void syscall_free(uint64_t ptr) { free((void *)ptr); }
 
 static uint64_t syscall_getMemoryInfo() { return (uint64_t)getMemoryInfo(); }
 
-static processInfo **syscall_getProcessesInfo() {
-  return (processInfo **)getProcessesInfo();
-}
+static PCB **syscall_getProcessesInfo() { return (PCB **)getProcessesInfo(); }
 
 static void syscall_freeProcessesInfo(uint64_t infoArray) {
-  freeProcessesInfo((processInfo **)infoArray);
+  freeProcessesInfo((PCB **)infoArray);
 }
 
 static uint64_t syscall_createProcess(uint16_t parentPid, ProcessCode code,
@@ -201,7 +199,7 @@ static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority) {
 
 static uint64_t syscall_waitpid(uint16_t pid) { return (uint64_t)waitpid(pid); }
 
-static uint64_t syscall_toggleBlock(uint16_t pid) { 
+static uint64_t syscall_toggleBlock(uint16_t pid) {
   // si esta bloqueado lo desbloquea, si no lo bloquea
   return (uint64_t)toggleBlockProcess(pid);
 }

@@ -4,6 +4,7 @@
 #include <color.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <types.h>
 
 /**
  * @brief Escribe a partir del descriptor recibido un caracter
@@ -114,39 +115,6 @@ void *malloc(uint64_t size);
  */
 void free(void *ptr);
 
-typedef enum processStatus {
-  RUNNING,
-  BLOCKED,
-  KILLED,
-  READY,
-  ZOMBIE
-} processStatus;
-
-typedef int (*ProcessCode)(int argc, char **args);
-
-typedef struct memoryBlock {
-  uint64_t *base;
-  uint64_t *current;
-  size_t    size;
-} memoryBlock;
-
-typedef struct memoryInfo {
-  int totalMemory;
-  int usedMemory;
-  int freeMemory;
-} memoryInfo;
-
-typedef struct processInfo {
-  uint16_t	pid;
-  uint16_t	parentPid;
-  char	       *name;
-  uint64_t     *base;
-  uint64_t     *current;
-  uint8_t	priority;
-  processStatus status;
-  // todo agregar FOREGROUND o BACKGROUND
-} processInfo;
-
 /**
  * @brief Devuelve informacion sobre el estado de la memoria
  * @return Informacion sobre el estado de la memoria
@@ -157,13 +125,13 @@ memoryInfo *getMemoryInfo();
  * @brief Devuelve informacion sobre los procesos
  * @return Informacion sobre los procesos
  */
-processInfo **getProcessesInfo();
+PCB **getProcessesInfo();
 
 /**
  * @brief Libera la memoria reservada para la informacion de los procesos
  * @param infoArray: Informacion de los procesos
  */
-void freeProcessesInfo(processInfo **infoArray);
+void freeProcessesInfo(PCB **infoArray);
 
 /**
  * @brief Crea un proceso
@@ -196,6 +164,6 @@ int setPriority(uint16_t pid, uint8_t priority);
  * @brief Espera a que termine un proceso
  * @return PID del proceso actual
  */
-uint16_t waitpid();
+uint16_t waitpid(uint16_t pid);
 
 #endif

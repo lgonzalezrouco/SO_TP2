@@ -1,13 +1,10 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
-#include <video.h>
 
 static uint16_t nextPid = 0;
 
-static char	  **allocArguments(char **args);
-static void	    freeProcessInfo(processInfo *info);
-static processInfo *getProcessInfo(PCB *process);
+static char **allocArguments(char **args);
 
 void resetPIDCounter() { nextPid = 0; }
 
@@ -24,7 +21,7 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
     return -1;
 
   process->pid = getNextPid();
-  if(process->pid == INVALID_PID) {
+  if (process->pid == INVALID_PID) {
     free(process);
     return -1;
   }
@@ -89,33 +86,24 @@ void freeProcess(PCB *process) {
   free(process);
 }
 
-processInfo **getProcessesInfo() {
-  processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
-  if(info == NULL)
+PCB **getProcessesInfo() {
+  PCB **info = malloc(sizeof(PCB *) * (getProcessesQty() + 1));
+  if (info == NULL)
     return NULL;
-  
-  int		i = 0;
-  PCB	       *process = NULL;
+
+  int  i = 0;
+  PCB *process = NULL;
   for (int j = 0; j < MAX_PROCESSES; j++) {
     process = getProcess(j);
-    if (process != NULL){
-      info[i] = getProcessInfo(process);
-      i++;
-    }
+    if (process != NULL)
+      info[i++] = process;
   }
 
   info[i] = NULL;
   return info;
 }
 
-void freeProcessesInfo(processInfo **infoArray) {
-  int i = 0;
-  while (infoArray[i] != NULL) {
-    freeProcessInfo(infoArray[i]);
-    i++;
-  }
-  free(infoArray);
-}
+void freeProcessesInfo(PCB **infoArray) { free(infoArray); }
 
 static char **allocArguments(char **args) {
   int argc = array_strlen(args), totalArgsLen = 0;
@@ -134,28 +122,4 @@ static char **allocArguments(char **args) {
   }
   newArgsArray[argc] = NULL;
   return newArgsArray;
-}
-
-static processInfo *getProcessInfo(PCB *process) {
-  processInfo *info = malloc(sizeof(processInfo));
-  if (info == NULL)
-    return NULL;
-  info->pid = process->pid;
-  info->parentPid = process->parentPid;
-  info->name = malloc(strlen(process->name) + 1);
-  if (info->name == NULL) {
-    free(info);
-    return NULL;
-  }
-  strcpy(info->name, process->name);
-  info->base = process->stack->base;
-  info->current = process->stack->current;
-  info->priority = process->priority;
-  info->status = process->status;
-  return info;
-}
-
-static void freeProcessInfo(processInfo *info) {
-  free(info->name);
-  free(info);
 }
