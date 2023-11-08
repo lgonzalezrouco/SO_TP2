@@ -60,8 +60,6 @@ static void printMem(char *pos);
 
 static int getCommandIndex(char *command);
 
-static int getPrefixForMemory(int size);
-
 static void printMemInfo();
 
 static void printProcesses();
@@ -208,13 +206,6 @@ static void man(char *command) {
     printErr(INVALID_COMMAND);
 }
 
-static int getPrefixForMemory(int size) {
-  int prefix = 0;
-  while ((size /= 1024) > 0)
-    prefix++;
-  return prefix;
-}
-
 static void printMemInfo() {
   memoryInfo *info = getMemoryInfo();
 
@@ -259,12 +250,11 @@ static void printProcesses() {
     if (info[i]->parentPid < 10)
       printf("\t");
     if (info[i]->priority == 6)
-      printf("BLOCKED\t\t");  // todo TRANQUI MATI ESTA MAL TABULADO A PROPOSITO
+      printf("BLOCKED\t\t\t\t");
     else if (info[i]->priority == 0)
-      printf("IDLE\t\t");  // todo TRANQUI MATI ESTA MAL TABULADO A PROPOSITO
+      printf("IDLE\t\t\t\t\t\t\t");
     else
-      printf("%d\t\t\t\t\t\t\t\t\t\t",
-	     info[i]->priority);  // todo ESTE ESTA BIEN
+      printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
     switch (info[i]->status) {
       case 0: printf("RUNNING\t\t"); break;
       case 1: printf("BLOCKED\t\t"); break;
@@ -282,9 +272,8 @@ static void printProcesses() {
 
 static void testProcesses() {
   char *helpArgs[] = {"loop", NULL};
-  int	pid = createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
-			    "endless_loop", (uint8_t)6);
-  // test_processes();  // TODO en un futuro llamar a esta funcion
+  createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
+		"endless_loop", (uint8_t)6);
 }
 
 static void kill(char *pid) {

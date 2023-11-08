@@ -59,36 +59,37 @@ static uint64_t syscall_killProcess(uint16_t pid);
 static uint64_t syscall_setPriority(uint16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(uint16_t pid);
 static uint64_t syscall_toggleBlock(uint16_t pid);
-static uint64_t syscall_unblock(uint16_t pid);
+static uint64_t syscall_getPid();
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
 
 static sysFunctions sysfunctions[] = {
-    (sysFunctions)syscall_read,
-    (sysFunctions)syscall_write,
-    (sysFunctions)syscall_clear,
-    (sysFunctions)syscall_seconds,
-    (sysFunctions)syscall_registerArray,
-    (sysFunctions)syscall_fontSize,
-    (sysFunctions)syscall_resolution,
-    (sysFunctions)syscall_drawRect,
-    (sysFunctions)syscall_getTicks,
-    (sysFunctions)syscall_getMemory,
-    (sysFunctions)syscall_playSound,
-    (sysFunctions)syscall_setFontColor,
-    (sysFunctions)syscall_getFontColor,
-    (sysFunctions)syscall_malloc,
-    (sysFunctions)syscall_free,
-    (sysFunctions)syscall_getMemoryInfo,
-    (sysFunctions)syscall_getProcessesInfo,
-    (sysFunctions)syscall_freeProcessesInfo,
-    (sysFunctions)syscall_createProcess,
-    (sysFunctions)syscall_killProcess,
-    (sysFunctions)syscall_setPriority,
-    (sysFunctions)syscall_waitpid,
-    (sysFunctions)syscall_toggleBlock,
-};
+              (sysFunctions)syscall_read,
+				      (sysFunctions)syscall_write,
+				      (sysFunctions)syscall_clear,
+				      (sysFunctions)syscall_seconds,
+				      (sysFunctions)syscall_registerArray,
+				      (sysFunctions)syscall_fontSize,
+				      (sysFunctions)syscall_resolution,
+				      (sysFunctions)syscall_drawRect,
+				      (sysFunctions)syscall_getTicks,
+				      (sysFunctions)syscall_getMemory,
+				      (sysFunctions)syscall_playSound,
+				      (sysFunctions)syscall_setFontColor,
+				      (sysFunctions)syscall_getFontColor,
+				      (sysFunctions)syscall_malloc,
+				      (sysFunctions)syscall_free,
+				      (sysFunctions)syscall_getMemoryInfo,
+				      (sysFunctions)syscall_getProcessesInfo,
+				      (sysFunctions)syscall_freeProcessesInfo,
+				      (sysFunctions)syscall_createProcess,
+				      (sysFunctions)syscall_killProcess,
+				      (sysFunctions)syscall_setPriority,
+				      (sysFunctions)syscall_waitpid,
+				      (sysFunctions)syscall_toggleBlock,
+				      (sysFunctions)syscall_getPid
+              };
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,
@@ -203,3 +204,5 @@ static uint64_t syscall_toggleBlock(uint16_t pid) {
   // si esta bloqueado lo desbloquea, si no lo bloquea
   return (uint64_t)toggleBlockProcess(pid);
 }
+
+static uint64_t syscall_getPid() { return (uint64_t)getCurrentPid(); }

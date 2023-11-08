@@ -22,6 +22,7 @@ GLOBAL killProcess
 GLOBAL setPriority
 GLOBAL waitpid
 GLOBAL toggleBlockProcess
+GLOBAL getPid
 
 read:
     mov rax, 0
@@ -136,5 +137,10 @@ waitpid:
 
 toggleBlockProcess:
     mov rax, 22
+    int 80h
+    ret
+
+getPid:
+    mov rax, 23
     int 80h
     ret

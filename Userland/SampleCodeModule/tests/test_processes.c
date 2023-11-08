@@ -3,8 +3,8 @@
 #include "test_processes.h"
 
 #include <stdio.h>
+#include <stdlib.h>
 
-#include "shell.h"
 #include "syscalls.h"
 #include "test_util.h"
 #include "types.h"
@@ -50,7 +50,7 @@ int64_t test_processes(char* cant) {
 	switch (action) {
 	  case 0:
 	    if (p_rqs[rq].state == RUNNING || p_rqs[rq].state == BLOCKED) {
-	      // printf("Killing process %d\n", p_rqs[rq].pid);
+	      printf("Killing process %d\n", p_rqs[rq].pid);
 	      int result = killProcess(p_rqs[rq].pid);
 	      if (result == NOT_FOUND) {
 		printErr("Es inexistente el proceso con pid ");
@@ -59,7 +59,7 @@ int64_t test_processes(char* cant) {
 		printErr("No se puede matar al proceso con pid ");
 		printf("%s\n", p_rqs[rq].pid);
 	      }
-	      // printf("Killed process %d\n", p_rqs[rq].pid);
+	      printf("Killed process %d\n", p_rqs[rq].pid);
 	      p_rqs[rq].state = KILLED;
 	      alive--;
 	    }
@@ -67,12 +67,12 @@ int64_t test_processes(char* cant) {
 
 	  case 1:
 	    if (p_rqs[rq].state == RUNNING) {
-	      // printf("Blocking process %d\n", p_rqs[rq].pid);
+	      printf("Blocking process %d\n", p_rqs[rq].pid);
 	      if (toggleBlockProcess(p_rqs[rq].pid) == -1) {
 		printf("test_processes: ERROR blocking process\n");
 		return -1;
 	      }
-	      // printf("Blocked process %d\n", p_rqs[rq].pid);
+	      printf("Blocked process %d\n", p_rqs[rq].pid);
 	      p_rqs[rq].state = BLOCKED;
 	    }
 	    break;
@@ -83,9 +83,7 @@ int64_t test_processes(char* cant) {
       for (rq = 0; rq < max_processes; rq++) {
 	if (p_rqs[rq].state == BLOCKED && GetUniform(100) % 2) {
 	  printf("Unblocking process %d\n", p_rqs[rq].pid);
-	  if (my_unblock(p_rqs[rq].pid) ==
-	      -1) {  // todo ver si en un futuro hacemos las dos syscall o
-		     // hacemos todo con toggle
+	  if (toggleBlockProcess(p_rqs[rq].pid) == -1) {
 	    printf("test_processes: ERROR unblocking process\n");
 	    return -1;
 	  }

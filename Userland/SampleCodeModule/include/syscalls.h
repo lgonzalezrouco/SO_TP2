@@ -166,4 +166,15 @@ int setPriority(uint16_t pid, uint8_t priority);
  */
 uint16_t waitpid(uint16_t pid);
 
+/**
+ * @brief Bloquea o desbloquea un proceso
+ */
+int toggleBlockProcess(uint16_t pid);
+
+/**
+ * @brief Devuelve el PID del proceso actual
+ * @return PID del proceso actual
+ */
+uint16_t getPid();
+
 #endif
