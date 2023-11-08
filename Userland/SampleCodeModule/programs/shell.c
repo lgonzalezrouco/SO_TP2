@@ -9,8 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 #include <syscalls.h>
-#include <test_processes.h>
 #include <test_mm.h>
+#include <test_processes.h>
 #include <test_util.h>
 #include <types.h>
 
@@ -44,6 +44,7 @@ typedef struct {
 } Command;
 
 static void help();
+static void printHelp();
 
 static void man(char *command);
 
@@ -104,10 +105,12 @@ static Command commands[] = {
     {"kill", "Mata un proceso", .g = (void *)&kill, SINGLE_PARAM},
     {"nice", "Cambia la prioridad de un proceso", .h = (void *)&nice,
      DUAL_PARAM},
-    {"t", "Corre el test de procesos, ingresar cantidad de procesos",
+    {"tm", "Corre el test de memoria, ingresar cantidad de memoria",
      .g = (void *)&test_mm, SINGLE_PARAM},
-    {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *)&toggleBlock,
-     SINGLE_PARAM},
+    {"tp", "Corre el test de procesos, ingresar cantidad de procesos",
+     .g = (void *)&test_processes, SINGLE_PARAM},
+    {"block", "Bloquea o desbloquea el proceso del pid dado",
+     .g = (void *)&toggleBlock, SINGLE_PARAM},
 };
 
 void run_shell() {
@@ -148,7 +151,7 @@ static int getCommandIndex(char *command) {
   return -1;
 }
 
-static void help() {
+static void printHelp() {
   for (int i = 0; i < QTY_COMMANDS; i++)
     printf("%s: %s\r\n", commands[i].name, commands[i].description);
 }
@@ -223,20 +226,26 @@ static void printMemInfo() {
 static void ps() {
   char *psArgs[] = {"ps", NULL};
   int	pid = createProcess((uint16_t)1, (ProcessCode)&printProcesses, psArgs,
-			    "ps", (uint8_t)6);
+			    "ps", (uint8_t)5);
+  if (pid != -1)
+    waitpid((uint16_t)pid);
+}
+
+static void help() {
+  char *helpArgs[] = {"help", NULL};
+  int	pid = createProcess((uint16_t)1, (ProcessCode)&printHelp, helpArgs,
+			    "help", (uint8_t)6);
   if (pid != -1)
     waitpid((uint16_t)pid);
 }
 
 static void printProcesses() {
-  processInfo **info = getProcessesInfo();
-  if(info == NULL)
-    return;
-
-  int		i = 0;
+  PCB **info = getProcessesInfo();
+  int	i = 0;
 
   // Encabezados de la tabla
-  printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
+  printf(
+      "PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
 
   while (info[i] != NULL) {
     printf("%d\t\t\t", info[i]->pid);
@@ -249,15 +258,21 @@ static void printProcesses() {
       printf("\t");
     if (info[i]->parentPid < 10)
       printf("\t");
-    printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
+    if (info[i]->priority == 6)
+      printf("BLOCKED\t\t");  // todo TRANQUI MATI ESTA MAL TABULADO A PROPOSITO
+    else if (info[i]->priority == 0)
+      printf("IDLE\t\t");  // todo TRANQUI MATI ESTA MAL TABULADO A PROPOSITO
+    else
+      printf("%d\t\t\t\t\t\t\t\t\t\t",
+	     info[i]->priority);  // todo ESTE ESTA BIEN
     switch (info[i]->status) {
       case 0: printf("RUNNING\t\t"); break;
       case 1: printf("BLOCKED\t\t"); break;
       case 3: printf("READY\t\t\t\t"); break;
       default: printf("UNKNOWN\t\t"); break;
     }
-    printf("0x%x\t\t\t\t\t", info[i]->base);
-    printf("0x%x\t\t\t\t\t\t\t\t", info[i]->current);
+    printf("0x%x\t\t\t\t\t", info[i]->stack->base);
+    printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
     printf("%s", info[i]->name);
     putchar('\n');
     i++;
@@ -269,7 +284,7 @@ static void testProcesses() {
   char *helpArgs[] = {"loop", NULL};
   int	pid = createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
 			    "endless_loop", (uint8_t)6);
-  //test_processes();  // TODO en un futuro llamar a esta funcion
+  // test_processes();  // TODO en un futuro llamar a esta funcion
 }
 
 static void kill(char *pid) {

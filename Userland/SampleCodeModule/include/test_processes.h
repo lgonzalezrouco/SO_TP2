@@ -3,6 +3,6 @@
 
 #include <stdint.h>
 
-int64_t test_processes();
+int64_t test_processes(char* cant);
 
 #endif
