@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <libasm.h>
 #include <man.h>
 #include <shell.h>
@@ -8,6 +10,7 @@
 #include <string.h>
 #include <syscalls.h>
 #include <test_processes.h>
+#include <test_mm.h>
 #include <test_util.h>
 #include <types.h>
 
@@ -102,7 +105,7 @@ static Command commands[] = {
     {"nice", "Cambia la prioridad de un proceso", .h = (void *)&nice,
      DUAL_PARAM},
     {"t", "Corre el test de procesos, ingresar cantidad de procesos",
-     .g = (void *)&test_processes, SINGLE_PARAM},
+     .g = (void *)&test_mm, SINGLE_PARAM},
     {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *)&toggleBlock,
      SINGLE_PARAM},
 };
@@ -263,7 +266,7 @@ static void testProcesses() {
   char *helpArgs[] = {"loop", NULL};
   int	pid = createProcess((uint16_t)1, (ProcessCode)&endless_loop, helpArgs,
 			    "endless_loop", (uint8_t)6);
-  // test_processes();  // TODO en un futuro llamar a esta funcion
+  //test_processes();  // TODO en un futuro llamar a esta funcion
 }
 
 static void kill(char *pid) {

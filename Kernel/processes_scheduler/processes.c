@@ -1,4 +1,7 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
+#include <video.h>
 
 static uint16_t nextPid = 0;
 
@@ -20,7 +23,6 @@ int createProcess(uint16_t parentPid, ProcessCode code, char **args, char *name,
   if (process == NULL)
     return -1;
 
-  
   process->pid = getNextPid();
   if(process->pid == INVALID_PID) {
     free(process);
