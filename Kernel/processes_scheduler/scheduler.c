@@ -103,7 +103,7 @@ int killCurrentProcess(int retValue) {
 }
 
 int killProcess(int16_t pid, int retValue) {
-  PCB	  *process = getProcess(pid);
+  PCB	 *process = getProcess(pid);
   int16_t currentPid = getCurrentPid();
 
   if (process == NULL)

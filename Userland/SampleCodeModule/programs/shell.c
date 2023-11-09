@@ -224,8 +224,8 @@ static void ps() {
 
 static void help() {
   char *helpArgs[] = {"help", NULL};
-  int	pid = createProcess((int16_t)1, (ProcessCode)&printHelp, helpArgs,
-			    "help", (uint8_t)6);
+  int pid = createProcess((int16_t)1, (ProcessCode)&printHelp, helpArgs, "help",
+			  (uint8_t)6);
   if (pid != -1)
     waitpid((int16_t)pid);
 }

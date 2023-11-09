@@ -64,8 +64,7 @@ static uint64_t syscall_getPid();
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t,
 				 uint64_t, uint64_t);
 
-static sysFunctions sysfunctions[] = {
-              (sysFunctions)syscall_read,
+static sysFunctions sysfunctions[] = {(sysFunctions)syscall_read,
 				      (sysFunctions)syscall_write,
 				      (sysFunctions)syscall_clear,
 				      (sysFunctions)syscall_seconds,
@@ -88,8 +87,7 @@ static sysFunctions sysfunctions[] = {
 				      (sysFunctions)syscall_setPriority,
 				      (sysFunctions)syscall_waitpid,
 				      (sysFunctions)syscall_toggleBlock,
-				      (sysFunctions)syscall_getPid
-              };
+				      (sysFunctions)syscall_getPid};
 
 uint64_t syscallDispatcher(uint64_t id, uint64_t arg0, uint64_t arg1,
 			   uint64_t arg2, uint64_t arg3, uint64_t arg4,

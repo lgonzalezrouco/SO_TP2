@@ -4,8 +4,6 @@
 
 static int16_t nextPid = 0;
 
-static char **allocArguments(char **args);
-
 void resetPIDCounter() { nextPid = 0; }
 
 void processWrapper(ProcessCode function, char **args) {
@@ -58,8 +56,7 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
   process->priority = priority;
   process->retValue = -1;
   process->childRetValue = -1;
-
-  process->argv = allocArguments(args);
+  process->argv = args;
 
   void *stackEnd = (void *)((uint64_t)process->stack->base + STACK_SIZE);
 
@@ -82,7 +79,6 @@ void freeProcess(PCB *process) {
   free(process->stack->base);
   free(process->stack);
   free(process->name);
-  free(process->argv);
   free(process);
 }
 
@@ -104,22 +100,3 @@ PCB **getProcessesInfo() {
 }
 
 void freeProcessesInfo(PCB **infoArray) { free(infoArray); }
-
-static char **allocArguments(char **args) {
-  int argc = array_strlen(args), totalArgsLen = 0;
-  int argsLen[argc];
-  for (int i = 0; i < argc; i++) {
-    argsLen[i] = strlen(args[i]) + 1;
-    totalArgsLen += argsLen[i];
-  }
-  char **newArgsArray =
-      (char **)malloc(totalArgsLen + sizeof(char **) * (argc + 1));
-  char *charPosition = (char *)newArgsArray + (sizeof(char **) * (argc + 1));
-  for (int i = 0; i < argc; i++) {
-    newArgsArray[i] = charPosition;
-    memcpy(charPosition, args[i], argsLen[i]);
-    charPosition += argsLen[i];
-  }
-  newArgsArray[argc] = NULL;
-  return newArgsArray;
-}
