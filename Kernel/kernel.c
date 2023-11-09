@@ -6,6 +6,7 @@
 #include <moduleLoader.h>
 #include <processes.h>
 #include <scheduler.h>
+#include <semaphores.h>
 #include <stdint.h>
 #include <video.h>
 
@@ -47,6 +48,7 @@ int main() {
 
 	initializeMemoryManager();
 	initializeScheduler();
+	initializeSemaphores();
 
 	createProcess(0, (ProcessCode) &idle, idleArgs, "idle", IDLE_PRIORITY);
 	int shellPid = createProcess(0, (ProcessCode) sampleCodeModuleAddress, shellArgs, "shell", MAX_PRIORITY);
