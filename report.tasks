@@ -76,12 +76,11 @@ pvs-studio.com/en/docs/warnings/	1	err	Help: The documentation for all analyzer 
 /root/Kernel/interruptions/exceptions.c	26	err	V614 Potentially uninitialized pointer 'msg' used. Consider checking the first actual argument of the 'printError' function.
 /root/Kernel/kernel.c	24	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x400000
 /root/Kernel/kernel.c	25	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x500000
+/root/Kernel/memory/memoryManager.c	22	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x600000
+/root/Kernel/memory/memoryManager.c	23	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *)(0x600000 + 0x100000)
 /root/Kernel/memory/registers.c	34	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Kernel/memory/registers.c	34	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Kernel/memory/registers.c	36	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Kernel/processes_scheduler/processes.c	24	note	V605 Consider verifying the expression: process->pid == INVALID_PID. An unsigned value is compared to the number -7.
-/root/Kernel/processes_scheduler/processes.c	24	warn	V547 Expression 'process->pid == INVALID_PID' is always false.
-/root/Kernel/processes_scheduler/processes.c	117	warn	V769 The '(char *) newArgsArray' pointer in the expression could be nullptr. In such case, resulting value of arithmetic operations on this pointer will be senseless and it should not be used. Check lines: 117, 116.
 /root/Userland/SampleCodeModule/lib/stdio.c	122	note	V547 The 'A = !cursorDrawn' expression is equivalent to the 'A = 0' expression.
 /root/Userland/SampleCodeModule/lib/stdio.c	144	err	V781 The value of the 'bIdx' index is checked after it was used. Perhaps there is a mistake in program logic.
 /root/Userland/SampleCodeModule/lib/stdio.c	178	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
@@ -95,4 +94,4 @@ pvs-studio.com/en/docs/warnings/	1	err	Help: The documentation for all analyzer 
 /root/Userland/SampleCodeModule/tests/test_mm.c	39	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Userland/SampleCodeModule/tests/test_processes.c	57	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
 /root/Userland/SampleCodeModule/tests/test_processes.c	60	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
-/root/Userland/SampleCodeModule/tests/test_util.c	74	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The argument is expected to be not greater than 32-bit.
+/root/Userland/SampleCodeModule/tests/test_util.c	74	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
