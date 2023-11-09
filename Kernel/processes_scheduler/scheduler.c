@@ -10,8 +10,6 @@ int processesQty = 0;
 
 static PCB * getNextProcess();
 static void killChildren(int16_t parentPid);
-static int blockProcess(int16_t pid);
-static int unblockProcess(int16_t pid);
 static void runProcess(int16_t pid);
 static void stopProcess(int16_t pid);
 
@@ -172,25 +170,7 @@ int16_t getNextPid() {
 	return INVALID_PID;
 }
 
-static PCB * getNextProcess() {
-	PCB * process = NULL;
-
-	for (int i = MAX_PRIORITY; i >= MIN_PRIORITY && process == NULL; i--) {
-		if (!isEmpty(queues[i]))
-			process = dequeue(queues[i]);
-	}
-
-	return process == NULL ? getProcess(IDLE_PID) : process;
-}
-
-static void killChildren(int16_t parentPid) {
-	for (int i = 0; i < MAX_PROCESSES; i++) {
-		if (processes[i] != NULL && processes[i]->parentPid == parentPid)
-			killProcess(processes[i]->pid, -1);
-	}
-}
-
-static int blockProcess(int16_t pid) {
+int blockProcess(int16_t pid) {
 	PCB * process = getProcess(pid);
 
 	if (process == NULL)
@@ -212,7 +192,7 @@ static int blockProcess(int16_t pid) {
 	return SUCCESS;
 }
 
-static int unblockProcess(int16_t pid) {
+int unblockProcess(int16_t pid) {
 	PCB * process = getProcess(pid);
 
 	if (process == NULL)
@@ -228,6 +208,25 @@ static int unblockProcess(int16_t pid) {
 	}
 	return SUCCESS;
 }
+
+static PCB * getNextProcess() {
+	PCB * process = NULL;
+
+	for (int i = MAX_PRIORITY; i >= MIN_PRIORITY && process == NULL; i--) {
+		if (!isEmpty(queues[i]))
+			process = dequeue(queues[i]);
+	}
+
+	return process == NULL ? getProcess(IDLE_PID) : process;
+}
+
+static void killChildren(int16_t parentPid) {
+	for (int i = 0; i < MAX_PROCESSES; i++) {
+		if (processes[i] != NULL && processes[i]->parentPid == parentPid)
+			killProcess(processes[i]->pid, -1);
+	}
+}
+
 
 static void runProcess(int16_t pid) {
 	PCB * process = getProcess(pid);

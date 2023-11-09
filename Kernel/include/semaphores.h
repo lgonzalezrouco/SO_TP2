@@ -2,6 +2,12 @@
 #define _SEMAPHORES_H_
 
 #include <stdint.h>
+#include <queueADT.h>
+#include <lib.h>
+#include <scheduler.h>
+#include <stddef.h>
+#include <types.h>
+#include <stdbool.h>
 
 typedef int sem_t;
 
@@ -9,6 +15,9 @@ typedef struct Semaphore {
 	char name[50];
 	sem_t id;
 	uint32_t value;
+	bool mutex;
+	QueueADT blockedProcesses;
+	QueueADT mutexProcesses;
 } Semaphore;
 
 void initializeSemaphores();
@@ -22,7 +31,7 @@ void initializeSemaphores();
  * @param value: Valor inicial del semaforo
  * @return 0 si se creo correctamente, -1 si ya existe un semaforo con ese nombre
  */
-int sem_init(const char * name, uint32_t value);
+int semInit(char * name, uint32_t value);
 
 /**
  * @brief Abre un semaforo con el nombre name
@@ -30,7 +39,7 @@ int sem_init(const char * name, uint32_t value);
  * @param name: Nombre del semaforo
  * @return 0 si se abrio correctamente, -1 si no se pudo abrir
  */
-int sem_open(const char * name);
+int semOpen(const char * name);
 
 /**
  * @brief Cierra el semaforo indicado
@@ -38,6 +47,22 @@ int sem_open(const char * name);
  * @param name: nombre del semaforo a cerrar
  * @return 0 si se borro correctamente, -1 si no se pudo borrar
  */
-int sem_close(const char * name);
+int semClose(const char * name);
+
+/**
+ * @brief Incrementa el valor del semaforo indicado
+ * 
+ * @param name: nombre del semaforo a incrementar
+ * @return 0 si se incremento correctamente, -1 si no se pudo incrementar
+*/
+int semWait(const char * name);
+
+/**
+ * @brief Decrementa el valor del semaforo indicado
+ * 
+ * @param name: nombre del semaforo a decrementar
+ * @return 0 si se decremento correctamente, -1 si no se pudo decrementar
+*/
+int semPost(const char * name);
 
 #endif

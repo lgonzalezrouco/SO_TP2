@@ -290,6 +290,8 @@ static void printProcesses() {
 static void testProcesses() {
 	char * helpArgs[] = {"loop", NULL};
 	createProcess((int16_t) 1, (ProcessCode) &endless_loop, helpArgs, "endless_loop", (uint8_t) 6);
+	//char * helpProp[] = {"5"};
+	//int pid = createProcess((int16_t) 1, (ProcessCode) &test_processes, helpProp, "test_processes", (uint8_t) 6);
 }
 
 static void kill(char * pid) {

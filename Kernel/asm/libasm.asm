@@ -5,6 +5,7 @@ GLOBAL getKeyPressed
 GLOBAL startSound
 GLOBAL stopSound
 GLOBAL saveRegisters
+GLOBAL criticalRegion
 
 section .text
     
@@ -117,4 +118,16 @@ stopSound:
 saveRegisters:
     mov rdi, rbp 
     call copyRegisters
+    ret
+
+criticalRegion:
+    push rbp
+    mov rbp, rsp
+
+    mov eax, 1
+    xchg eax, [rdi]
+
+    mov rsp, rbp
+    pop rbp
+
     ret
