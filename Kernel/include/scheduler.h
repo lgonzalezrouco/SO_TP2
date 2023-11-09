@@ -15,13 +15,13 @@ void initializeScheduler();
 
 void startShell(int16_t pid);
 
-void addProcess(PCB *process);
+void addProcess(PCB * process);
 
-PCB *getProcess(int16_t pid);
+PCB * getProcess(int16_t pid);
 
 int16_t getCurrentPid();
 
-void *schedule(void *currentSP);
+void * schedule(void * currentSP);
 
 int toggleBlockProcess(int16_t pid);
 

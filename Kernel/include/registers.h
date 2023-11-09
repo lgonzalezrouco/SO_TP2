@@ -13,12 +13,12 @@
  * @param  newRsp: Direccion del RSP a partir de la que se encuentran los
  * registros
  */
-void dump(uint64_t rip, uint64_t rsp, uint64_t *newRsp);
+void dump(uint64_t rip, uint64_t rsp, uint64_t * newRsp);
 
 /**
  * @brief Devuelve el snapshot de los registros
  * @return Puntero a los registros
  */
-uint64_t *getLastRegSnapshot();
+uint64_t * getLastRegSnapshot();
 
 #endif

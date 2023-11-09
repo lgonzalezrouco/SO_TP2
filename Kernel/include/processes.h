@@ -11,17 +11,16 @@
 
 void resetPIDCounter();
 
-void processWrapper(ProcessCode code, char **args);
+void processWrapper(ProcessCode code, char ** args);
 
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
-		  uint8_t priority);
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority);
 
-int idle(int argc, char **argv);
+int idle(int argc, char ** argv);
 
-void freeProcess(PCB *process);
+void freeProcess(PCB * process);
 
-PCB **getProcessesInfo();
+PCB ** getProcessesInfo();
 
-void freeProcessesInfo(PCB **infoArray);
+void freeProcessesInfo(PCB ** infoArray);
 
 #endif

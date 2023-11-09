@@ -37,7 +37,7 @@ void clear(void);
  * @param regarr: Vector donde se llena la informacion de los registros
  * @return Puntero a la informacion de los registros
  */
-uint64_t *getInfoReg(uint64_t *regarr);
+uint64_t * getInfoReg(uint64_t * regarr);
 
 /**
  * @brief Cambia el tamaño de la fuente
@@ -59,8 +59,7 @@ uint32_t getScreenResolution();
  * @param  height: Alto
  * @param  color: Color de relleno
  */
-void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-	      Color color);
+void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color);
 
 /**
  * @brief Devuelve la cantidad de ticks actuales
@@ -74,7 +73,7 @@ uint64_t getTicks();
  * @param pos: Direccion de memoria a partir de la cual se llena el vector
  * @param vec: Vector en el cual se llena la informacion
  */
-void getMemory(uint64_t pos, uint8_t *vec);
+void getMemory(uint64_t pos, uint8_t * vec);
 
 /**
  * @brief Reproduce un sonido
@@ -107,31 +106,31 @@ Color getFontColor();
  * @param size: Cantidad de bytes a reservar
  * @return Puntero a la memoria reservada
  */
-void *malloc(uint64_t size);
+void * malloc(uint64_t size);
 
 /**
  * @brief Libera memoria reservada dinamicamente
  * @param ptr: Puntero a la memoria a liberar
  */
-void free(void *ptr);
+void free(void * ptr);
 
 /**
  * @brief Devuelve informacion sobre el estado de la memoria
  * @return Informacion sobre el estado de la memoria
  */
-memoryInfo *getMemoryInfo();
+memoryInfo * getMemoryInfo();
 
 /**
  * @brief Devuelve informacion sobre los procesos
  * @return Informacion sobre los procesos
  */
-PCB **getProcessesInfo();
+PCB ** getProcessesInfo();
 
 /**
  * @brief Libera la memoria reservada para la informacion de los procesos
  * @param infoArray: Informacion de los procesos
  */
-void freeProcessesInfo(PCB **infoArray);
+void freeProcessesInfo(PCB ** infoArray);
 
 /**
  * @brief Crea un proceso
@@ -141,8 +140,7 @@ void freeProcessesInfo(PCB **infoArray);
  * @param name: Nombre del proceso
  * @param priority: Prioridad del proceso
  */
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name,
-		  uint8_t priority);
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority);
 
 /**
  * @brief Mata a un proceso

@@ -6,17 +6,17 @@
 #include <stdint.h>
 
 typedef struct memoryInfo {
-  int totalMemory;
-  int usedMemory;
-  int freeMemory;
+	int totalMemory;
+	int usedMemory;
+	int freeMemory;
 } memoryInfo;
 
 void initializeMemoryManager();
 
-void *malloc(uint64_t size);
+void * malloc(uint64_t size);
 
-void free(void *ptr);
+void free(void * ptr);
 
-memoryInfo *getMemoryInfo();
+memoryInfo * getMemoryInfo();
 
 #endif
