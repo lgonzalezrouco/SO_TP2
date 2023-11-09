@@ -2,19 +2,33 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <keyboard.h>
 #include <lib.h>
+#include <semaphores.h>
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
-#define BUFFER_CAPACITY 10                     /* Longitud maxima del vector _buffer */
-#define HOTKEY          29                     /* Scancode para el snapshot de registros */
+
+#define BUFFER_CAPACITY 32   /* Longitud maxima del vector _buffer */
+#define LEFT_CONTROL    29   /* Scancode para la tecla control izquierda */
+#define LEFT_SHIFT      42   /* Scancode para la tecla shift izquierda */
+#define HOTKEY          29   /* Scancode para el snapshot de registros */
+#define RELEASED        0x80 /* Mascara para detectar si una tecla fue liberada */
+#define SHIFTED         0x80 /* Mascara para detectar si una tecla fue presionada con shift */
+
 static uint8_t _bufferStart = 0;               /* Indice del comienzo de la cola */
 static char _bufferSize = 0;                   /* Longitud de la cola */
-static uint8_t _buffer[BUFFER_CAPACITY] = {0}; /* Vector ciclico que guarda las teclas
-                                                * que se van leyendo del teclado */
-static const char charHexMap[256] =            /* Mapa de scancode a ASCII */
-    {0,   0,   '1', '2', '3', '4', '5',  '6', '7', '8', '9', '0', '-', '=', '\b', ' ', 'q', 'w', 'e',  'r', 't', 'y',
-     'u', 'i', 'o', 'p', '[', ']', '\n', 0,   'a', 's', 'd', 'f', 'g', 'h', 'j',  'k', 'l', ';', '\'', 0,   0,   '\\',
-     'z', 'x', 'c', 'v', 'b', 'n', 'm',  ',', '.', '/', 0,   '*', 0,   ' ', 0,    0,   0,   0,   0,    0};
+static uint8_t _buffer[BUFFER_CAPACITY] = {0}; /* Vector ciclico que guarda las teclas que se van leyendo del teclado */
+
+static const char charHexMap[] = /* Mapa de scancode a ASCII */
+    {0,    0,   '1', '2',  '3', '4', '5', '6', '7',  '8', '9', '0', '-', '=', '\b', ' ', 'q', 'w', 'e', 'r',
+     't',  'y', 'u', 'i',  'o', 'p', '[', ']', '\n', 0,   'a', 's', 'd', 'f', 'g',  'h', 'j', 'k', 'l', ';',
+     '\'', 0,   0,   '\\', 'z', 'x', 'c', 'v', 'b',  'n', 'm', ',', '.', '/', 0,    '*', 0,   ' '};
+static const char shiftedCharHexMap[] = /* Mapa de scancode con shift a ASCII */
+    {0,   0,   '!', '@', '#', '$', '%', '^', '&',  '*', '(', ')', '_', '+', '\b', ' ', 'Q', 'W', 'E', 'R',
+     'T', 'Y', 'U', 'I', 'O', 'P', '{', '}', '\n', 0,   'A', 'S', 'D', 'F', 'G',  'H', 'J', 'K', 'L', ';',
+     '"', 0,   0,   '|', 'Z', 'X', 'C', 'V', 'B',  'N', 'M', '<', '>', '?', 0,    '*', 0,   ' '};
+
+static uint8_t _ctrl = 0;  /* Flag para detectar si se presiono ctrl */
+static uint8_t _shift = 0; /* Flag para detectar si se presiono shift */
 
 /**
  * @brief  Obtiene el indice del elemento en la cola dado un corrimiento
@@ -24,18 +38,44 @@ static const char charHexMap[256] =            /* Mapa de scancode a ASCII */
 static int getBufferIndex(int offset) {
 	return (_bufferStart + offset) % (BUFFER_CAPACITY);
 }
+static void writeKey(char key);
+
+void initializeKeyboardDriver() {
+	semInit("keyboard", 0);
+}
 
 void keyboardHandler() {
 	uint8_t key = getKeyPressed();
-	if (_bufferSize < BUFFER_CAPACITY - 1) {
-		if (!(key & 0x80)) {
-			if (key == HOTKEY) {
-				saveRegisters();
-				return;
-			}
-			_buffer[getBufferIndex(_bufferSize)] = key;
-			_bufferSize++;
+	if (!(key & RELEASED)) {
+		if (key == LEFT_CONTROL)
+			_ctrl = 1;
+		else if (key == LEFT_SHIFT)
+			_shift = 1;
+		else if (_ctrl) {
+			;  // todo ctrl + d
+		} else if (_bufferSize < BUFFER_CAPACITY - 1) {
+			if (_shift)
+				key = SHIFTED | key;
+			writeKey(key);
 		}
+	}
+	/* if (_bufferSize < BUFFER_CAPACITY - 1) {
+	        if (!(key & 0x80)) {
+	                if (key == HOTKEY) {
+	                        saveRegisters();
+	                        return;
+	                }
+	                _buffer[getBufferIndex(_bufferSize)] = key;
+	                _bufferSize++;
+	        }
+	} */
+}
+
+static void writeKey(char key) {
+	if (((key & 0x7F) < sizeof(charHexMap) && charHexMap[key & 0x7F] != 0) || (int) key == EOF) {
+		_buffer[getBufferIndex(_bufferSize)] = key;
+		_bufferSize++;
+		semPost("keyboard");
 	}
 }
 
@@ -50,5 +90,6 @@ char getScancode() {
 }
 
 char getAscii() {
+	semWait("keyboard");
 	return charHexMap[(int) getScancode()];
 }

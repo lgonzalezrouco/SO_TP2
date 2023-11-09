@@ -125,9 +125,6 @@ void forceTimerTick();
  */
 void forceChangeOfProcess(uint64_t * RSP);
 
-/**
- * 
-*/
-int criticalRegion(uint64_t * mutex);
+int criticalRegion(int * mutex);
 
 #endif

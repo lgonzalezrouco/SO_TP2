@@ -1,13 +1,13 @@
 #ifndef _SEMAPHORES_H_
 #define _SEMAPHORES_H_
 
-#include <stdint.h>
-#include <queueADT.h>
 #include <lib.h>
+#include <queueADT.h>
 #include <scheduler.h>
-#include <stddef.h>
-#include <types.h>
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
+#include <types.h>
 
 typedef int sem_t;
 
@@ -15,7 +15,7 @@ typedef struct Semaphore {
 	char name[50];
 	sem_t id;
 	uint32_t value;
-	bool mutex;
+	int mutex;
 	QueueADT blockedProcesses;
 	QueueADT mutexProcesses;
 } Semaphore;
@@ -51,18 +51,18 @@ int semClose(const char * name);
 
 /**
  * @brief Incrementa el valor del semaforo indicado
- * 
+ *
  * @param name: nombre del semaforo a incrementar
  * @return 0 si se incremento correctamente, -1 si no se pudo incrementar
-*/
+ */
 int semWait(const char * name);
 
 /**
  * @brief Decrementa el valor del semaforo indicado
- * 
+ *
  * @param name: nombre del semaforo a decrementar
  * @return 0 si se decremento correctamente, -1 si no se pudo decrementar
-*/
+ */
 int semPost(const char * name);
 
 #endif
