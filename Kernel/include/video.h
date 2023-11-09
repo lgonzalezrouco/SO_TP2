@@ -21,8 +21,7 @@ void videoClear();
  * @param  height: Alto
  * @param  color: Color de relleno
  */
-void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height,
-	      Color color);
+void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color color);
 
 /**
  * @brief  Cambiar el color de la letra para STDIN
@@ -51,21 +50,21 @@ void printChar(char c);
  * @brief  Imprime una cadena de caracteres en pantalla
  * @param  s: Cadena de caracteres a imprimir
  */
-void print(const char *s);
+void print(const char * s);
 
 /**
  * @brief  Imprime una cadena de caracteres con formato en pantalla
  * @note   No confundir con la funcion printf definida en userland
  * @param  fmt: Formato
  */
-void printf(char *fmt, ...);
+void printf(char * fmt, ...);
 
 /**
  * @brief  Imprime n caracteres de un string
  * @param  s: String origen
  * @param  n: Cantidad de caracteres a imprimir
  */
-void printN(const char *s, uint32_t n);
+void printN(const char * s, uint32_t n);
 
 /**
  * @brief  Imprime n veces un caracter

@@ -15,6 +15,14 @@ GLOBAL getFontColor
 GLOBAL malloc
 GLOBAL free
 GLOBAL getMemoryInfo
+GLOBAL getProcessesInfo
+GLOBAL freeProcessesInfo
+GLOBAL createProcess
+GLOBAL killProcess
+GLOBAL setPriority
+GLOBAL waitpid
+GLOBAL toggleBlockProcess
+GLOBAL getPid
 
 read:
     mov rax, 0
@@ -94,5 +102,45 @@ free:
 
 getMemoryInfo:
     mov rax, 15
+    int 80h
+    ret
+
+getProcessesInfo:
+    mov rax, 16
+    int 80h
+    ret
+
+freeProcessesInfo:
+    mov rax, 17
+    int 80h
+    ret
+
+createProcess:
+    mov rax, 18
+    int 80h
+    ret
+
+killProcess:
+    mov rax, 19
+    int 80h
+    ret
+
+setPriority:
+    mov rax, 20
+    int 80h
+    ret
+
+waitpid:
+    mov rax, 21
+    int 80h
+    ret
+
+toggleBlockProcess:
+    mov rax, 22
+    int 80h
+    ret
+
+getPid:
+    mov rax, 23
     int 80h
     ret
