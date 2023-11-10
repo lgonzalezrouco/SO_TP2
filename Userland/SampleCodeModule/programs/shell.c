@@ -14,6 +14,7 @@
 #include <test_util.h>
 #include <test_sync.h>
 #include <types.h>
+#include <test_prio.h>
 
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
@@ -102,7 +103,8 @@ static Command commands[] = {
     {"tm", "Corre el test de memoria, ingresar cantidad de memoria", .g = (void *) &test_mm, SINGLE_PARAM},
     {"tp", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *) &test_processes, SINGLE_PARAM},
     {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *) &toggleBlock, SINGLE_PARAM},
-	{"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM}
+	{"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM},
+	{"tprio", "Corre el test de prioridades, ", .f = (void *) &test_prio, NO_PARAMS},
 };
 
 void run_shell() {
