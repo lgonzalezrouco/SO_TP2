@@ -10,6 +10,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
+#include <semaphores.h>
 
 /* File Descriptors*/
 #define STDIN  0
@@ -57,6 +58,12 @@ static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(int16_t pid);
 static uint64_t syscall_toggleBlock(int16_t pid);
 static uint64_t syscall_getPid();
+static uint64_t syscall_yield();
+static uint64_t syscall_semInit(char* name, uint32_t value);
+static uint64_t syscall_semOpen(char* name);
+static uint64_t syscall_semClose(char* name);
+static uint64_t syscall_semWait(char* name);
+static uint64_t syscall_semPost(char* name);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -83,7 +90,13 @@ static sysFunctions sysfunctions[] = {(sysFunctions) syscall_read,
                                       (sysFunctions) syscall_setPriority,
                                       (sysFunctions) syscall_waitpid,
                                       (sysFunctions) syscall_toggleBlock,
-                                      (sysFunctions) syscall_getPid};
+                                      (sysFunctions) syscall_getPid,
+									  (sysFunctions) syscall_yield,
+									  (sysFunctions) syscall_semInit,
+									  (sysFunctions) syscall_semOpen,
+									  (sysFunctions) syscall_semClose,
+									  (sysFunctions) syscall_semWait,
+									  (sysFunctions) syscall_semPost};
 
 uint64_t syscallDispatcher(
     uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -218,4 +231,29 @@ static uint64_t syscall_toggleBlock(int16_t pid) {
 
 static uint64_t syscall_getPid() {
 	return (uint64_t) getCurrentPid();
+}
+
+static uint64_t syscall_yield() {
+	yield();
+	return 0;
+}
+
+static uint64_t syscall_semInit(char* name, uint32_t value) {
+	return (uint64_t) semInit(name, value);
+}
+
+static uint64_t syscall_semOpen(char* name) {
+	return (uint64_t) semOpen(name);
+}
+
+static uint64_t syscall_semClose(char* name) {
+	return (uint64_t) semClose(name);
+}
+
+static uint64_t syscall_semWait(char* name) {
+	return (uint64_t) semWait(name);
+}
+
+static uint64_t syscall_semPost(char* name) {
+	return (uint64_t) semPost(name);
 }

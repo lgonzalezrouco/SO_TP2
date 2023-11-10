@@ -31,7 +31,7 @@ int semInit(char * name, uint32_t value) {
 	strcpy(semaphores[id]->name, name);
 	semaphores[id]->id = id;
 	semaphores[id]->value = value;
-	semaphores[id]->mutex = false;
+	semaphores[id]->mutex = 0;
 	semaphores[id]->blockedProcesses = createQueueADT();
 	semaphores[id]->mutexProcesses = createQueueADT();
 
@@ -63,9 +63,11 @@ int semWait(const char * name) {
 
 	getExclusiveAccess(semaphore);
 
-	if (semaphore->value <= 0) {
+	while (semaphore->value == 0) {
 		uint16_t pid = getCurrentPid();
-		PCB* process = getProcess(pid);
+		PCB * process = getProcess(pid);
+		if(process == NULL)
+			return -1;
 		enqueue(semaphore->blockedProcesses, process);
 		blockProcess(pid);
 		releaseExclusiveAccess(semaphore);
@@ -86,7 +88,7 @@ int semPost(const char * name) {
 	getExclusiveAccess(semaphore);
 
 	semaphore->value++;
-	if (semaphore->value <= 0) {
+	if (semaphore->value == 0) {
 		releaseExclusiveAccess(semaphore);
 		return -1;
 	}
@@ -119,9 +121,11 @@ static void freeSemaphore(Semaphore * semaphore) {
 }
 
 static void getExclusiveAccess(Semaphore * semaphore) {
-	while(criticalRegion(&(semaphore->mutex))){
+	while (criticalRegion(&(semaphore->mutex))) {
 		uint16_t pid = getCurrentPid();
-		PCB* process = getProcess(pid);
+		PCB * process = getProcess(pid);
+		if(process == NULL)
+			return -1;
 		enqueue(semaphore->mutexProcesses, process);
 		blockProcess(pid);
 		yield();
@@ -130,13 +134,14 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 
 static void releaseExclusiveAccess(Semaphore * semaphore) {
 	resumeUnblockedProcess(semaphore->mutexProcesses);
-	semaphore->mutex = false;
+	semaphore->mutex = 0;
 }
 
 static void resumeUnblockedProcess(QueueADT queue) {
 	if (!isEmpty(queue)) {
-		PCB *process = dequeue(queue);
-		if(process!=NULL)
+		PCB * process = dequeue(queue);
+		if (process != NULL){
 			unblockProcess(process->pid);
+		}
 	}
 }

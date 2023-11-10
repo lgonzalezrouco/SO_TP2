@@ -111,3 +111,12 @@ void freeQueue(QueueADT queue) {
 	freeRec(queue->first);
 	free(queue);
 }
+
+void dumpQueue (QueueADT queue) { // todo borrar
+	printf("dumping queue\n");
+	TNode node = queue->first;
+	while (node != NULL) {
+		printf("pid: %d\n", node->process->pid);
+		node = node->next;
+	}
+}

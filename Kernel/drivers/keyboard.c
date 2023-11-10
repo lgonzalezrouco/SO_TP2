@@ -41,7 +41,7 @@ static int getBufferIndex(int offset) {
 static void writeKey(char key);
 
 void initializeKeyboardDriver() {
-	semInit("keyboard", 0);
+	//semInit("keyboard", 0);
 }
 
 void keyboardHandler() {
@@ -75,7 +75,7 @@ static void writeKey(char key) {
 	if (((key & 0x7F) < sizeof(charHexMap) && charHexMap[key & 0x7F] != 0) || (int) key == EOF) {
 		_buffer[getBufferIndex(_bufferSize)] = key;
 		_bufferSize++;
-		semPost("keyboard");
+		//semPost("keyboard");
 	}
 }
 
@@ -90,6 +90,6 @@ char getScancode() {
 }
 
 char getAscii() {
-	semWait("keyboard");
+	//semWait("keyboard");
 	return charHexMap[(int) getScancode()];
 }

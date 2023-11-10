@@ -23,6 +23,12 @@ GLOBAL setPriority
 GLOBAL waitpid
 GLOBAL toggleBlockProcess
 GLOBAL getPid
+GLOBAL yield
+GLOBAL semInit
+GLOBAL semOpen
+GLOBAL semClose
+GLOBAL semWait
+GLOBAL semPost
 
 read:
     mov rax, 0
@@ -142,5 +148,35 @@ toggleBlockProcess:
 
 getPid:
     mov rax, 23
+    int 80h
+    ret
+
+yield:
+    mov rax, 24
+    int 80h
+    ret
+
+semInit:
+    mov rax, 25
+    int 80h
+    ret
+
+semOpen:
+    mov rax, 26
+    int 80h
+    ret
+
+semClose:
+    mov rax, 27
+    int 80h
+    ret
+
+semWait:
+    mov rax, 28
+    int 80h
+    ret
+
+semPost:
+    mov rax, 29
     int 80h
     ret

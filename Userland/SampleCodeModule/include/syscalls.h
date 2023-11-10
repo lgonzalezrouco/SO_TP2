@@ -166,6 +166,7 @@ int waitpid(int16_t pid);
 
 /**
  * @brief Bloquea o desbloquea un proceso
+ * @param pid: PID del proceso a bloquear o desbloquear
  */
 int toggleBlockProcess(int16_t pid);
 
@@ -174,5 +175,46 @@ int toggleBlockProcess(int16_t pid);
  * @return PID del proceso actual
  */
 int16_t getPid();
+
+/**
+ * @brief fuerza el cambio de contexto
+ */
+void yield();
+
+/**
+ * @brief Inicializa un semaforo
+ * @param name: Nombre del semaforo
+ * @param value: Valor inicial del semaforo
+ * @return 0 si se pudo inicializar, -1 si no
+ */
+int semInit(char* name, uint32_t value);
+
+/**
+ * @brief Abre un semaforo
+ * @param name: Nombre del semaforo
+ * @return 0 si se pudo abrir, -1 si no
+ */
+int semOpen(const char* name);
+
+/**
+ * @brief Cierra un semaforo
+ * @param name: Nombre del semaforo
+ * @return 0 si se pudo cerrar, -1 si no
+ */
+int semClose(const char* name);
+
+/**
+ * @brief Destruye un semaforo
+ * @param name: Nombre del semaforo
+ * @return 0 si se pudo destruir, -1 si no
+ */
+int semWait(const char* name);
+
+/**
+ * @brief Incrementa el valor de un semaforo
+ * @param name: Nombre del semaforo
+ * @return 0 si se pudo incrementar, -1 si no
+ */
+int semPost(const char* name);
 
 #endif

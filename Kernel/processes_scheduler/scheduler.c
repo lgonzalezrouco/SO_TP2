@@ -182,7 +182,9 @@ int blockProcess(int16_t pid) {
 		process->status = BLOCKED;
 		process->priority = BLOCKED_PRIORITY;
 		enqueue(queues[process->priority], process);
-		yield();
+		// quantumRemaining = 0; // todo ver si esto estaria bien
+		//if(process->pid == getCurrentPid()) // todo ver que onda esto
+			//yield();
 	} else if (process->status == READY) {
 		removeByPid(queues[process->priority], process->pid);
 		process->status = BLOCKED;

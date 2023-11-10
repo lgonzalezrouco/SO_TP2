@@ -12,6 +12,7 @@
 #include <test_mm.h>
 #include <test_processes.h>
 #include <test_util.h>
+#include <test_sync.h>
 #include <types.h>
 
 /* Enum para la cantidad de argumentos recibidos */
@@ -101,6 +102,7 @@ static Command commands[] = {
     {"tm", "Corre el test de memoria, ingresar cantidad de memoria", .g = (void *) &test_mm, SINGLE_PARAM},
     {"tp", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *) &test_processes, SINGLE_PARAM},
     {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *) &toggleBlock, SINGLE_PARAM},
+	{"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM}
 };
 
 void run_shell() {
