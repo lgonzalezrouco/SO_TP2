@@ -70,8 +70,12 @@ int toggleBlockProcess(int16_t pid) {
 
 	if (process->status == BLOCKED)
 		return unblockProcess(pid);
-	else
-		return blockProcess(pid);
+	else {
+		blockProcess(pid);
+		if (process->pid == getCurrentPid())
+			yield();
+	}
+	return SUCCESS;
 }
 
 int setPriority(int16_t pid, uint8_t newPriority) {
@@ -170,7 +174,7 @@ int16_t getNextPid() {
 	return INVALID_PID;
 }
 
-int semaphoreBlockProcess(int16_t pid) {  // todo make a unified function or another alternative
+int blockProcess(int16_t pid) {
 	PCB * process = getProcess(pid);
 
 	if (process == NULL)
@@ -189,33 +193,6 @@ int semaphoreBlockProcess(int16_t pid) {  // todo make a unified function or ano
 	process->priority = BLOCKED_PRIORITY;
 	enqueue(queues[process->priority], process);
 
-	return SUCCESS;
-}
-
-int blockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
-
-	if (process == NULL)
-		return NOT_FOUND;
-
-	if (process->pid == IDLE_PID)
-		return INVALID_PROCESS;
-
-	if (process->status == BLOCKED)
-		return SAME_STATUS;
-	else if (process->status == RUNNING) {
-		process->status = BLOCKED;
-		process->priority = BLOCKED_PRIORITY;
-		enqueue(queues[process->priority], process);
-
-		if (process->pid == getCurrentPid())
-			yield();
-	} else if (process->status == READY) {
-		removeByPid(queues[process->priority], process->pid);
-		process->status = BLOCKED;
-		process->priority = BLOCKED_PRIORITY;
-		enqueue(queues[process->priority], process);
-	}
 	return SUCCESS;
 }
 

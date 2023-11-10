@@ -69,7 +69,7 @@ int semWait(const char * name) {
 		if (process == NULL)
 			return -1;
 		enqueue(semaphore->blockedProcesses, process);
-		semaphoreBlockProcess(pid);
+		blockProcess(pid);
 		releaseExclusiveAccess(semaphore);
 		yield();
 
@@ -128,7 +128,7 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 		if (process == NULL)
 			return;
 		enqueue(semaphore->mutexProcesses, process);
-		semaphoreBlockProcess(pid);
+		blockProcess(pid);
 		yield();
 	}
 }
@@ -141,8 +141,7 @@ static void releaseExclusiveAccess(Semaphore * semaphore) {
 static void resumeUnblockedProcess(QueueADT queue) {
 	if (!isEmpty(queue)) {
 		PCB * process = dequeue(queue);
-		if (process != NULL) {
+		if (process != NULL)
 			unblockProcess(process->pid);
-		}
 	}
 }

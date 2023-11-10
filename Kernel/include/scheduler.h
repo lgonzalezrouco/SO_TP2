@@ -39,8 +39,6 @@ int waitpid(int16_t pid);
 
 int16_t getNextPid();
 
-int semaphoreBlockProcess(int16_t pid);
-
 int blockProcess(int16_t pid);
 
 int unblockProcess(int16_t pid);
