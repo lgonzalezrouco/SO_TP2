@@ -44,7 +44,7 @@ static int getBufferIndex(int offset) {
 static void writeKey(int8_t key);
 
 void initializeKeyboardDriver() {
-	// semInit("keyboard", 0);
+	semInit("keyboard", 0);
 }
 
 void keyboardHandler() {

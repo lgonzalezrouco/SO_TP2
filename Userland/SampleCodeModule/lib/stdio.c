@@ -38,12 +38,13 @@ void printErr(const char * s) {
 
 int getchar() {
 	char c;
-	c = read(STDIN);
+	read(STDIN, &c, 1);
 	return c;
 }
 
 char getScanCode() {
-	return read(KBDIN);
+	return 0;
+	// return read(KBDIN);
 }
 
 void printf(char * fmt, ...) {

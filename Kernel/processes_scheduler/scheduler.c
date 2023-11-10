@@ -170,11 +170,36 @@ int16_t getNextPid() {
 	return INVALID_PID;
 }
 
+int semaphoreBlockProcess(int16_t pid) {  // todo make a unified function or another alternative
+	PCB * process = getProcess(pid);
+
+	if (process == NULL)
+		return NOT_FOUND;
+
+	if (process->pid == IDLE_PID)
+		return INVALID_PROCESS;
+
+	if (process->status == BLOCKED)
+		return SAME_STATUS;
+
+	if (process->status == READY)
+		removeByPid(queues[process->priority], process->pid);
+
+	process->status = BLOCKED;
+	process->priority = BLOCKED_PRIORITY;
+	enqueue(queues[process->priority], process);
+
+	return SUCCESS;
+}
+
 int blockProcess(int16_t pid) {
 	PCB * process = getProcess(pid);
 
 	if (process == NULL)
 		return NOT_FOUND;
+
+	if (process->pid == IDLE_PID)
+		return INVALID_PROCESS;
 
 	if (process->status == BLOCKED)
 		return SAME_STATUS;
@@ -182,9 +207,9 @@ int blockProcess(int16_t pid) {
 		process->status = BLOCKED;
 		process->priority = BLOCKED_PRIORITY;
 		enqueue(queues[process->priority], process);
-		// quantumRemaining = 0; // todo ver si esto estaria bien
-		// if(process->pid == getCurrentPid()) // todo ver que onda esto
-		//	yield();
+
+		if (process->pid == getCurrentPid())
+			yield();
 	} else if (process->status == READY) {
 		removeByPid(queues[process->priority], process->pid);
 		process->status = BLOCKED;
@@ -207,6 +232,7 @@ int unblockProcess(int16_t pid) {
 		enqueue(queues[process->priority], process);
 		process->status = READY;
 		process->quantum = 1;
+		quantumRemaining = 0;
 	}
 	return SUCCESS;
 }

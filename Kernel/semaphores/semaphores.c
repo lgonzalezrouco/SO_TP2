@@ -69,9 +69,10 @@ int semWait(const char * name) {
 		if (process == NULL)
 			return -1;
 		enqueue(semaphore->blockedProcesses, process);
-		blockProcess(pid);
+		semaphoreBlockProcess(pid);
 		releaseExclusiveAccess(semaphore);
 		yield();
+
 		getExclusiveAccess(semaphore);
 	}
 	semaphore->value--;
@@ -125,9 +126,9 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 		uint16_t pid = getCurrentPid();
 		PCB * process = getProcess(pid);
 		if (process == NULL)
-			return -1;
+			return;
 		enqueue(semaphore->mutexProcesses, process);
-		blockProcess(pid);
+		semaphoreBlockProcess(pid);
 		yield();
 	}
 }

@@ -18,7 +18,7 @@ void write(int fd, char c);
  * @param fd: FileDescriptor (STDIN | KBDIN)
  * @return Byte leido
  */
-uint8_t read(int fd);
+int64_t read(int16_t fd, char * buffer, uint64_t count);
 
 /**
  * @brief Devuelve la hora expresada en segundos

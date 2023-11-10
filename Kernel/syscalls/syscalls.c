@@ -18,22 +18,7 @@
 #define STDERR 2
 #define KBDIN  3
 
-/* IDs de syscalls */
-/* #define READ 0
-#define WRITE 1
-#define CLEAR 2
-#define SECONDS 3
-#define GET_REGISTER_ARRAY 4
-#define SET_FONT_SIZE 5
-#define GET_RESOLUTION 6
-#define DRAW_RECT 7
-#define GET_TICKS 8
-#define GET_MEMORY 9
-#define PLAY_SOUND 10
-#define SET_FONT_COLOR 11
-#define GET_FONT_COLOR 12 */
-
-static uint8_t syscall_read(uint32_t fd);
+static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count);
 static void syscall_write(uint32_t fd, char c);
 static void syscall_clear();
 static uint32_t syscall_seconds();
@@ -104,14 +89,16 @@ uint64_t syscallDispatcher(
 }
 
 // Read char
-static uint8_t syscall_read(uint32_t fd) {
-	switch (fd) {
-		case STDIN:
-			return getAscii();
-		case KBDIN:
-			return getScancode();
+static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count) {
+	if (fd == STDIN) {
+		for (uint64_t i = 0; i < count; i++) {
+			buffer[i] = getAscii();
+			if ((int) buffer[i] == EOF)
+				return i + 1;
+		}
+		return count;
 	}
-	return 0;
+	return -1;
 }
 
 // Write char
