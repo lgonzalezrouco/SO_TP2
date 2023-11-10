@@ -5,13 +5,14 @@
 #include <stdint.h>
 
 typedef enum status {
-	INVALID_PID = -7,
+	INVALID_PID = -8,
 	SAME_STATUS,
 	INVALID_STATUS,
 	SAME_PRIORITY,
 	INVALID_PRIORITY,
 	NOT_FOUND,
 	INVALID_PROCESS,
+	PROBLEM,
 	SUCCESS
 } status;
 
@@ -20,6 +21,15 @@ typedef enum status {
 #define MAX_PRIORITY     (PRIORITY_LEVELS - 2)
 #define MIN_PRIORITY     1
 #define IDLE_PRIORITY    0
+
+// 3 (stdin, stdout, stderr)
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+#define STD_PIPES 3
+#define READ	  0
+#define WRITE	  1
+#define EOF	  -1
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
 
@@ -45,6 +55,7 @@ typedef struct PCB {
 	processStatus status;
 	int retValue;
 	int childRetValue;
+	int fds[STD_PIPES];
 } PCB;
 
 typedef struct processInfo {

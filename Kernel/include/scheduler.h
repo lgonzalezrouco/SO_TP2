@@ -43,4 +43,6 @@ int blockProcess(int16_t pid);
 
 int unblockProcess(int16_t pid);
 
+int16_t getFileDescriptor(uint8_t index);
+
 #endif

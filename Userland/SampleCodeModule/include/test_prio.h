@@ -5,6 +5,7 @@
 #include "test_util.h"
 #include "types.h"
 
+#include <stdlib.h>
 #include <stdint.h>
 #include <stdio.h>
 

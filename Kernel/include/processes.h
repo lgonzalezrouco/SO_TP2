@@ -6,6 +6,7 @@
 #include "memoryManager.h"
 #include "scheduler.h"
 #include "types.h"
+#include "pipes.h"
 
 #define STACK_SIZE 4096
 
@@ -13,7 +14,7 @@ void resetPIDCounter();
 
 void processWrapper(ProcessCode code, char ** args);
 
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority);
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]);
 
 int idle(int argc, char ** argv);
 

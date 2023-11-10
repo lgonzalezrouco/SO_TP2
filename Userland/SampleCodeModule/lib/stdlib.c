@@ -8,6 +8,11 @@
 #define isNumber(n) ((n) >= '0' && (n) <= '9')
 #define isHex(n)    ((n) >= 'a' && (n) <= 'f')
 
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority) {
+	int fds[] = {STDIN, STDOUT, STDERR};
+	return createProcessFds(parentPid, code, args, name, priority, fds);
+}
+
 static unsigned int log(uint64_t n, int base) {
 	unsigned int count = 1;
 	while (n /= base)

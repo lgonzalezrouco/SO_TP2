@@ -1,7 +1,18 @@
 #ifndef _STDLIB_H
 #define _STDLIB_H
 #include <stdint.h>
+#include <types.h>
+#include <syscalls.h>
 
+/**
+ * @brief Crea un proceso
+ * @param code: Puntero a la funcion que se desea ejecutar
+ * @param args: Arreglo de cadenas de caracteres con los argumentos de la
+ * funcion
+ * @param name: Nombre del proceso
+ * @param priority: Prioridad del proceso
+ */
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority);
 /**
  * @brief Convierte un arreglo de caracteres en numero entero en formato decimal
  * @param s: Cadena de caracteres

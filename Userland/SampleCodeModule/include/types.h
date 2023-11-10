@@ -4,13 +4,14 @@
 #include <stddef.h>
 
 typedef enum status {
-	INVALID_PID = -7,
+	INVALID_PID = -8,
 	SAME_STATUS,
 	INVALID_STATUS,
 	SAME_PRIORITY,
 	INVALID_PRIORITY,
 	NOT_FOUND,
 	INVALID_PROCESS,
+	PROBLEM,
 	SUCCESS
 } status;
 
@@ -43,6 +44,15 @@ typedef struct PCB {
 	int retValue;
 	int childRetValue;
 } PCB;
+
+// 3 (stdin, stdout, stderr)
+#define STDIN 0
+#define STDOUT 1
+#define STDERR 2
+#define STD_PIPES 3
+#define READ	  0
+#define WRITE	  1
+#define EOF	  -1
 
 typedef struct processInfo {
   uint16_t	pid;

@@ -125,7 +125,7 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 		uint16_t pid = getCurrentPid();
 		PCB * process = getProcess(pid);
 		if(process == NULL)
-			return -1;
+			return;
 		enqueue(semaphore->mutexProcesses, process);
 		blockProcess(pid);
 		yield();

@@ -52,8 +52,11 @@ int main() {
 	initializeSemaphores();
 	initializeKeyboardDriver();
 
-	createProcess(0, (ProcessCode) &idle, idleArgs, "idle", IDLE_PRIORITY);
-	int shellPid = createProcess(0, (ProcessCode) sampleCodeModuleAddress, shellArgs, "shell", MAX_PRIORITY);
+	int fdsIdle[] = {-1, -1, STDERR};
+	int fdsShell[] = {STDIN, STDOUT, STDERR};
+
+	createProcess(0, (ProcessCode) &idle, idleArgs, "idle", IDLE_PRIORITY, fdsIdle);
+	int shellPid = createProcess(0, (ProcessCode) sampleCodeModuleAddress, shellArgs, "shell", MAX_PRIORITY, fdsShell);
 
 	startShell(shellPid);
 	return 0;
