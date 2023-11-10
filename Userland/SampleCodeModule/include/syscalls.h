@@ -187,34 +187,34 @@ void yield();
  * @param value: Valor inicial del semaforo
  * @return 0 si se pudo inicializar, -1 si no
  */
-int semInit(char* name, uint32_t value);
+int semInit(char * name, uint32_t value);
 
 /**
  * @brief Abre un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo abrir, -1 si no
  */
-int semOpen(const char* name);
+int semOpen(const char * name);
 
 /**
  * @brief Cierra un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo cerrar, -1 si no
  */
-int semClose(const char* name);
+int semClose(const char * name);
 
 /**
  * @brief Destruye un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo destruir, -1 si no
  */
-int semWait(const char* name);
+int semWait(const char * name);
 
 /**
  * @brief Incrementa el valor de un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo incrementar, -1 si no
  */
-int semPost(const char* name);
+int semPost(const char * name);
 
 #endif

@@ -183,8 +183,8 @@ int blockProcess(int16_t pid) {
 		process->priority = BLOCKED_PRIORITY;
 		enqueue(queues[process->priority], process);
 		// quantumRemaining = 0; // todo ver si esto estaria bien
-		//if(process->pid == getCurrentPid()) // todo ver que onda esto
-			//yield();
+		// if(process->pid == getCurrentPid()) // todo ver que onda esto
+		//	yield();
 	} else if (process->status == READY) {
 		removeByPid(queues[process->priority], process->pid);
 		process->status = BLOCKED;
@@ -228,7 +228,6 @@ static void killChildren(int16_t parentPid) {
 			killProcess(processes[i]->pid, -1);
 	}
 }
-
 
 static void runProcess(int16_t pid) {
 	PCB * process = getProcess(pid);

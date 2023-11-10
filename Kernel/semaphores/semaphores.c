@@ -66,7 +66,7 @@ int semWait(const char * name) {
 	while (semaphore->value == 0) {
 		uint16_t pid = getCurrentPid();
 		PCB * process = getProcess(pid);
-		if(process == NULL)
+		if (process == NULL)
 			return -1;
 		enqueue(semaphore->blockedProcesses, process);
 		blockProcess(pid);
@@ -124,7 +124,7 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 	while (criticalRegion(&(semaphore->mutex))) {
 		uint16_t pid = getCurrentPid();
 		PCB * process = getProcess(pid);
-		if(process == NULL)
+		if (process == NULL)
 			return -1;
 		enqueue(semaphore->mutexProcesses, process);
 		blockProcess(pid);
@@ -140,7 +140,7 @@ static void releaseExclusiveAccess(Semaphore * semaphore) {
 static void resumeUnblockedProcess(QueueADT queue) {
 	if (!isEmpty(queue)) {
 		PCB * process = dequeue(queue);
-		if (process != NULL){
+		if (process != NULL) {
 			unblockProcess(process->pid);
 		}
 	}

@@ -9,7 +9,7 @@ void test_prio() {
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
 		pids[i] = createProcess(1, (ProcessCode) &endless_loop, argv, "endless_loop_print", 0);
-		
+
 	bussy_wait(WAIT);
 	printf("\nCHANGING PRIORITIES...\n");
 

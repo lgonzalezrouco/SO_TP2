@@ -51,6 +51,4 @@ PCB * removeByPid(QueueADT queue, int16_t pid);
  */
 void freeQueue(QueueADT queue);
 
-void dumpQueue (QueueADT queue); // todo borrar
-
 #endif

@@ -1,6 +1,6 @@
 #include <stdint.h>
 
-#define SEM_ID "sem"
+#define SEM_ID               "sem"
 #define TOTAL_PAIR_PROCESSES 2
 
 uint32_t GetUint();

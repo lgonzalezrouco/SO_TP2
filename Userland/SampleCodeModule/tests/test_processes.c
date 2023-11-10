@@ -19,7 +19,7 @@ int64_t test_processes(char * cant) {
 	uint8_t rq;
 	uint8_t alive = 0;
 	uint8_t action;
-	if(cant == NULL){
+	if (cant == NULL) {
 		printErr("test_processes: No se ingreso la cantidad de procesos a crear\n");
 		return -1;
 	}
@@ -27,7 +27,7 @@ int64_t test_processes(char * cant) {
 	char * argvAux[] = {0};
 
 	p_rq p_rqs[max_processes];
-	
+
 	while (1) {
 		// Create max_processes processes
 		for (rq = 0; rq < max_processes; rq++) {

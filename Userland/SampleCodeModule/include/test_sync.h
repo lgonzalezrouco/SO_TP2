@@ -12,7 +12,7 @@
  * @brief Testea la sincronizacion entre procesos
  * @param n: Cantidad de sumas y restas que hace, debe ser mayor a 0
  * @param use_sem: Si es 1 usa semaforos, si es 0 no usa semaforos
-*/
+ */
 uint64_t test_sync(char * n, char * use_sem);
 
 #endif

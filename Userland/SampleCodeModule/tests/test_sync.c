@@ -1,6 +1,6 @@
 #include <test_sync.h>
 
-int64_t global; // shared memory
+int64_t global;  // shared memory
 
 void slowInc(int64_t * p, int64_t inc) {
 	uint64_t aux = *p;
