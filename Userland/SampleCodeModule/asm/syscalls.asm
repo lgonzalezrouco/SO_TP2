@@ -17,7 +17,7 @@ GLOBAL free
 GLOBAL getMemoryInfo
 GLOBAL getProcessesInfo
 GLOBAL freeProcessesInfo
-GLOBAL createProcess
+GLOBAL createProcessFds
 GLOBAL killProcess
 GLOBAL setPriority
 GLOBAL waitpid
@@ -29,6 +29,8 @@ GLOBAL semOpen
 GLOBAL semClose
 GLOBAL semWait
 GLOBAL semPost
+GLOBAL openPipe
+GLOBAL closePipe
 
 read:
     mov rax, 0
@@ -121,7 +123,7 @@ freeProcessesInfo:
     int 80h
     ret
 
-createProcess:
+createProcessFds:
     mov rax, 18
     int 80h
     ret
@@ -178,5 +180,15 @@ semWait:
 
 semPost:
     mov rax, 29
+    int 80h
+    ret
+
+openPipe:
+    mov rax, 30
+    int 80h
+    ret
+
+closePipe:
+    mov rax, 31
     int 80h
     ret

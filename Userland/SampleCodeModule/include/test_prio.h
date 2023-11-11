@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 #define MINOR_WAIT "500000000"  // TODO: Change this value to prevent a process from flooding the screen
 #define WAIT \

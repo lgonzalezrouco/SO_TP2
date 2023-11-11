@@ -14,7 +14,7 @@ void processWrapper(ProcessCode function, char ** args) {
 	killProcess(getCurrentPid(), retValue);
 }
 
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority) {
+int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]) {
 	PCB * process = (PCB *) malloc(sizeof(PCB));
 	if (process == NULL)
 		return -1;
@@ -64,6 +64,15 @@ int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name
 	process->stack->current = setup_stack(&processWrapper, code, stackEnd, (void *) process->argv);
 
 	addProcess(process);
+
+	/*
+  	process->fds[0] = fds[0];
+  	openPipe(0, fds[0], process->pid);
+  	process->fds[1] = fds[1];
+  	openPipe(1, fds[1], process->pid);
+  	process->fds[2] = fds[2];
+  	openPipe(2, fds[2], process->pid);
+  	*/
 
 	return process->pid;
 }

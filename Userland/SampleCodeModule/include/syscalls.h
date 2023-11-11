@@ -139,8 +139,9 @@ void freeProcessesInfo(PCB ** infoArray);
  * @param args: Argumentos del proceso
  * @param name: Nombre del proceso
  * @param priority: Prioridad del proceso
+ * @param fds: File descriptors del proceso
  */
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority);
+int createProcessFds(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]);
 
 /**
  * @brief Mata a un proceso
@@ -216,5 +217,20 @@ int semWait(const char * name);
  * @return 0 si se pudo incrementar, -1 si no
  */
 int semPost(const char * name);
+
+/**
+ * @brief Abre un pipe
+ * @param id: ID del pipe
+ * @param mode: Modo de apertura
+ * @param pid: PID del proceso que abre el pipe
+ */
+int openPipe(uint16_t id, uint8_t mode, uint16_t pid);
+
+/**
+ * @brief Cierra un pipe
+ * @param id: ID del pipe
+ * @param mode: Modo de cierre
+ */
+int closePipe(uint16_t id, uint8_t mode);
 
 #endif

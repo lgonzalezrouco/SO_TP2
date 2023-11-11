@@ -214,6 +214,11 @@ int unblockProcess(int16_t pid) {
 	return SUCCESS;
 }
 
+int16_t getFileDescriptor(uint8_t index) {
+	PCB * process = getProcess(getCurrentPid());
+	return process->fds[index];
+}
+
 static PCB * getNextProcess() {
 	PCB * process = NULL;
 

@@ -7,6 +7,7 @@
 
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 /**
  * @brief Testea la sincronizacion entre procesos
