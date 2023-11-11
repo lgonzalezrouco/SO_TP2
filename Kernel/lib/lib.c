@@ -99,6 +99,14 @@ void strcpy(char * dest, char * src) {
 	dest[i] = 0;
 }
 
+int strcmp(const char * s1, const char * s2) {
+	while (*s1 != 0 && *s1 == *s2) {
+		s1++;
+		s2++;
+	}
+	return *s1 - *s2;
+}
+
 unsigned int strlen(char * str) {
 	unsigned int i = 0;
 	while (str[i] != 0) {

@@ -6,6 +6,7 @@
 #include <memoryManager.h>
 #include <processes.h>
 #include <registers.h>
+#include <semaphores.h>
 #include <speaker.h>
 #include <stdint.h>
 #include <time.h>
@@ -17,22 +18,7 @@
 #define STDERR 2
 #define KBDIN  3
 
-/* IDs de syscalls */
-/* #define READ 0
-#define WRITE 1
-#define CLEAR 2
-#define SECONDS 3
-#define GET_REGISTER_ARRAY 4
-#define SET_FONT_SIZE 5
-#define GET_RESOLUTION 6
-#define DRAW_RECT 7
-#define GET_TICKS 8
-#define GET_MEMORY 9
-#define PLAY_SOUND 10
-#define SET_FONT_COLOR 11
-#define GET_FONT_COLOR 12 */
-
-static uint8_t syscall_read(uint32_t fd);
+static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count);
 static void syscall_write(uint32_t fd, char c);
 static void syscall_clear();
 static uint32_t syscall_seconds();
@@ -57,6 +43,12 @@ static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(int16_t pid);
 static uint64_t syscall_toggleBlock(int16_t pid);
 static uint64_t syscall_getPid();
+static uint64_t syscall_yield();
+static uint64_t syscall_semInit(char * name, uint32_t value);
+static uint64_t syscall_semOpen(char * name);
+static uint64_t syscall_semClose(char * name);
+static uint64_t syscall_semWait(char * name);
+static uint64_t syscall_semPost(char * name);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -83,7 +75,13 @@ static sysFunctions sysfunctions[] = {(sysFunctions) syscall_read,
                                       (sysFunctions) syscall_setPriority,
                                       (sysFunctions) syscall_waitpid,
                                       (sysFunctions) syscall_toggleBlock,
-                                      (sysFunctions) syscall_getPid};
+                                      (sysFunctions) syscall_getPid,
+                                      (sysFunctions) syscall_yield,
+                                      (sysFunctions) syscall_semInit,
+                                      (sysFunctions) syscall_semOpen,
+                                      (sysFunctions) syscall_semClose,
+                                      (sysFunctions) syscall_semWait,
+                                      (sysFunctions) syscall_semPost};
 
 uint64_t syscallDispatcher(
     uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -91,14 +89,16 @@ uint64_t syscallDispatcher(
 }
 
 // Read char
-static uint8_t syscall_read(uint32_t fd) {
-	switch (fd) {
-		case STDIN:
-			return getAscii();
-		case KBDIN:
-			return getScancode();
+static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count) {
+	if (fd == STDIN) {
+		for (uint64_t i = 0; i < count; i++) {
+			buffer[i] = getAscii();
+			if ((int) buffer[i] == EOF)
+				return i + 1;
+		}
+		return count;
 	}
-	return 0;
+	return -1;
 }
 
 // Write char
@@ -218,4 +218,29 @@ static uint64_t syscall_toggleBlock(int16_t pid) {
 
 static uint64_t syscall_getPid() {
 	return (uint64_t) getCurrentPid();
+}
+
+static uint64_t syscall_yield() {
+	yield();
+	return 0;
+}
+
+static uint64_t syscall_semInit(char * name, uint32_t value) {
+	return (uint64_t) semInit(name, value);
+}
+
+static uint64_t syscall_semOpen(char * name) {
+	return (uint64_t) semOpen(name);
+}
+
+static uint64_t syscall_semClose(char * name) {
+	return (uint64_t) semClose(name);
+}
+
+static uint64_t syscall_semWait(char * name) {
+	return (uint64_t) semWait(name);
+}
+
+static uint64_t syscall_semPost(char * name) {
+	return (uint64_t) semPost(name);
 }

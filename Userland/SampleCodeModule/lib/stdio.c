@@ -38,12 +38,13 @@ void printErr(const char * s) {
 
 int getchar() {
 	char c;
-	c = read(STDIN);
+	read(STDIN, &c, 1);
 	return c;
 }
 
 char getScanCode() {
-	return read(KBDIN);
+	return 0;
+	// return read(KBDIN);
 }
 
 void printf(char * fmt, ...) {
@@ -108,27 +109,10 @@ int scanf(char * fmt, ...) {
 	va_list v;
 	va_start(v, fmt);
 	char c;
-	int ticks = getTicks();
-	int cursorTicks = 0;
-	char cursorDrawn = 0;
 	char buffer[MAX_CHARS];
 	uint64_t bIdx = 0;
 	while ((c = getchar()) != '\n' && bIdx < MAX_CHARS - 1) {
-		cursorTicks = getTicks() - ticks;
-		if (cursorTicks > CURSOR_FREQ) {
-			ticks = getTicks();
-			cursorTicks = 0;
-			if (cursorDrawn)
-				putchar('\b');
-			else
-				putchar('_');
-			cursorDrawn = !cursorDrawn;
-		}
 		if (c != 0) {
-			if (cursorDrawn) {
-				putchar('\b');
-				cursorDrawn = !cursorDrawn;
-			}
 			if (c != '\b') {
 				buffer[bIdx++] = c;
 				putchar(c);
@@ -140,8 +124,6 @@ int scanf(char * fmt, ...) {
 			}
 		}
 	}
-	if (cursorDrawn)
-		putchar('\b');
 	putchar('\n');
 	buffer[bIdx] = 0;
 	char * fmtPtr = fmt;

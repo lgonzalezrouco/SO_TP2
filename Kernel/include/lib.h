@@ -89,6 +89,15 @@ void _hlt();
 void strcpy(char * dest, char * src);
 
 /**
+ * @brief Compara dos strings
+ *
+ * @param s1: String 1
+ * @param s2: String 2
+ * @return 0 si son iguales, 1 si s1 > s2, -1 si s1 < s2
+ */
+int strcmp(const char * s1, const char * s2);
+
+/**
  * @brief Devuelve la longitud de un string
  *
  * @param str: String a medir
@@ -115,5 +124,7 @@ void forceTimerTick();
  * @param RSP: Puntero al stack del proceso
  */
 void forceChangeOfProcess(uint64_t * RSP);
+
+int criticalRegion(int * mutex);
 
 #endif

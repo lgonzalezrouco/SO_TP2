@@ -47,4 +47,15 @@ typedef struct PCB {
 	int childRetValue;
 } PCB;
 
+typedef struct processInfo {
+	uint16_t pid;
+	uint16_t parentPid;
+	char * name;
+	uint64_t * base;
+	uint64_t * current;
+	uint8_t priority;
+	processStatus status;
+	// todo agregar FOREGROUND o BACKGROUND
+} processInfo;
+
 #endif

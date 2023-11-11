@@ -10,7 +10,9 @@
 #include <string.h>
 #include <syscalls.h>
 #include <test_mm.h>
+#include <test_prio.h>
 #include <test_processes.h>
+#include <test_sync.h>
 #include <test_util.h>
 #include <types.h>
 
@@ -101,6 +103,8 @@ static Command commands[] = {
     {"tm", "Corre el test de memoria, ingresar cantidad de memoria", .g = (void *) &test_mm, SINGLE_PARAM},
     {"tp", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *) &test_processes, SINGLE_PARAM},
     {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *) &toggleBlock, SINGLE_PARAM},
+    {"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM},
+    {"tprio", "Corre el test de prioridades, ", .f = (void *) &test_prio, NO_PARAMS},
 };
 
 void run_shell() {
@@ -290,6 +294,8 @@ static void printProcesses() {
 static void testProcesses() {
 	char * helpArgs[] = {"loop", NULL};
 	createProcess((int16_t) 1, (ProcessCode) &endless_loop, helpArgs, "endless_loop", (uint8_t) 6);
+	// char * helpProp[] = {"5"};
+	// int pid = createProcess((int16_t) 1, (ProcessCode) &test_processes, helpProp, "test_processes", (uint8_t) 6);
 }
 
 static void kill(char * pid) {

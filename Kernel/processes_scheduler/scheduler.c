@@ -10,8 +10,6 @@ int processesQty = 0;
 
 static PCB * getNextProcess();
 static void killChildren(int16_t parentPid);
-static int blockProcess(int16_t pid);
-static int unblockProcess(int16_t pid);
 static void runProcess(int16_t pid);
 static void stopProcess(int16_t pid);
 
@@ -72,8 +70,12 @@ int toggleBlockProcess(int16_t pid) {
 
 	if (process->status == BLOCKED)
 		return unblockProcess(pid);
-	else
-		return blockProcess(pid);
+	else {
+		blockProcess(pid);
+		if (process->pid == getCurrentPid())
+			yield();
+	}
+	return SUCCESS;
 }
 
 int setPriority(int16_t pid, uint8_t newPriority) {
@@ -172,6 +174,46 @@ int16_t getNextPid() {
 	return INVALID_PID;
 }
 
+int blockProcess(int16_t pid) {
+	PCB * process = getProcess(pid);
+
+	if (process == NULL)
+		return NOT_FOUND;
+
+	if (process->pid == IDLE_PID)
+		return INVALID_PROCESS;
+
+	if (process->status == BLOCKED)
+		return SAME_STATUS;
+
+	if (process->status == READY)
+		removeByPid(queues[process->priority], process->pid);
+
+	process->status = BLOCKED;
+	process->priority = BLOCKED_PRIORITY;
+	enqueue(queues[process->priority], process);
+
+	return SUCCESS;
+}
+
+int unblockProcess(int16_t pid) {
+	PCB * process = getProcess(pid);
+
+	if (process == NULL)
+		return NOT_FOUND;
+	if (process->status == READY || process->status == RUNNING)
+		return SAME_STATUS;
+	else if (process->status == BLOCKED) {
+		removeByPid(queues[process->priority], process->pid);
+		process->priority = MAX_PRIORITY;
+		enqueue(queues[process->priority], process);
+		process->status = READY;
+		process->quantum = 1;
+		quantumRemaining = 0;
+	}
+	return SUCCESS;
+}
+
 static PCB * getNextProcess() {
 	PCB * process = NULL;
 
@@ -188,45 +230,6 @@ static void killChildren(int16_t parentPid) {
 		if (processes[i] != NULL && processes[i]->parentPid == parentPid)
 			killProcess(processes[i]->pid, -1);
 	}
-}
-
-static int blockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
-
-	if (process == NULL)
-		return NOT_FOUND;
-
-	if (process->status == BLOCKED)
-		return SAME_STATUS;
-	else if (process->status == RUNNING) {
-		process->status = BLOCKED;
-		process->priority = BLOCKED_PRIORITY;
-		enqueue(queues[process->priority], process);
-		yield();
-	} else if (process->status == READY) {
-		removeByPid(queues[process->priority], process->pid);
-		process->status = BLOCKED;
-		process->priority = BLOCKED_PRIORITY;
-		enqueue(queues[process->priority], process);
-	}
-	return SUCCESS;
-}
-
-static int unblockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
-
-	if (process == NULL)
-		return NOT_FOUND;
-	if (process->status == READY || process->status == RUNNING)
-		return SAME_STATUS;
-	else if (process->status == BLOCKED) {
-		removeByPid(queues[process->priority], process->pid);
-		process->priority = MAX_PRIORITY;
-		enqueue(queues[process->priority], process);
-		process->status = READY;
-		process->quantum = 1;
-	}
-	return SUCCESS;
 }
 
 static void runProcess(int16_t pid) {
