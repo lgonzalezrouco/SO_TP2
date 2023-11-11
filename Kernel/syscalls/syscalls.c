@@ -52,6 +52,7 @@ static uint64_t syscall_semWait(char *name);
 static uint64_t syscall_semPost(char *name);
 static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid);
 static uint64_t syscall_closePipe(uint16_t id, uint16_t pid);
+static uint64_t syscall_unblockProcess(int16_t pid);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -88,6 +89,7 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions) syscall_semPost,
     (sysFunctions) syscall_openPipe,
     (sysFunctions) syscall_closePipe,
+	(sysFunctions) syscall_unblockProcess,
 };
 
 uint64_t syscallDispatcher(
@@ -274,4 +276,8 @@ static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid) {
 
 static uint64_t syscall_closePipe(uint16_t id, uint16_t pid) {
 	return (uint64_t) closePipe(id, pid);
+}
+
+static uint64_t syscall_unblockProcess(int16_t pid) {
+	return (uint64_t) unblockProcess(pid);
 }

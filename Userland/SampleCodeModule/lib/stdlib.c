@@ -72,3 +72,37 @@ int strtoh(char *s, char **end) {
 	*end = s;
 	return num;
 }
+
+void *stringToPtr(char *buffer) {
+	uint64_t res = 0;
+	for (int i = 0; buffer[i] != '\0'; i++)
+		res = res * 10 + buffer[i] - '0';
+	return (void *) res;
+}
+
+int intToBase(unsigned long long num, int base, char *buffer) {
+	char stack[11];
+	int c = 0;
+	int i = 0;
+	if (num == 0)
+		stack[i++] = '0';
+	while (num != 0) {
+		int remainder = num % base;
+		stack[i] = remainder >= 10 ? remainder + 'A' - 10 : remainder + '0';
+		num = num / base;
+		i++;
+	}
+	c = i;
+	i--;
+	while (i >= 0) {
+		*buffer = stack[i];
+		buffer++;
+		i--;
+	}
+	*buffer = 0;
+	return c;
+}
+
+int intToString(unsigned long long num, char *buffer) {
+	return intToBase(num, 10, buffer);
+}

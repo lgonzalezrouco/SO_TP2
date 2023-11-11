@@ -18,7 +18,6 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 	PCB *process = (PCB *) malloc(sizeof(PCB));
 	if (process == NULL)
 		return -1;
-
 	process->pid = getNextPid();
 	if (process->pid == INVALID_PID) {
 		free(process);

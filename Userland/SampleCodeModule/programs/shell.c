@@ -16,6 +16,7 @@
 #include <test_pipes.h>
 #include <test_util.h>
 #include <types.h>
+#include <phylosophers.h>
 
 /* Enum para la cantidad de argumentos recibidos */
 typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
@@ -107,6 +108,7 @@ static Command commands[] = {
     {"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM},
     {"tprio", "Corre el test de prioridades, ", .f = (void *) &test_prio, NO_PARAMS},
 	{"tpipe", "Corre el test de pipes.", .f = (void *) &testNamedPipes, NO_PARAMS},
+	{"phylo", "Corre el problema de los filosofos.", .f = (void *) &phylo, NO_PARAMS},
 };
 
 void run_shell() {

@@ -235,4 +235,10 @@ int openPipe(uint16_t id, uint8_t mode, uint16_t pid);
  */
 int closePipe(uint16_t id, uint16_t pid);
 
+/**
+ * @brief Desbloquea un proceso que esta bloqueado
+ * @param pid: PID del proceso a desbloquear
+ */
+uint64_t unblockProcess(int16_t pid);
+
 #endif

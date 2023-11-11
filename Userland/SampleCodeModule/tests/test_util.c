@@ -56,7 +56,7 @@ int64_t satoi(char *str) {
 }
 
 // Dummies
-void bussy_wait(uint64_t n) {
+void busyWait(uint64_t n) {
 	uint64_t i;
 	for (i = 0; i < n; i++)
 		;
@@ -72,6 +72,6 @@ void endless_loop_print(uint64_t wait) {
 
 	while (1) {
 		printf("%d ", pid);
-		bussy_wait(wait);
+		busyWait(wait);
 	}
 }

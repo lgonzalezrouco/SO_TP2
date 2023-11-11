@@ -10,13 +10,13 @@ void test_prio() {
 	for (i = 0; i < TOTAL_PROCESSES; i++)
 		pids[i] = createProcess(1, (ProcessCode) &endless_loop, argv, "endless_loop_print", 0);
 
-	bussy_wait(WAIT);
+	busyWait(WAIT);
 	printf("\nCHANGING PRIORITIES...\n");
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
 		setPriority(pids[i], prio[i]);
 
-	bussy_wait(WAIT);
+	busyWait(WAIT);
 	printf("\nBLOCKING...\n");
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
@@ -32,7 +32,7 @@ void test_prio() {
 	for (i = 0; i < TOTAL_PROCESSES; i++)
 		toggleBlockProcess(pids[i]);
 
-	bussy_wait(WAIT);
+	busyWait(WAIT);
 	printf("\nKILLING...\n");
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
