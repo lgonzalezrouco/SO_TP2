@@ -15,7 +15,9 @@ void write(int fd, char c);
 
 /**
  * @brief Lee un byte a partir del descriptor recibido
- * @param fd: FileDescriptor (STDIN | KBDIN)
+ * @param fd: FileDescriptor
+ * @param buffer: Buffer donde se guarda el byte leido
+ * @param count: Cantidad de bytes a leer
  * @return Byte leido
  */
 int64_t read(int16_t fd, char *buffer, uint64_t count);
@@ -231,6 +233,6 @@ int openPipe(uint16_t id, uint8_t mode, uint16_t pid);
  * @param id: ID del pipe
  * @param mode: Modo de cierre
  */
-int closePipe(uint16_t id, uint8_t mode);
+int closePipe(uint16_t id, uint16_t pid);
 
 #endif

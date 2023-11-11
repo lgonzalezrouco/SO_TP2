@@ -125,13 +125,16 @@ int killProcess(int16_t pid, int retValue) {
 	killChildren(process->pid);
 	if (process->status == READY || process->status == BLOCKED)
 		removeByPid(queues[process->priority], process->pid);
-	/*     else
-	    currentProcess = NULL; */
 
 	PCB *parent = getProcess(process->parentPid);
 	if (parent->pidToWait == pid) {
 		parent->childRetValue = retValue;
 		unblockProcess(parent->pid);
+	}
+
+	for (int i = 0; i < STD_FDS; i++) {
+		if (process->fds[i] >= STD_FDS)
+			closePipe(process->fds[i], process->pid);
 	}
 
 	processes[process->pid] = NULL;

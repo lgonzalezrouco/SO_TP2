@@ -19,7 +19,7 @@
 #define KBDIN  3
 
 static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count);
-static void syscall_write(uint32_t fd, char c);
+static void syscall_write(int32_t fd, char c);
 static void syscall_clear();
 static uint32_t syscall_seconds();
 static uint64_t *syscall_registerArray(uint64_t *regarr);
@@ -51,7 +51,7 @@ static uint64_t syscall_semClose(char *name);
 static uint64_t syscall_semWait(char *name);
 static uint64_t syscall_semPost(char *name);
 static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid);
-static uint64_t syscall_closePipe(uint16_t id, uint8_t mode);
+static uint64_t syscall_closePipe(uint16_t id, uint16_t pid);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -97,6 +97,12 @@ uint64_t syscallDispatcher(
 
 // Read char
 static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count) {
+	if (fd == DEV_NULL) {
+		buffer[0] = EOF;
+		return 0;
+	}
+
+	uint16_t fdValue = getFdValue(fd);
 	if (fd == STDIN) {
 		for (uint64_t i = 0; i < count; i++) {
 			buffer[i] = getAscii();
@@ -104,19 +110,29 @@ static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count) {
 				return i + 1;
 		}
 		return count;
+	} else if (fdValue >= STD_FDS) {
+		return readPipe(fdValue, buffer, count, getCurrentPid());
 	}
 	return -1;
 }
 
 // Write char
-static void syscall_write(uint32_t fd, char c) {
-	Color prevColor = getFontColor();
-	if (fd == STDERR)
-		setFontColor(ERROR_COLOR);
-	else if (fd != STDOUT)
+static void syscall_write(int32_t fd, char c) {
+	if (fd <= DEV_NULL)
 		return;
-	printChar(c);
-	setFontColor(prevColor);
+
+	uint16_t fdValue = getFdValue(fd);
+	if (fdValue == STDIN || fdValue == STDERR) {
+		Color prevColor = getFontColor();
+		if (fd == STDERR)
+			setFontColor(ERROR_COLOR);
+		else if (fd != STDOUT)
+			return;
+		printChar(c);
+		setFontColor(prevColor);
+	} else if (fdValue >= STD_FDS) {
+		writePipe(fdValue, &c, 1, getCurrentPid());
+	}
 }
 
 // Clear
@@ -256,6 +272,6 @@ static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid) {
 	return (uint64_t) openPipe(id, mode, pid);
 }
 
-static uint64_t syscall_closePipe(uint16_t id, uint8_t mode) {
-	return (uint64_t) closePipe(id, mode);
+static uint64_t syscall_closePipe(uint16_t id, uint16_t pid) {
+	return (uint64_t) closePipe(id, pid);
 }

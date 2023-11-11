@@ -13,6 +13,7 @@
 #include <test_prio.h>
 #include <test_processes.h>
 #include <test_sync.h>
+#include <test_pipes.h>
 #include <test_util.h>
 #include <types.h>
 
@@ -105,6 +106,7 @@ static Command commands[] = {
     {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *) &toggleBlock, SINGLE_PARAM},
     {"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM},
     {"tprio", "Corre el test de prioridades, ", .f = (void *) &test_prio, NO_PARAMS},
+	{"tpipe", "Corre el test de pipes.", .f = (void *) &testNamedPipes, NO_PARAMS},
 };
 
 void run_shell() {

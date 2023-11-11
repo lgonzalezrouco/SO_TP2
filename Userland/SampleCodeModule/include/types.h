@@ -2,6 +2,7 @@
 #define _TYPES_H_U_
 
 #include <stddef.h>
+#include <stdint.h>
 
 typedef enum status {
 	PIPE_ERROR = -8,
@@ -21,6 +22,7 @@ typedef enum status {
 #define STDERR  2
 #define STD_FDS 3
 #define EOF     -1
+#define DEV_NULL -1
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
 

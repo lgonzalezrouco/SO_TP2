@@ -22,6 +22,7 @@ static void unblockPipe(Pipe *pipe, pipeModes mode);
 static Pipe *createPipe();
 static int16_t getIndex(uint16_t id);
 static Pipe *getPipe(uint16_t id);
+static void freePipe(uint16_t id);
 
 Pipe *pipes[MAX_PIPES];
 
@@ -54,21 +55,16 @@ int8_t openPipe(uint16_t id, pipeModes mode, uint16_t pid) {
 	return SUCCESS;
 }
 
-int8_t closePipe(uint16_t id, pipeModes mode) {
+int8_t closePipe(uint16_t id, uint16_t pid) {
 	Pipe *pipe = getPipe(id);
-	if (pipe == NULL)
+	if (pipe == NULL || (pipe->inPid != pid && pipe->outPid != pid))
 		return PIPE_ERROR;
 
-	if (mode == READ && pipe->outPid >= 0)
-		pipe->outPid = -1;
-	else if (mode == WRITE && pipe->inPid >= 0)
-		pipe->inPid = -1;
-	else
-		return PIPE_ERROR;
-
-	if (pipe->inPid < 0 && pipe->outPid < 0) {
-		free(pipe);
-		pipes[getIndex(id)] = NULL;
+	if (pipe->inPid == pid)
+		pipe->inPid = DEV_NULL;
+	else{
+		pipe->outPid = DEV_NULL;
+		freePipe(id);
 	}
 
 	return SUCCESS;
@@ -151,8 +147,8 @@ static Pipe *createPipe() {
 	Pipe *pipe = (Pipe *) malloc(sizeof(Pipe));
 	if (pipe == NULL)
 		return NULL;
-	pipe->inPid = -1;
-	pipe->outPid = -1;
+	pipe->inPid = DEV_NULL;
+	pipe->outPid = DEV_NULL;
 	pipe->writePosition = 0;
 	pipe->readPosition = 0;
 	pipe->charRemaining = 0;
@@ -172,4 +168,12 @@ static Pipe *getPipe(uint16_t id) {
 	if ((index = getIndex(id)) == NOT_FOUND)
 		return NULL;
 	return pipes[index];
+}
+
+static void freePipe(uint16_t id){
+	Pipe *pipe = getPipe(id);
+	if(pipe == NULL)
+		return;
+	free(pipe);
+	pipes[getIndex(id)] = NULL;
 }

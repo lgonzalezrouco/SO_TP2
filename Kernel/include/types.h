@@ -28,6 +28,7 @@ typedef enum status {
 #define STDERR  2
 #define STD_FDS 3
 #define EOF     -1
+#define DEV_NULL -1
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
 

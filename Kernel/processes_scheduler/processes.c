@@ -65,9 +65,18 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 
 	addProcess(process);
 
-	process->fds[STDIN] = fds[STDIN];
-	process->fds[STDOUT] = fds[STDOUT];
-	process->fds[STDERR] = fds[STDERR];
+	for (int i = 0; i < STD_FDS; i++) {
+		if (process->fds[i] == DEV_NULL) {
+			process->fds[i] = fds[i];
+
+			if (fds[i] >= STD_FDS) {
+				if (i == STDIN)
+					openPipe(fds[i], READ, process->pid);
+				else
+					openPipe(fds[i], WRITE, process->pid);
+			}
+		}
+	}
 
 	return process->pid;
 }
@@ -105,4 +114,12 @@ PCB **getProcessesInfo() {
 
 void freeProcessesInfo(PCB **infoArray) {
 	free(infoArray);
+}
+
+uint16_t getFdValue(uint8_t fdIndex) {
+	if (fdIndex < STD_FDS) {
+		PCB *process = getProcess(getCurrentPid());
+		return process->fds[fdIndex];
+	} else
+		return fdIndex;
 }

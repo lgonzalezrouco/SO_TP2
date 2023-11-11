@@ -16,6 +16,6 @@
 #define READ            0
 #define WRITE           1
 
-int testNamedPipes(int argc, char **argv);
+int testNamedPipes();
 
 #endif

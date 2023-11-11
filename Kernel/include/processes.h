@@ -24,4 +24,6 @@ PCB **getProcessesInfo();
 
 void freeProcessesInfo(PCB **infoArray);
 
+uint16_t getFdValue(uint8_t fdIndex);
+
 #endif
