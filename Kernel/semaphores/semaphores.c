@@ -2,21 +2,21 @@
 
 #define MAX_SEMAPHORES 1024
 
-static Semaphore * getSemaphore(const char * name);
+static Semaphore *getSemaphore(const char *name);
 static int getNextSemaphoreID();
-static void freeSemaphore(Semaphore * semaphore);
-static void getExclusiveAccess(Semaphore * semaphore);
-static void releaseExclusiveAccess(Semaphore * semaphore);
+static void freeSemaphore(Semaphore *semaphore);
+static void getExclusiveAccess(Semaphore *semaphore);
+static void releaseExclusiveAccess(Semaphore *semaphore);
 static void resumeUnblockedProcess(QueueADT queue);
 
-Semaphore * semaphores[MAX_SEMAPHORES];
+Semaphore *semaphores[MAX_SEMAPHORES];
 
 void initializeSemaphores() {
 	for (int i = 0; i < MAX_SEMAPHORES; i++)
 		semaphores[i] = NULL;
 }
 
-int semInit(char * name, uint32_t value) {
+int semInit(char *name, uint32_t value) {
 	if (getSemaphore(name) != NULL)
 		return -1;
 
@@ -38,16 +38,16 @@ int semInit(char * name, uint32_t value) {
 	return 0;
 }
 
-int semOpen(const char * name) {
-	Semaphore * semaphore = getSemaphore(name);
+int semOpen(const char *name) {
+	Semaphore *semaphore = getSemaphore(name);
 	if (semaphore == NULL)
 		return -1;
 
 	return semaphore->id;
 }
 
-int semClose(const char * name) {
-	Semaphore * semaphore = getSemaphore(name);
+int semClose(const char *name) {
+	Semaphore *semaphore = getSemaphore(name);
 	if (semaphore == NULL)
 		return -1;
 
@@ -56,8 +56,8 @@ int semClose(const char * name) {
 	return 0;
 }
 
-int semWait(const char * name) {
-	Semaphore * semaphore = getSemaphore(name);
+int semWait(const char *name) {
+	Semaphore *semaphore = getSemaphore(name);
 	if (semaphore == NULL)
 		return -1;
 
@@ -65,7 +65,7 @@ int semWait(const char * name) {
 
 	while (semaphore->value == 0) {
 		uint16_t pid = getCurrentPid();
-		PCB * process = getProcess(pid);
+		PCB *process = getProcess(pid);
 		if (process == NULL)
 			return -1;
 		enqueue(semaphore->blockedProcesses, process);
@@ -81,8 +81,8 @@ int semWait(const char * name) {
 	return 0;
 }
 
-int semPost(const char * name) {
-	Semaphore * semaphore = getSemaphore(name);
+int semPost(const char *name) {
+	Semaphore *semaphore = getSemaphore(name);
 	if (semaphore == NULL)
 		return -1;
 
@@ -99,7 +99,7 @@ int semPost(const char * name) {
 	return 0;
 }
 
-static Semaphore * getSemaphore(const char * name) {
+static Semaphore *getSemaphore(const char *name) {
 	for (int i = 0; i < MAX_SEMAPHORES; i++) {
 		if (semaphores[i] != NULL && strcmp(semaphores[i]->name, name) == 0)
 			return semaphores[i];
@@ -115,16 +115,16 @@ static int getNextSemaphoreID() {
 	return -1;
 }
 
-static void freeSemaphore(Semaphore * semaphore) {
+static void freeSemaphore(Semaphore *semaphore) {
 	freeQueue(semaphore->mutexProcesses);
 	freeQueue(semaphore->blockedProcesses);
 	free(semaphore);
 }
 
-static void getExclusiveAccess(Semaphore * semaphore) {
+static void getExclusiveAccess(Semaphore *semaphore) {
 	while (criticalRegion(&(semaphore->mutex))) {
 		uint16_t pid = getCurrentPid();
-		PCB * process = getProcess(pid);
+		PCB *process = getProcess(pid);
 		if (process == NULL)
 			return;
 		enqueue(semaphore->mutexProcesses, process);
@@ -133,14 +133,14 @@ static void getExclusiveAccess(Semaphore * semaphore) {
 	}
 }
 
-static void releaseExclusiveAccess(Semaphore * semaphore) {
+static void releaseExclusiveAccess(Semaphore *semaphore) {
 	resumeUnblockedProcess(semaphore->mutexProcesses);
 	semaphore->mutex = 0;
 }
 
 static void resumeUnblockedProcess(QueueADT queue) {
 	if (!isEmpty(queue)) {
-		PCB * process = dequeue(queue);
+		PCB *process = dequeue(queue);
 		if (process != NULL)
 			unblockProcess(process->pid);
 	}

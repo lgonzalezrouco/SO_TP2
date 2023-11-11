@@ -13,10 +13,10 @@ typedef struct memoryInfo {
 
 void initializeMemoryManager();
 
-void * malloc(uint64_t size);
+void *malloc(uint64_t size);
 
-void free(void * ptr);
+void free(void *ptr);
 
-memoryInfo * getMemoryInfo();
+memoryInfo *getMemoryInfo();
 
 #endif

@@ -1,23 +1,22 @@
 #include <test_pipes.h>
 
-
 static void testWriter(int argc, char **argv);
 static void testReader(int argc, char **argv);
 
 static void testWriter(int argc, char **argv) {
-	openPipe(TEST_PIPE, WRITE, 0); // todo no se que hacer con el pid
+	openPipe(TEST_PIPE, WRITE, 0);  // todo no se que hacer con el pid
 	char *msg = "Prueba";
-    printf("Escribiendo mensaje: %s\n", msg);
+	printf("Escribiendo mensaje: %s\n", msg);
 	int len = 6;
-	//write(TEST_PIPE, msg, len);
+	// write(TEST_PIPE, msg, len);
 	closePipe(TEST_PIPE, WRITE);
 }
 
 static void testReader(int argc, char **argv) {
 	openPipe(TEST_PIPE, READ, 0);  // todo no se que hacer con el pid
 	char dst[TEST_BUFFER_LEN] = {0};
-	//read(TEST_PIPE, dst, TEST_BUFFER_LEN);
-    printf("Leyendo mensaje: %s\n", dst);
+	// read(TEST_PIPE, dst, TEST_BUFFER_LEN);
+	printf("Leyendo mensaje: %s\n", dst);
 	closePipe(TEST_PIPE, READ);
 }
 

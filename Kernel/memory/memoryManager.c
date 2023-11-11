@@ -3,20 +3,20 @@
 #include <memoryManager.h>
 
 typedef struct Node {
-	void * address;
+	void *address;
 	uint64_t size;
 	bool is_free;
-	struct Node * prev;
-	struct Node * next;
+	struct Node *prev;
+	struct Node *next;
 } Node;
 
-typedef Node * NodePtr;
+typedef Node *NodePtr;
 
 Node memory_list;
 
 memoryInfo memory_data;
 
-void * list_address;
+void *list_address;
 
 void initializeMemoryManager() {
 	list_address = (void *) 0x600000;
@@ -31,7 +31,7 @@ void initializeMemoryManager() {
 	memory_data.usedMemory = 0;
 }
 
-void * malloc(uint64_t size) {
+void *malloc(uint64_t size) {
 	if (size <= 0) {
 		return NULL;
 	}
@@ -62,7 +62,7 @@ void * malloc(uint64_t size) {
 	return current->address;
 }
 
-void free(void * address) {
+void free(void *address) {
 	NodePtr current = &memory_list;
 	while (current != NULL && current->address != address) {
 		current = current->next;
@@ -95,6 +95,6 @@ void free(void * address) {
 	}
 }
 
-memoryInfo * getMemoryInfo() {
+memoryInfo *getMemoryInfo() {
 	return &memory_data;
 }

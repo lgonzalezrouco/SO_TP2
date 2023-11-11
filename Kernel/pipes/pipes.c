@@ -18,12 +18,12 @@ typedef struct Pipe {
 } Pipe;
 
 static int16_t getIndex(uint16_t id);
-static Pipe * getPipe(uint16_t id);
-static Pipe * createPipe();
-static void block(Pipe * pipe, uint8_t mode);
-static void unblock(Pipe * pipe, uint8_t mode);
+static Pipe *getPipe(uint16_t id);
+static Pipe *createPipe();
+static void block(Pipe *pipe, uint8_t mode);
+static void unblock(Pipe *pipe, uint8_t mode);
 
-Pipe * pipes[MAX_PIPES];
+Pipe *pipes[MAX_PIPES];
 
 int8_t initPipes() {
 	for (int i = 0; i < MAX_PIPES; i++)
@@ -35,7 +35,7 @@ int8_t openPipe(uint16_t id, uint8_t mode, uint16_t pid) {
 	int16_t index;
 	if ((index = getIndex(id)) == NOT_FOUND)
 		return NOT_FOUND;
-	Pipe * pipe = pipes[index];
+	Pipe *pipe = pipes[index];
 	if (pipe == NULL) {
 		pipe = createPipe();
 		pipes[index] = pipe;
@@ -54,7 +54,7 @@ int8_t closePipe(uint16_t id, uint8_t mode) {
 	int16_t index;
 	if ((index = getIndex(id)) == NOT_FOUND)
 		return NOT_FOUND;
-	Pipe * pipe = pipes[index];
+	Pipe *pipe = pipes[index];
 	if (pipe == NULL)
 		return PROBLEM;
 	if (mode == READ && pipe->outPid >= 0)
@@ -70,11 +70,11 @@ int8_t closePipe(uint16_t id, uint8_t mode) {
 	return SUCCESS;
 }
 
-int64_t writePipe(uint16_t id, char * src, uint64_t len, uint16_t pid) {
+int64_t writePipe(uint16_t id, char *src, uint64_t len, uint16_t pid) {
 	int16_t index;
 	if ((index = getIndex(id)) == NOT_FOUND)
 		return PROBLEM;
-	Pipe * pipe = getPipe(id);
+	Pipe *pipe = getPipe(id);
 	if (pipe == NULL || pipe->inPid != pid ||
 	    pipe->buffer[((pipe->startPosition + pipe->currentSize) % PIPE_SIZE)] == EOF || len == 0)
 		return PROBLEM;
@@ -100,8 +100,8 @@ int64_t writePipe(uint16_t id, char * src, uint64_t len, uint16_t pid) {
 	return qtyWritten;
 }
 
-int64_t readPipe(uint16_t id, char * dst, uint64_t len, uint16_t pid) {
-	Pipe * pipe = getPipe(id);
+int64_t readPipe(uint16_t id, char *dst, uint64_t len, uint16_t pid) {
+	Pipe *pipe = getPipe(id);
 	if (pipe == NULL || pipe->outPid != pid || len == 0 || pipe->buffer[pipe->startPosition] == EOF)
 		return PROBLEM;
 
@@ -125,7 +125,7 @@ int64_t readPipe(uint16_t id, char * dst, uint64_t len, uint16_t pid) {
 	return qtyRead;
 }
 
-static void block(Pipe * pipe, uint8_t mode) {
+static void block(Pipe *pipe, uint8_t mode) {
 	if (mode == READ)
 		blockProcess((uint16_t) pipe->outPid);
 	else
@@ -134,7 +134,7 @@ static void block(Pipe * pipe, uint8_t mode) {
 	yield();
 }
 
-static void unblock(Pipe * pipe, uint8_t mode) {
+static void unblock(Pipe *pipe, uint8_t mode) {
 	if (mode == READ)
 		unblockProcess((uint16_t) pipe->outPid);
 	else
@@ -142,8 +142,8 @@ static void unblock(Pipe * pipe, uint8_t mode) {
 	pipe->isBlocking = 0;
 }
 
-static Pipe * createPipe() {
-	Pipe * pipe = (Pipe *) malloc(sizeof(Pipe));
+static Pipe *createPipe() {
+	Pipe *pipe = (Pipe *) malloc(sizeof(Pipe));
 	pipe->inPid = -1;
 	pipe->outPid = -1;
 	pipe->startPosition = 0;
@@ -156,7 +156,7 @@ static int16_t getIndex(uint16_t id) {
 	return ((id - STD_PIPES) > MAX_PIPES || (id - STD_PIPES) < 0) ? NOT_FOUND : (id - STD_PIPES);
 }
 
-static Pipe * getPipe(uint16_t id) {
+static Pipe *getPipe(uint16_t id) {
 	int16_t index;
 	if ((index = getIndex(id)) == NOT_FOUND)
 		return NULL;

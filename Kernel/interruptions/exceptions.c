@@ -8,15 +8,15 @@
 #define GENERAL_PROTECTION_ID 13
 #define PAGE_FAULT_ID         14
 
-static void printError(char * msg, uint64_t rip, uint64_t * rsp);
+static void printError(char *msg, uint64_t rip, uint64_t *rsp);
 
-char * ZERO_EXCEPTION_DESCRIPTION = "Division por cero";
-char * OPCODE_EXCEPTION_DESCRIPTION = "Operacion invalida";
-char * GENERAL_PROTECTION_DESCRIPTION = "Proteccion general";
-char * PAGE_FAULT_DESCRIPTION = "Fallo de pagina";
+char *ZERO_EXCEPTION_DESCRIPTION = "Division por cero";
+char *OPCODE_EXCEPTION_DESCRIPTION = "Operacion invalida";
+char *GENERAL_PROTECTION_DESCRIPTION = "Proteccion general";
+char *PAGE_FAULT_DESCRIPTION = "Fallo de pagina";
 
-void exceptionDispatcher(int ex, uint64_t * rip, uint64_t * rsp) {
-	char * msg;
+void exceptionDispatcher(int ex, uint64_t *rip, uint64_t *rsp) {
+	char *msg;
 	switch (ex) {
 		case ZERO_EXCEPTION_ID:
 			msg = ZERO_EXCEPTION_DESCRIPTION;
@@ -34,7 +34,7 @@ void exceptionDispatcher(int ex, uint64_t * rip, uint64_t * rsp) {
 	printError(msg, *rip, rsp);
 }
 
-static void printError(char * msg, uint64_t rip, uint64_t * rsp) {
+static void printError(char *msg, uint64_t rip, uint64_t *rsp) {
 	setFontColor(ERROR_COLOR);
 	printf("Error: %s\n\n", msg);
 	dump(rip, *rsp, rsp - 4);

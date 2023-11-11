@@ -8,7 +8,7 @@
 #define isNumber(n) ((n) >= '0' && (n) <= '9')
 #define isHex(n)    ((n) >= 'a' && (n) <= 'f')
 
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority) {
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority) {
 	int fds[] = {STDIN, STDOUT, STDERR};
 	return createProcessFds(parentPid, code, args, name, priority, fds);
 }
@@ -20,7 +20,7 @@ static unsigned int log(uint64_t n, int base) {
 	return count;
 }
 
-int itoa(uint64_t n, char * buffer, int base) {
+int itoa(uint64_t n, char *buffer, int base) {
 	if (n == 0) {
 		buffer[0] = '0';
 		buffer[1] = '\0';
@@ -46,14 +46,14 @@ int itoa(uint64_t n, char * buffer, int base) {
 	return len;
 }
 
-int atoi(char * s) {
+int atoi(char *s) {
 	int num = 0;
 	while (isNumber(*s))
 		num = num * 10 + *(s++) - '0';
 	return num;
 }
 
-int strtoi(char * s, char ** end) {
+int strtoi(char *s, char **end) {
 	int num = 0;
 	while (isNumber(*s))
 		num = num * 10 + *(s++) - '0';
@@ -61,7 +61,7 @@ int strtoi(char * s, char ** end) {
 	return num;
 }
 
-int strtoh(char * s, char ** end) {
+int strtoh(char *s, char **end) {
 	int num = 0;
 	int aux;
 	while (isNumber(*s) || isHex(*s)) {

@@ -4,24 +4,24 @@
 #include "interrupts.h"
 #include "lib.h"
 #include "memoryManager.h"
+#include "pipes.h"
 #include "scheduler.h"
 #include "types.h"
-#include "pipes.h"
 
 #define STACK_SIZE 4096
 
 void resetPIDCounter();
 
-void processWrapper(ProcessCode code, char ** args);
+void processWrapper(ProcessCode code, char **args);
 
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]);
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
 
-int idle(int argc, char ** argv);
+int idle(int argc, char **argv);
 
-void freeProcess(PCB * process);
+void freeProcess(PCB *process);
 
-PCB ** getProcessesInfo();
+PCB **getProcessesInfo();
 
-void freeProcessesInfo(PCB ** infoArray);
+void freeProcessesInfo(PCB **infoArray);
 
 #endif

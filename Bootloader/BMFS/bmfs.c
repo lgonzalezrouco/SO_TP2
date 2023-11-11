@@ -37,24 +37,24 @@ char s_read[] = "read";
 char s_write[] = "write";
 char s_delete[] = "delete";
 struct BMFSEntry entry;
-void * pentry = &entry;
-char * BlockMap;
-char * FileBlocks;
+void *pentry = &entry;
+char *BlockMap;
+char *FileBlocks;
 char Directory[4096];
 char DiskInfo[512];
 
 /* Built-in functions */
-int findfile(char * filename, struct BMFSEntry * fileentry, int * entrynumber);
+int findfile(char *filename, struct BMFSEntry *fileentry, int *entrynumber);
 void list();
 void format();
-int initialize(char * diskname, char * size, char * mbr, char * boot, char * kernel);
-void create(char * filename, unsigned long long maxsize);
-void read(char * filename);
-void write(char * filename);
-void delete (char * filename);
+int initialize(char *diskname, char *size, char *mbr, char *boot, char *kernel);
+void create(char *filename, unsigned long long maxsize);
+void read(char *filename);
+void write(char *filename);
+void delete (char *filename);
 
 /* Program code */
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
 	/* Parse arguments */
 	if (argc < 3) {
 		printf("BareMetal File System Utility v1.0 (2013 04 10)\n");
@@ -72,10 +72,10 @@ int main(int argc, char * argv[]) {
 
 	if (strcasecmp(s_initialize, command) == 0) {
 		if (argc >= 4) {
-			char * size = argv[3];                        // Required
-			char * mbr = (argc > 4 ? argv[4] : NULL);     // Opt.
-			char * boot = (argc > 5 ? argv[5] : NULL);    // Opt.
-			char * kernel = (argc > 6 ? argv[6] : NULL);  // Opt.
+			char *size = argv[3];                        // Required
+			char *mbr = (argc > 4 ? argv[4] : NULL);     // Opt.
+			char *boot = (argc > 5 ? argv[5] : NULL);    // Opt.
+			char *kernel = (argc > 6 ? argv[6] : NULL);  // Opt.
 			int ret = initialize(diskname, size, mbr, boot, kernel);
 			exit(ret);
 		} else {
@@ -161,7 +161,7 @@ int main(int argc, char * argv[]) {
 	return 0;
 }
 
-int findfile(char * filename, struct BMFSEntry * fileentry, int * entrynumber) {
+int findfile(char *filename, struct BMFSEntry *fileentry, int *entrynumber) {
 	int tint;
 
 	for (tint = 0; tint < 64; tint++) {
@@ -217,15 +217,15 @@ void format() {
 	printf("Format complete.\n");
 }
 
-int initialize(char * diskname, char * size, char * mbr, char * boot, char * kernel) {
+int initialize(char *diskname, char *size, char *mbr, char *boot, char *kernel) {
 	unsigned long long diskSize = 0;
 	unsigned long long writeSize = 0;
-	const char * bootFileType = NULL;
+	const char *bootFileType = NULL;
 	size_t bufferSize = 50 * 1024;
-	char * buffer = NULL;
-	FILE * mbrFile = NULL;
-	FILE * bootFile = NULL;
-	FILE * kernelFile = NULL;
+	char *buffer = NULL;
+	FILE *mbrFile = NULL;
+	FILE *bootFile = NULL;
+	FILE *kernelFile = NULL;
 	int diskSizeFactor = 0;
 	size_t chunkSize = 0;
 	int ret = 0;
@@ -482,9 +482,9 @@ int initialize(char * diskname, char * size, char * mbr, char * boot, char * ker
 }
 
 // helper function for qsort, sorts by StartingBlock field
-static int StartingBlockCmp(const void * pa, const void * pb) {
-	struct BMFSEntry * ea = (struct BMFSEntry *) pa;
-	struct BMFSEntry * eb = (struct BMFSEntry *) pb;
+static int StartingBlockCmp(const void *pa, const void *pb) {
+	struct BMFSEntry *ea = (struct BMFSEntry *) pa;
+	struct BMFSEntry *eb = (struct BMFSEntry *) pb;
 	// empty records go to the end
 	if (ea->FileName[0] == 0x01)
 		return 1;
@@ -494,7 +494,7 @@ static int StartingBlockCmp(const void * pa, const void * pb) {
 	return (ea->StartingBlock - eb->StartingBlock);
 }
 
-void create(char * filename, unsigned long long maxsize) {
+void create(char *filename, unsigned long long maxsize) {
 	struct BMFSEntry tempentry;
 	int slot;
 
@@ -508,7 +508,7 @@ void create(char * filename, unsigned long long maxsize) {
 		int num_used_entries = 0;                           // how many entries of Directory are either used or deleted
 		int first_free_entry = -1;                          // where to put new entry
 		int tint;
-		struct BMFSEntry * pEntry;
+		struct BMFSEntry *pEntry;
 		unsigned long long new_file_start = 0;
 		unsigned long long prev_file_end = 1;
 
@@ -596,9 +596,9 @@ void create(char * filename, unsigned long long maxsize) {
 	}
 }
 
-void read(char * filename) {
+void read(char *filename) {
 	struct BMFSEntry tempentry;
-	FILE * tfile;
+	FILE *tfile;
 	int tint, slot;
 
 	if (0 == findfile(filename, &tempentry, &slot)) {
@@ -621,9 +621,9 @@ void read(char * filename) {
 	}
 }
 
-void write(char * filename) {
+void write(char *filename) {
 	struct BMFSEntry tempentry;
-	FILE * tfile;
+	FILE *tfile;
 	int tint, slot;
 	unsigned long long tempfilesize;
 
@@ -659,7 +659,7 @@ void write(char * filename) {
 	}
 }
 
-void delete (char * filename) {
+void delete (char *filename) {
 	struct BMFSEntry tempentry;
 	char delmarker = 0x01;
 	int slot;

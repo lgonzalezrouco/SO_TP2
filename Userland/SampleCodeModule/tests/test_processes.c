@@ -14,7 +14,7 @@ typedef struct P_rq {
 	enum processStatus state;
 } p_rq;
 
-int64_t test_processes(char * cant) {
+int64_t test_processes(char *cant) {
 	printf("test_processes: Starting\n");
 	uint8_t rq;
 	uint8_t alive = 0;
@@ -24,7 +24,7 @@ int64_t test_processes(char * cant) {
 		return -1;
 	}
 	uint64_t max_processes = atoi(cant);
-	char * argvAux[] = {0};
+	char *argvAux[] = {0};
 
 	p_rq p_rqs[max_processes];
 

@@ -18,7 +18,7 @@ void write(int fd, char c);
  * @param fd: FileDescriptor (STDIN | KBDIN)
  * @return Byte leido
  */
-int64_t read(int16_t fd, char * buffer, uint64_t count);
+int64_t read(int16_t fd, char *buffer, uint64_t count);
 
 /**
  * @brief Devuelve la hora expresada en segundos
@@ -37,7 +37,7 @@ void clear(void);
  * @param regarr: Vector donde se llena la informacion de los registros
  * @return Puntero a la informacion de los registros
  */
-uint64_t * getInfoReg(uint64_t * regarr);
+uint64_t *getInfoReg(uint64_t *regarr);
 
 /**
  * @brief Cambia el tamaño de la fuente
@@ -73,7 +73,7 @@ uint64_t getTicks();
  * @param pos: Direccion de memoria a partir de la cual se llena el vector
  * @param vec: Vector en el cual se llena la informacion
  */
-void getMemory(uint64_t pos, uint8_t * vec);
+void getMemory(uint64_t pos, uint8_t *vec);
 
 /**
  * @brief Reproduce un sonido
@@ -106,31 +106,31 @@ Color getFontColor();
  * @param size: Cantidad de bytes a reservar
  * @return Puntero a la memoria reservada
  */
-void * malloc(uint64_t size);
+void *malloc(uint64_t size);
 
 /**
  * @brief Libera memoria reservada dinamicamente
  * @param ptr: Puntero a la memoria a liberar
  */
-void free(void * ptr);
+void free(void *ptr);
 
 /**
  * @brief Devuelve informacion sobre el estado de la memoria
  * @return Informacion sobre el estado de la memoria
  */
-memoryInfo * getMemoryInfo();
+memoryInfo *getMemoryInfo();
 
 /**
  * @brief Devuelve informacion sobre los procesos
  * @return Informacion sobre los procesos
  */
-PCB ** getProcessesInfo();
+PCB **getProcessesInfo();
 
 /**
  * @brief Libera la memoria reservada para la informacion de los procesos
  * @param infoArray: Informacion de los procesos
  */
-void freeProcessesInfo(PCB ** infoArray);
+void freeProcessesInfo(PCB **infoArray);
 
 /**
  * @brief Crea un proceso
@@ -141,7 +141,7 @@ void freeProcessesInfo(PCB ** infoArray);
  * @param priority: Prioridad del proceso
  * @param fds: File descriptors del proceso
  */
-int createProcessFds(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]);
+int createProcessFds(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
 
 /**
  * @brief Mata a un proceso
@@ -188,35 +188,35 @@ void yield();
  * @param value: Valor inicial del semaforo
  * @return 0 si se pudo inicializar, -1 si no
  */
-int semInit(char * name, uint32_t value);
+int semInit(char *name, uint32_t value);
 
 /**
  * @brief Abre un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo abrir, -1 si no
  */
-int semOpen(const char * name);
+int semOpen(const char *name);
 
 /**
  * @brief Cierra un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo cerrar, -1 si no
  */
-int semClose(const char * name);
+int semClose(const char *name);
 
 /**
  * @brief Destruye un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo destruir, -1 si no
  */
-int semWait(const char * name);
+int semWait(const char *name);
 
 /**
  * @brief Incrementa el valor de un semaforo
  * @param name: Nombre del semaforo
  * @return 0 si se pudo incrementar, -1 si no
  */
-int semPost(const char * name);
+int semPost(const char *name);
 
 /**
  * @brief Abre un pipe

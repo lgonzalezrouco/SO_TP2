@@ -2,13 +2,13 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
 
-PCB * processes[MAX_PROCESSES];
-PCB * currentProcess = NULL;
+PCB *processes[MAX_PROCESSES];
+PCB *currentProcess = NULL;
 uint16_t quantumRemaining = 0;
 QueueADT queues[PRIORITY_LEVELS];
 int processesQty = 0;
 
-static PCB * getNextProcess();
+static PCB *getNextProcess();
 static void killChildren(int16_t parentPid);
 static void runProcess(int16_t pid);
 static void stopProcess(int16_t pid);
@@ -29,13 +29,13 @@ void startShell(int16_t pid) {
 	forceChangeOfProcess(currentProcess->stack->current);
 }
 
-void addProcess(PCB * process) {
+void addProcess(PCB *process) {
 	enqueue(queues[process->priority], process);
 	processes[process->pid] = process;
 	processesQty++;
 }
 
-PCB * getProcess(int16_t pid) {
+PCB *getProcess(int16_t pid) {
 	return processes[pid];
 }
 
@@ -43,7 +43,7 @@ int16_t getCurrentPid() {
 	return currentProcess->pid;
 }
 
-void * schedule(void * currentSP) {
+void *schedule(void *currentSP) {
 	if (quantumRemaining > 0) {
 		quantumRemaining--;
 		return currentSP;
@@ -57,13 +57,13 @@ void * schedule(void * currentSP) {
 	if (currentProcess->status != BLOCKED)
 		stopProcess(currentProcess->pid);
 
-	PCB * nextProcess = getNextProcess();
+	PCB *nextProcess = getNextProcess();
 	runProcess(nextProcess->pid);
 	return currentProcess->stack->current;
 }
 
 int toggleBlockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 
 	if (process == NULL)
 		return NOT_FOUND;
@@ -79,7 +79,7 @@ int toggleBlockProcess(int16_t pid) {
 }
 
 int setPriority(int16_t pid, uint8_t newPriority) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 
 	if (process == NULL)
 		return NOT_FOUND;
@@ -111,7 +111,7 @@ int killCurrentProcess(int retValue) {
 }
 
 int killProcess(int16_t pid, int retValue) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 	int16_t currentPid = getCurrentPid();
 
 	if (process == NULL)
@@ -128,7 +128,7 @@ int killProcess(int16_t pid, int retValue) {
 	/*     else
 	    currentProcess = NULL; */
 
-	PCB * parent = getProcess(process->parentPid);
+	PCB *parent = getProcess(process->parentPid);
 	if (parent->pidToWait == pid) {
 		parent->childRetValue = retValue;
 		unblockProcess(parent->pid);
@@ -150,12 +150,12 @@ void yield() {
 }
 
 int waitpid(int16_t pid) {
-	PCB * child = getProcess(pid);
+	PCB *child = getProcess(pid);
 
 	if (child == NULL)
 		return NOT_FOUND;
 
-	PCB * parent = getProcess(child->parentPid);
+	PCB *parent = getProcess(child->parentPid);
 	parent->pidToWait = pid;
 
 	blockProcess(parent->pid);
@@ -175,7 +175,7 @@ int16_t getNextPid() {
 }
 
 int blockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 
 	if (process == NULL)
 		return NOT_FOUND;
@@ -197,7 +197,7 @@ int blockProcess(int16_t pid) {
 }
 
 int unblockProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 
 	if (process == NULL)
 		return NOT_FOUND;
@@ -215,12 +215,12 @@ int unblockProcess(int16_t pid) {
 }
 
 int16_t getFileDescriptor(uint8_t index) {
-	PCB * process = getProcess(getCurrentPid());
+	PCB *process = getProcess(getCurrentPid());
 	return process->fds[index];
 }
 
-static PCB * getNextProcess() {
-	PCB * process = NULL;
+static PCB *getNextProcess() {
+	PCB *process = NULL;
 
 	for (int i = MAX_PRIORITY; i >= MIN_PRIORITY && process == NULL; i--) {
 		if (!isEmpty(queues[i]))
@@ -238,14 +238,14 @@ static void killChildren(int16_t parentPid) {
 }
 
 static void runProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 	process->status = RUNNING;
 	quantumRemaining = process->quantum;
 	currentProcess = process;
 }
 
 static void stopProcess(int16_t pid) {
-	PCB * process = getProcess(pid);
+	PCB *process = getProcess(pid);
 	process->status = READY;
 	removeByPid(queues[process->priority], process->pid);
 	process->priority = process->priority > MIN_PRIORITY ? process->priority - 1 : process->priority;

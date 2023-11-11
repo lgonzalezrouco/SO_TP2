@@ -8,14 +8,14 @@ void resetPIDCounter() {
 	nextPid = 0;
 }
 
-void processWrapper(ProcessCode function, char ** args) {
+void processWrapper(ProcessCode function, char **args) {
 	size_t len = array_strlen(args);
 	int retValue = function(len, args);
 	killProcess(getCurrentPid(), retValue);
 }
 
-int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]) {
-	PCB * process = (PCB *) malloc(sizeof(PCB));
+int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]) {
+	PCB *process = (PCB *) malloc(sizeof(PCB));
 	if (process == NULL)
 		return -1;
 
@@ -59,45 +59,45 @@ int createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name
 	process->childRetValue = -1;
 	process->argv = args;
 
-	void * stackEnd = (void *) ((uint64_t) process->stack->base + STACK_SIZE);
+	void *stackEnd = (void *) ((uint64_t) process->stack->base + STACK_SIZE);
 
 	process->stack->current = setup_stack(&processWrapper, code, stackEnd, (void *) process->argv);
 
 	addProcess(process);
 
 	/*
-  	process->fds[0] = fds[0];
-  	openPipe(0, fds[0], process->pid);
-  	process->fds[1] = fds[1];
-  	openPipe(1, fds[1], process->pid);
-  	process->fds[2] = fds[2];
-  	openPipe(2, fds[2], process->pid);
-  	*/
+	process->fds[0] = fds[0];
+	openPipe(0, fds[0], process->pid);
+	process->fds[1] = fds[1];
+	openPipe(1, fds[1], process->pid);
+	process->fds[2] = fds[2];
+	openPipe(2, fds[2], process->pid);
+	*/
 
 	return process->pid;
 }
 
-int idle(int argc, char ** argv) {
+int idle(int argc, char **argv) {
 	while (1)
 		_hlt();
 
 	return 0;
 }
 
-void freeProcess(PCB * process) {
+void freeProcess(PCB *process) {
 	free(process->stack->base);
 	free(process->stack);
 	free(process->name);
 	free(process);
 }
 
-PCB ** getProcessesInfo() {
-	PCB ** info = malloc(sizeof(PCB *) * (getProcessesQty() + 1));
+PCB **getProcessesInfo() {
+	PCB **info = malloc(sizeof(PCB *) * (getProcessesQty() + 1));
 	if (info == NULL)
 		return NULL;
 
 	int i = 0;
-	PCB * process = NULL;
+	PCB *process = NULL;
 	for (int j = 0; j < MAX_PROCESSES; j++) {
 		process = getProcess(j);
 		if (process != NULL)
@@ -108,6 +108,6 @@ PCB ** getProcessesInfo() {
 	return info;
 }
 
-void freeProcessesInfo(PCB ** infoArray) {
+void freeProcessesInfo(PCB **infoArray) {
 	free(infoArray);
 }

@@ -23,23 +23,23 @@ typedef enum status {
 #define IDLE_PRIORITY    0
 
 // 3 (stdin, stdout, stderr)
-#define STDIN 0
-#define STDOUT 1
-#define STDERR 2
+#define STDIN     0
+#define STDOUT    1
+#define STDERR    2
 #define STD_PIPES 3
-#define READ	  0
-#define WRITE	  1
-#define EOF	  -1
+#define READ      0
+#define WRITE     1
+#define EOF       -1
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
 
-typedef int (*ProcessCode)(int argc, char ** args);
+typedef int (*ProcessCode)(int argc, char **args);
 
 // todo cambiar los tipos de pid por pid_t
 
 typedef struct memoryBlock {
-	uint64_t * base;
-	uint64_t * current;
+	uint64_t *base;
+	uint64_t *current;
 	size_t size;
 } memoryBlock;
 
@@ -47,9 +47,9 @@ typedef struct PCB {
 	int16_t pid;
 	int16_t parentPid;
 	int16_t pidToWait;
-	char * name;
-	char ** argv;
-	memoryBlock * stack;
+	char *name;
+	char **argv;
+	memoryBlock *stack;
 	uint8_t priority;
 	uint16_t quantum;
 	processStatus status;
@@ -61,9 +61,9 @@ typedef struct PCB {
 typedef struct processInfo {
 	uint16_t pid;
 	uint16_t parentPid;
-	char * name;
-	uint64_t * base;
-	uint64_t * current;
+	char *name;
+	uint64_t *base;
+	uint64_t *current;
 	uint8_t priority;
 	processStatus status;
 	// todo agregar FOREGROUND o BACKGROUND

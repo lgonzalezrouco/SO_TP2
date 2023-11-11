@@ -28,14 +28,14 @@ void putcharErr(char c);
  * @brief Imprime una cadena en STDOUT
  * @param s: Cadena a a imprimir
  */
-void puts(const char * s);
+void puts(const char *s);
 
 /**
  * @brief Imprime una cadena en STDERR
  *
  * @param s: Cadena a a imprimir
  */
-void printErr(const char * s);
+void printErr(const char *s);
 
 /**
  * @brief Imprime una n cantidad de caracteres el caracter c
@@ -64,7 +64,7 @@ char getScanCode();
  * @param ...
  * @return Cantidad de parametros que se leyeron
  */
-int scanf(char * fmt, ...);
+int scanf(char *fmt, ...);
 
 /**
  * @brief Imprime en STDOUT una "cadena de formato" que permite mezclar
@@ -73,10 +73,10 @@ int scanf(char * fmt, ...);
  * @param fmt: Formato de lo que se desea escribir de STDOUT
  * @param ...
  */
-void printf(char * fmt, ...);
+void printf(char *fmt, ...);
 
 /* Deprecado */
-void printRegisters(const uint64_t * rsp);
+void printRegisters(const uint64_t *rsp);
 
 /**
  * @brief Analogo a printf pero permite asignar un color a la cadena de
@@ -86,6 +86,6 @@ void printRegisters(const uint64_t * rsp);
  * @param fmt: Formato de lo que se desea escribir de STDOUT
  * @param ...
  */
-void printfc(Color color, char * fmt, ...);
+void printfc(Color color, char *fmt, ...);
 
 #endif

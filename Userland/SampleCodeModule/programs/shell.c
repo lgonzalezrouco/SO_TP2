@@ -31,9 +31,9 @@ typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
 #define CHECK_MAN_FONT    "Escriba \"man font-size\" para ver las dimensiones validas\n"
 
 typedef struct {
-	char * name;         // Nombre del comando
-	char * description;  // Descripcion del comando (para help)
-	union {              // Puntero a la funcion
+	char *name;         // Nombre del comando
+	char *description;  // Descripcion del comando (para help)
+	union {             // Puntero a la funcion
 		int (*f)(void);
 
 		int (*g)(char *);
@@ -47,19 +47,19 @@ typedef struct {
 static void help();
 static void printHelp();
 
-static void man(char * command);
+static void man(char *command);
 
 static void printInfoReg();
 
 static void time();
 
-static int div(char * num, char * div);
+static int div(char *num, char *div);
 
-static void fontSize(char * size);
+static void fontSize(char *size);
 
-static void printMem(char * pos);
+static void printMem(char *pos);
 
-static int getCommandIndex(char * command);
+static int getCommandIndex(char *command);
 
 static void printMemInfo();
 
@@ -67,13 +67,13 @@ static void printProcesses();
 
 static void testProcesses();
 
-static void kill(char * pid);
+static void kill(char *pid);
 
-static void nice(char * pid, char * priority);
+static void nice(char *pid, char *priority);
 
 static void ps();
 
-static void toggleBlock(char * pid);
+static void toggleBlock(char *pid);
 
 static Command commands[] = {
     {"help", "Listado de comandos", .f = (void *) &help, NO_PARAMS},
@@ -142,7 +142,7 @@ void run_shell() {
 	}
 }
 
-static int getCommandIndex(char * command) {
+static int getCommandIndex(char *command) {
 	int idx = 0;
 	for (; idx < QTY_COMMANDS; idx++) {
 		if (!strcmp(commands[idx].name, command))
@@ -156,7 +156,7 @@ static void printHelp() {
 		printf("%s: %s\r\n", commands[i].name, commands[i].description);
 }
 
-static int div(char * num, char * div) {
+static int div(char *num, char *div) {
 	printf("%s/%s=%d\r\n", num, div, atoi(num) / atoi(div));
 	return 1;
 }
@@ -167,7 +167,7 @@ static void time() {
 	printf("%2d:%2d:%2d\r\n", h, m, s);
 }
 
-static void fontSize(char * size) {
+static void fontSize(char *size) {
 	int s = atoi(size);
 	if (s >= MIN_FONT_SIZE && s <= MAX_FONT_SIZE)
 		setFontSize((uint8_t) atoi(size));
@@ -177,9 +177,9 @@ static void fontSize(char * size) {
 	}
 }
 
-static void printMem(char * pos) {
+static void printMem(char *pos) {
 	uint8_t resp[QTY_BYTES];
-	char * end;
+	char *end;
 	getMemory(strtoh(pos, &end), resp);
 	for (int i = 0; i < QTY_BYTES; i++) {
 		printf("0x%2x ", resp[i]);
@@ -188,23 +188,23 @@ static void printMem(char * pos) {
 	}
 }
 
-static char * _regNames[] = {"RIP",
-                             "RSP",
-                             "RAX",
-                             "RBX",
-                             "RCX",
-                             "RDX",
-                             "RBP",
-                             "RDI",
-                             "RSI",
-                             "R8",
-                             "R9",
-                             "R10",
-                             "R11",
-                             "R12",
-                             "R13",
-                             "R14",
-                             "R15"};
+static char *_regNames[] = {"RIP",
+                            "RSP",
+                            "RAX",
+                            "RBX",
+                            "RCX",
+                            "RDX",
+                            "RBP",
+                            "RDI",
+                            "RSI",
+                            "R8",
+                            "R9",
+                            "R10",
+                            "R11",
+                            "R12",
+                            "R13",
+                            "R14",
+                            "R15"};
 
 static void printInfoReg() {
 	int len = sizeof(_regNames) / sizeof(char *);
@@ -214,7 +214,7 @@ static void printInfoReg() {
 		printf("%s: 0x%x\n", _regNames[i], regSnapshot[i]);
 }
 
-static void man(char * command) {
+static void man(char *command) {
 	int idx = getCommandIndex(command);
 	if (idx != -1)
 		printf("%s\n", usages[idx]);
@@ -223,7 +223,7 @@ static void man(char * command) {
 }
 
 static void printMemInfo() {
-	memoryInfo * info = getMemoryInfo();
+	memoryInfo *info = getMemoryInfo();
 
 	printf("Total memory: %d B\n", info->totalMemory);
 	printf("Used memory: %d B\n", info->usedMemory);
@@ -231,21 +231,21 @@ static void printMemInfo() {
 }
 
 static void ps() {
-	char * psArgs[] = {"ps", NULL};
+	char *psArgs[] = {"ps", NULL};
 	int pid = createProcess((int16_t) 1, (ProcessCode) &printProcesses, psArgs, "ps", (uint8_t) 5);
 	if (pid != -1)
 		waitpid((int16_t) pid);
 }
 
 static void help() {
-	char * helpArgs[] = {"help", NULL};
+	char *helpArgs[] = {"help", NULL};
 	int pid = createProcess((int16_t) 1, (ProcessCode) &printHelp, helpArgs, "help", (uint8_t) 6);
 	if (pid != -1)
 		waitpid((int16_t) pid);
 }
 
 static void printProcesses() {
-	PCB ** info = getProcessesInfo();
+	PCB **info = getProcessesInfo();
 	int i = 0;
 
 	// Encabezados de la tabla
@@ -292,13 +292,13 @@ static void printProcesses() {
 }
 
 static void testProcesses() {
-	char * helpArgs[] = {"loop", NULL};
+	char *helpArgs[] = {"loop", NULL};
 	createProcess((int16_t) 1, (ProcessCode) &endless_loop, helpArgs, "endless_loop", (uint8_t) 6);
 	// char * helpProp[] = {"5"};
 	// int pid = createProcess((int16_t) 1, (ProcessCode) &test_processes, helpProp, "test_processes", (uint8_t) 6);
 }
 
-static void kill(char * pid) {
+static void kill(char *pid) {
 	int result = killProcess((int16_t) atoi(pid));
 	if (result == NOT_FOUND) {
 		printErr("Es inexistente el proceso con pid ");
@@ -310,7 +310,7 @@ static void kill(char * pid) {
 		printf("Se mato al proceso con pid %s\n", pid);
 }
 
-static void nice(char * pid, char * priority) {
+static void nice(char *pid, char *priority) {
 	int result = setPriority((int16_t) atoi(pid), (uint8_t) atoi(priority));
 	if (result == NOT_FOUND) {
 		printErr("Es inexistente el proceso con pid ");
@@ -326,7 +326,7 @@ static void nice(char * pid, char * priority) {
 		printf("Se cambio la prioridad del proceso %s a %s\n", pid, priority);
 }
 
-static void toggleBlock(char * pid) {
+static void toggleBlock(char *pid) {
 	int result = toggleBlockProcess((int16_t) atoi(pid));
 	if (result == NOT_FOUND) {
 		printErr("Es inexistente el proceso con pid ");

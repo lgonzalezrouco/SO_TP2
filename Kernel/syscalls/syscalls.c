@@ -18,16 +18,16 @@
 #define STDERR 2
 #define KBDIN  3
 
-static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count);
+static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count);
 static void syscall_write(uint32_t fd, char c);
 static void syscall_clear();
 static uint32_t syscall_seconds();
-static uint64_t * syscall_registerArray(uint64_t * regarr);
+static uint64_t *syscall_registerArray(uint64_t *regarr);
 static void syscall_fontSize(uint8_t size);
 static uint32_t syscall_resolution();
 static void syscall_drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, uint32_t color);
 static uint64_t syscall_getTicks();
-static void syscall_getMemory(uint64_t pos, uint8_t * vec);
+static void syscall_getMemory(uint64_t pos, uint8_t *vec);
 static void syscall_playSound(uint64_t frequency, uint64_t ticks);
 static void syscall_setFontColor(uint8_t r, uint8_t g, uint8_t b);
 static uint32_t syscall_getFontColor();
@@ -35,21 +35,21 @@ static uint64_t syscall_malloc(uint64_t size);
 static void syscall_free(uint64_t ptr);
 static uint64_t syscall_getMemoryInfo();
 // static processInfo * syscall_getProcessInfo();
-static PCB ** syscall_getProcessesInfo();
+static PCB **syscall_getProcessesInfo();
 static void syscall_freeProcessesInfo(uint64_t infoArray);
 static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]);
+syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
 static uint64_t syscall_killProcess(int16_t pid);
 static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(int16_t pid);
 static uint64_t syscall_toggleBlock(int16_t pid);
 static uint64_t syscall_getPid();
 static uint64_t syscall_yield();
-static uint64_t syscall_semInit(char * name, uint32_t value);
-static uint64_t syscall_semOpen(char * name);
-static uint64_t syscall_semClose(char * name);
-static uint64_t syscall_semWait(char * name);
-static uint64_t syscall_semPost(char * name);
+static uint64_t syscall_semInit(char *name, uint32_t value);
+static uint64_t syscall_semOpen(char *name);
+static uint64_t syscall_semClose(char *name);
+static uint64_t syscall_semWait(char *name);
+static uint64_t syscall_semPost(char *name);
 static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid);
 static uint64_t syscall_closePipe(uint16_t id, uint8_t mode);
 
@@ -96,7 +96,7 @@ uint64_t syscallDispatcher(
 }
 
 // Read char
-static int64_t syscall_read(int16_t fd, char * buffer, uint64_t count) {
+static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count) {
 	if (fd == STDIN) {
 		for (uint64_t i = 0; i < count; i++) {
 			buffer[i] = getAscii();
@@ -132,8 +132,8 @@ static uint32_t syscall_seconds() {
 }
 
 // Get register snapshot array
-static uint64_t * syscall_registerArray(uint64_t * regarr) {
-	uint64_t * snapshot = getLastRegSnapshot();
+static uint64_t *syscall_registerArray(uint64_t *regarr) {
+	uint64_t *snapshot = getLastRegSnapshot();
 	for (int i = 0; i < QTY_REGS; i++)
 		regarr[i] = snapshot[i];
 	return regarr;
@@ -161,7 +161,7 @@ static uint64_t syscall_getTicks() {
 }
 
 // PrintMem
-static void syscall_getMemory(uint64_t pos, uint8_t * vec) {
+static void syscall_getMemory(uint64_t pos, uint8_t *vec) {
 	memcpy(vec, (uint8_t *) pos, 32);
 }
 
@@ -193,7 +193,7 @@ static uint64_t syscall_getMemoryInfo() {
 	return (uint64_t) getMemoryInfo();
 }
 
-static PCB ** syscall_getProcessesInfo() {
+static PCB **syscall_getProcessesInfo() {
 	return (PCB **) getProcessesInfo();
 }
 
@@ -202,7 +202,7 @@ static void syscall_freeProcessesInfo(uint64_t infoArray) {
 }
 
 static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char ** args, char * name, uint8_t priority, int fds[]) {
+syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]) {
 	return (uint64_t) createProcess(parentPid, code, args, name, priority, fds);
 }
 
@@ -232,23 +232,23 @@ static uint64_t syscall_yield() {
 	return 0;
 }
 
-static uint64_t syscall_semInit(char * name, uint32_t value) {
+static uint64_t syscall_semInit(char *name, uint32_t value) {
 	return (uint64_t) semInit(name, value);
 }
 
-static uint64_t syscall_semOpen(char * name) {
+static uint64_t syscall_semOpen(char *name) {
 	return (uint64_t) semOpen(name);
 }
 
-static uint64_t syscall_semClose(char * name) {
+static uint64_t syscall_semClose(char *name) {
 	return (uint64_t) semClose(name);
 }
 
-static uint64_t syscall_semWait(char * name) {
+static uint64_t syscall_semWait(char *name) {
 	return (uint64_t) semWait(name);
 }
 
-static uint64_t syscall_semPost(char * name) {
+static uint64_t syscall_semPost(char *name) {
 	return (uint64_t) semPost(name);
 }
 

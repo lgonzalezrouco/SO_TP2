@@ -53,12 +53,12 @@ struct vbe_mode_info_structure {
 	uint8_t reserved1[206];
 } __attribute__((packed));
 
-struct vbe_mode_info_structure * _screenData = (void *) 0x5C00;
+struct vbe_mode_info_structure *_screenData = (void *) 0x5C00;
 uint16_t _X = 0, _Y = 0;              /* Coordenadas de escritura de caracteres */
 Color _fontColor = DEFAULT_COLOR;     /* Color de fuente */
 uint8_t _charWidth = CHAR_WIDTH_12;   /* Ancho en pixeles de un caracter */
 uint8_t _charHeight = CHAR_HEIGHT_12; /* Altura en pixeles de un caracter */
-char * _font = font_12;               /* Mapa de bits de dibujo para los caracteres */
+char *_font = font_12;                /* Mapa de bits de dibujo para los caracteres */
 char _charBuffer[MAX_RESOLUTION];     /* Buffer de caracteres */
 uint16_t _bufferIdx = 0;              /* Posicion de indice del buffer */
 
@@ -74,14 +74,14 @@ static void renderFonts();
  * @param  y: Coordenada y
  * @return Puntero al pixel (x,y)
  */
-static void * getPtrToPixel(uint16_t x, uint16_t y);
+static void *getPtrToPixel(uint16_t x, uint16_t y);
 
-static void * getPtrToPixel(uint16_t x, uint16_t y) {
+static void *getPtrToPixel(uint16_t x, uint16_t y) {
 	return (void *) (_screenData->framebuffer + RGB_SIZE * (x + (y * (uint64_t) _screenData->width)));
 }
 
 void videoClear() {
-	void * pos = getPtrToPixel(0, 0);
+	void *pos = getPtrToPixel(0, 0);
 	memset(pos, 0, RGB_SIZE * (uint64_t) _screenData->width * _screenData->height);
 	_X = _Y = 0;
 	_bufferIdx = 0;
@@ -103,7 +103,7 @@ void drawRect(uint16_t x, uint16_t y, uint16_t width, uint16_t height, Color col
 	if (height > maxHeight)
 		height = maxHeight;
 
-	Color * ptr = (Color *) getPtrToPixel(x, y);
+	Color *ptr = (Color *) getPtrToPixel(x, y);
 	uint16_t lineDiff = _screenData->width - width;
 	for (int i = 0; i < height; i++) {
 		for (int c = 0; c < width; c++)
@@ -183,9 +183,9 @@ void printChar(char c) {
 
 	if (c >= FIRST_CHAR && c <= LAST_CHAR) {
 		/* Puntero al Bitmap de dibujo del caracter recibido */
-		const char * data = _font + _charHeight * _charWidth * (c - FIRST_CHAR) / 8;
+		const char *data = _font + _charHeight * _charWidth * (c - FIRST_CHAR) / 8;
 		for (int h = 0; h < _charHeight; h++) {  // Iteracion por filas
-			Color * ptr = (Color *) getPtrToPixel(_X, _Y + h);
+			Color *ptr = (Color *) getPtrToPixel(_X, _Y + h);
 			uint8_t mask = 1;
 			for (uint8_t i = 0; i < _charWidth; i++) {  // Iteracion por columnas
 				if (*data & mask) {
@@ -207,23 +207,23 @@ void printChar(char c) {
 		printNewline();
 }
 
-void print(const char * s) {
+void print(const char *s) {
 	while (*s)
 		printChar(*s++);
 }
 
-void printN(const char * s, uint32_t n) {
+void printN(const char *s, uint32_t n) {
 	if (!n)
 		return;
 	while (n-- && *s)
 		printChar(*s++);
 }
 
-void printf(char * fmt, ...) {
+void printf(char *fmt, ...) {
 	va_list v;
 	va_start(v, fmt);
 	char buffer[256] = {0};
-	char * fmtPtr = fmt;
+	char *fmtPtr = fmt;
 	while (*fmtPtr) {
 		if (*fmtPtr == '%') {
 			fmtPtr++;

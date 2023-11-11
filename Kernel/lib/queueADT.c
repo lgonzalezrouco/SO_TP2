@@ -3,11 +3,11 @@
 #include <queueADT.h>
 
 typedef struct Node {
-	PCB * process;
-	struct Node * next;
+	PCB *process;
+	struct Node *next;
 } Node;
 
-typedef Node * TNode;
+typedef Node *TNode;
 
 typedef struct QueueCDT {
 	TNode first;
@@ -29,12 +29,12 @@ int isEmpty(QueueADT queue) {
 	return queue->size == 0;
 }
 
-PCB * dequeue(QueueADT queue) {
+PCB *dequeue(QueueADT queue) {
 	if (queue == NULL || queue->size == 0)
 		return NULL;
 
 	TNode node = queue->first;
-	PCB * process = node->process;
+	PCB *process = node->process;
 	queue->first = node->next;
 
 	if (queue->first == NULL)
@@ -46,7 +46,7 @@ PCB * dequeue(QueueADT queue) {
 	return process;
 }
 
-void enqueue(QueueADT queue, PCB * process) {
+void enqueue(QueueADT queue, PCB *process) {
 	if (queue == NULL)
 		return;
 
@@ -67,13 +67,13 @@ void enqueue(QueueADT queue, PCB * process) {
 	queue->size++;
 }
 
-PCB * removeByPid(QueueADT queue, int16_t pid) {
+PCB *removeByPid(QueueADT queue, int16_t pid) {
 	if (queue == NULL || queue->size == 0)
 		return NULL;
 
 	TNode node = queue->first;
 	TNode prev = NULL;
-	PCB * process = NULL;
+	PCB *process = NULL;
 
 	while (node != NULL && node->process->pid != pid) {
 		prev = node;

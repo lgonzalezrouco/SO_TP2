@@ -11,13 +11,13 @@
 #define MAX_BLOCKS 128
 
 typedef struct MM_rq {
-	void * address;
+	void *address;
 	uint32_t size;
 } mm_rq;
 
-void * my_memset(void * destination, int32_t c, uint64_t length) {
+void *my_memset(void *destination, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t) c;
-	char * dst = (char *) destination;
+	char *dst = (char *) destination;
 
 	while (length--)
 		dst[length] = chr;
@@ -25,7 +25,7 @@ void * my_memset(void * destination, int32_t c, uint64_t length) {
 	return destination;
 }
 
-uint64_t test_mm(char * cant) {
+uint64_t test_mm(char *cant) {
 	printf("test_mm: Starting\n");
 	mm_rq mm_rqs[MAX_BLOCKS];
 	uint8_t rq;

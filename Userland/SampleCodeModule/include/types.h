@@ -17,7 +17,7 @@ typedef enum status {
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY, ZOMBIE } processStatus;
 
-typedef int (*ProcessCode)(int argc, char ** args);
+typedef int (*ProcessCode)(int argc, char **args);
 
 typedef struct memoryInfo {
 	int totalMemory;
@@ -26,8 +26,8 @@ typedef struct memoryInfo {
 } memoryInfo;
 
 typedef struct memoryBlock {
-	uint64_t * base;
-	uint64_t * current;
+	uint64_t *base;
+	uint64_t *current;
 	size_t size;
 } memoryBlock;
 
@@ -35,9 +35,9 @@ typedef struct PCB {
 	int16_t pid;
 	int16_t parentPid;
 	int16_t pidToWait;
-	char * name;
-	char ** argv;
-	memoryBlock * stack;
+	char *name;
+	char **argv;
+	memoryBlock *stack;
 	uint8_t priority;
 	uint16_t quantum;
 	processStatus status;
@@ -57,9 +57,9 @@ typedef struct PCB {
 typedef struct processInfo {
 	uint16_t pid;
 	uint16_t parentPid;
-	char * name;
-	uint64_t * base;
-	uint64_t * current;
+	char *name;
+	uint64_t *base;
+	uint64_t *current;
 	uint8_t priority;
 	processStatus status;
 	// todo agregar FOREGROUND o BACKGROUND

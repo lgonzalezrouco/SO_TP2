@@ -21,8 +21,8 @@ uint32_t GetUniform(uint32_t max) {
 }
 
 // Memory
-uint8_t memcheck(void * start, uint8_t value, uint32_t size) {
-	uint8_t * p = (uint8_t *) start;
+uint8_t memcheck(void *start, uint8_t value, uint32_t size) {
+	uint8_t *p = (uint8_t *) start;
 	uint32_t i;
 
 	for (i = 0; i < size; i++, p++)
@@ -33,7 +33,7 @@ uint8_t memcheck(void * start, uint8_t value, uint32_t size) {
 }
 
 // Parameters
-int64_t satoi(char * str) {
+int64_t satoi(char *str) {
 	uint64_t i = 0;
 	int64_t res = 0;
 	int8_t sign = 1;

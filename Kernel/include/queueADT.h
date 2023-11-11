@@ -4,7 +4,7 @@
 #include "memoryManager.h"
 #include "types.h"
 
-typedef struct QueueCDT * QueueADT;
+typedef struct QueueCDT *QueueADT;
 
 /**
  * @brief Crea una QueueADT
@@ -25,7 +25,7 @@ int isEmpty(QueueADT queue);
  * @param queue
  * @return PCB*
  */
-PCB * dequeue(QueueADT queue);
+PCB *dequeue(QueueADT queue);
 
 /**
  * @brief Agrega un elemento al final de la cola
@@ -33,7 +33,7 @@ PCB * dequeue(QueueADT queue);
  * @param queue
  * @param process
  */
-void enqueue(QueueADT queue, PCB * process);
+void enqueue(QueueADT queue, PCB *process);
 
 /**
  * @brief Remueve un elemento especifico de la cola por su pid
@@ -42,7 +42,7 @@ void enqueue(QueueADT queue, PCB * process);
  * @param pid
  * @return PCB*
  */
-PCB * removeByPid(QueueADT queue, int16_t pid);
+PCB *removeByPid(QueueADT queue, int16_t pid);
 
 /**
  * @brief Libera la memoria de la cola

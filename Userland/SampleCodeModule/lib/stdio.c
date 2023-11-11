@@ -16,7 +16,7 @@
  * @param fmt Formato de lo que se desea escribir de STDOUT
  * @param args lista de argumentos
  */
-static void vprintf(char * fmt, va_list args);
+static void vprintf(char *fmt, va_list args);
 
 void putchar(char c) {
 	write(STDOUT, c);
@@ -26,12 +26,12 @@ void putcharErr(char c) {
 	write(STDERR, c);
 }
 
-void puts(const char * s) {
+void puts(const char *s) {
 	while (*s)
 		putchar(*s++);
 }
 
-void printErr(const char * s) {
+void printErr(const char *s) {
 	while (*s)
 		putcharErr(*s++);
 }
@@ -47,16 +47,16 @@ char getScanCode() {
 	// return read(KBDIN);
 }
 
-void printf(char * fmt, ...) {
+void printf(char *fmt, ...) {
 	va_list v;
 	va_start(v, fmt);
 	vprintf(fmt, v);
 	va_end(v);
 }
 
-void vprintf(char * fmt, va_list args) {
+void vprintf(char *fmt, va_list args) {
 	char buffer[MAX_CHARS] = {0};
-	char * fmtPtr = fmt;
+	char *fmtPtr = fmt;
 	while (*fmtPtr) {
 		if (*fmtPtr == '%') {
 			fmtPtr++;
@@ -90,7 +90,7 @@ void vprintf(char * fmt, va_list args) {
 	}
 }
 
-void printfc(Color color, char * fmt, ...) {
+void printfc(Color color, char *fmt, ...) {
 	Color prevColor = getFontColor();
 	setFontColor(color.r, color.g, color.b);
 	va_list args;
@@ -105,7 +105,7 @@ void printNChars(char c, int n) {
 		putchar(c);
 }
 
-int scanf(char * fmt, ...) {
+int scanf(char *fmt, ...) {
 	va_list v;
 	va_start(v, fmt);
 	char c;
@@ -126,8 +126,8 @@ int scanf(char * fmt, ...) {
 	}
 	putchar('\n');
 	buffer[bIdx] = 0;
-	char * fmtPtr = fmt;
-	char * end;
+	char *fmtPtr = fmt;
+	char *end;
 	bIdx = 0;
 
 	int qtyParams = 0;
@@ -163,9 +163,9 @@ int scanf(char * fmt, ...) {
 	return qtyParams;
 }
 
-static char * _regNames[] = {
+static char *_regNames[] = {
     "RAX", "RBX", "RCX", "RDX", "RBP", "RDI", "RSI", "R8", "R9", "R10", "R11", "R12", "R13", "R14", "R15"};
-void printRegisters(const uint64_t * rsp) {
+void printRegisters(const uint64_t *rsp) {
 	for (int i = 0; i < sizeof(_regNames) / sizeof(char *); i++)
 		printf("%s: 0x%x\n", _regNames[i], rsp[sizeof(_regNames) / sizeof(char *) - i - 1]);
 }

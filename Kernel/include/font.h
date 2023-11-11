@@ -21370,7 +21370,7 @@ char font_36[] = {
     0x00,
     0x00};
 
-char * fonts[] = {font_12, font_24, font_36};
+char *fonts[] = {font_12, font_24, font_36};
 uint8_t charWidths[] = {CHAR_WIDTH_12, CHAR_WIDTH_24, CHAR_WIDTH_36};
 uint8_t charHeights[] = {CHAR_HEIGHT_12, CHAR_HEIGHT_24, CHAR_HEIGHT_36};
 #endif

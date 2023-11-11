@@ -10,8 +10,8 @@
 #include <unistd.h>
 
 // Parser elements
-const char * argp_program_version = "x64BareBones ModulePacker (C) v0.2";
-const char * argp_program_bug_address = "arq-catedra@googlegroups.com";
+const char *argp_program_version = "x64BareBones ModulePacker (C) v0.2";
+const char *argp_program_bug_address = "arq-catedra@googlegroups.com";
 
 /* Program documentation. */
 static char doc[] = "ModulePacker is an appender of binary files to be loaded all together";
@@ -25,7 +25,7 @@ static struct argp_option options[] = {{"output", 'o', "FILE", 0, "Output to FIL
 /* Our argp parser. */
 static struct argp argp = {options, parse_opt, args_doc, doc};
 
-int main(int argc, char * argv[]) {
+int main(int argc, char *argv[]) {
 	struct arguments arguments;
 
 	arguments.output_file = OUTPUT_FILE;
@@ -42,8 +42,8 @@ int main(int argc, char * argv[]) {
 	return !buildImage(fileArray, arguments.output_file);
 }
 
-int buildImage(array_t fileArray, char * output_file) {
-	FILE * target;
+int buildImage(array_t fileArray, char *output_file) {
+	FILE *target;
 
 	if ((target = fopen(output_file, "w")) == NULL) {
 		printf("Can't create target file\n");
@@ -51,7 +51,7 @@ int buildImage(array_t fileArray, char * output_file) {
 	}
 
 	// First, write the kernel
-	FILE * source = fopen(fileArray.array[0], "r");
+	FILE *source = fopen(fileArray.array[0], "r");
 	write_file(target, source);
 
 	// Write how many extra binaries we got.
@@ -61,7 +61,7 @@ int buildImage(array_t fileArray, char * output_file) {
 
 	int i;
 	for (i = 1; i < fileArray.length; i++) {
-		FILE * source = fopen(fileArray.array[i], "r");
+		FILE *source = fopen(fileArray.array[i], "r");
 
 		// Write the file size;
 		write_size(target, fileArray.array[i]);
@@ -86,14 +86,14 @@ int checkFiles(array_t fileArray) {
 	return TRUE;
 }
 
-int write_size(FILE * target, char * filename) {
+int write_size(FILE *target, char *filename) {
 	struct stat st;
 	stat(filename, &st);
 	uint32_t size = st.st_size;
 	fwrite(&size, sizeof(uint32_t), 1, target);
 }
 
-int write_file(FILE * target, FILE * source) {
+int write_file(FILE *target, FILE *source) {
 	char buffer[BUFFER_SIZE];
 	int read;
 
@@ -106,10 +106,10 @@ int write_file(FILE * target, FILE * source) {
 }
 
 /* Parse a single option. */
-static error_t parse_opt(int key, char * arg, struct argp_state * state) {
+static error_t parse_opt(int key, char *arg, struct argp_state *state) {
 	/* Get the input argument from argp_parse, which we
 	   know is a pointer to our arguments structure. */
-	struct arguments * arguments = state->input;
+	struct arguments *arguments = state->input;
 
 	switch (key) {
 		case 'o':

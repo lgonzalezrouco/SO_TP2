@@ -2,14 +2,14 @@
 
 int64_t global;  // shared memory
 
-void slowInc(int64_t * p, int64_t inc) {
+void slowInc(int64_t *p, int64_t inc) {
 	uint64_t aux = *p;
 	yield();  // This makes the race condition highly probable
 	aux += inc;
 	*p = aux;
 }
 
-uint64_t my_process_inc(int argc, char * argv[]) {
+uint64_t my_process_inc(int argc, char *argv[]) {
 	uint64_t n;
 	int8_t inc;
 	int8_t use_sem;
@@ -49,7 +49,7 @@ uint64_t my_process_inc(int argc, char * argv[]) {
 	return 0;
 }
 
-uint64_t test_sync(char * n, char * use_sem) {
+uint64_t test_sync(char *n, char *use_sem) {
 	if (satoi(n) <= 0) {
 		printf("test_sync: ERROR in first parameter, should be greater than 0.\n");
 		return -1;
@@ -69,8 +69,8 @@ uint64_t test_sync(char * n, char * use_sem) {
 
 	uint64_t pids[2 * TOTAL_PAIR_PROCESSES];
 
-	char * argvDec[] = {"my_process_dec", n, "-1", use_sem, NULL};
-	char * argvInc[] = {"my_process_inc", n, "1", use_sem, NULL};
+	char *argvDec[] = {"my_process_dec", n, "-1", use_sem, NULL};
+	char *argvInc[] = {"my_process_inc", n, "1", use_sem, NULL};
 
 	global = 0;
 

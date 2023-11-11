@@ -4,9 +4,9 @@
 
 static unsigned int log(uint64_t n, int base);
 
-void * memset(void * destination, int32_t c, uint64_t length) {
+void *memset(void *destination, int32_t c, uint64_t length) {
 	uint8_t chr = (uint8_t) c;
-	char * dst = (char *) destination;
+	char *dst = (char *) destination;
 
 	while (length--)
 		dst[length] = chr;
@@ -14,7 +14,7 @@ void * memset(void * destination, int32_t c, uint64_t length) {
 	return destination;
 }
 
-void * memcpy(void * destination, const void * source, uint64_t length) {
+void *memcpy(void *destination, const void *source, uint64_t length) {
 	/*
 	 * memcpy does not support overlapping buffers, so always do it
 	 * forwards. (Don't change this without adjusting memmove.)
@@ -31,14 +31,14 @@ void * memcpy(void * destination, const void * source, uint64_t length) {
 
 	if ((uint64_t) destination % sizeof(uint32_t) == 0 && (uint64_t) source % sizeof(uint32_t) == 0 &&
 	    length % sizeof(uint32_t) == 0) {
-		uint32_t * d = (uint32_t *) destination;
-		const uint32_t * s = (const uint32_t *) source;
+		uint32_t *d = (uint32_t *) destination;
+		const uint32_t *s = (const uint32_t *) source;
 
 		for (i = 0; i < length / sizeof(uint32_t); i++)
 			d[i] = s[i];
 	} else {
-		uint8_t * d = (uint8_t *) destination;
-		const uint8_t * s = (const uint8_t *) source;
+		uint8_t *d = (uint8_t *) destination;
+		const uint8_t *s = (const uint8_t *) source;
 
 		for (i = 0; i < length; i++)
 			d[i] = s[i];
@@ -54,7 +54,7 @@ static unsigned int log(uint64_t n, int base) {
 	return count;
 }
 
-int itoa(uint64_t n, char * buffer, int base) {
+int itoa(uint64_t n, char *buffer, int base) {
 	if (n == 0) {
 		buffer[0] = '0';
 		buffer[1] = '\0';
@@ -82,7 +82,7 @@ int itoa(uint64_t n, char * buffer, int base) {
 	return len;
 }
 
-int strtoi(char * s, char ** end) {
+int strtoi(char *s, char **end) {
 	int num = 0;
 	while (*s >= '0' && *s <= '9')
 		num = num * 10 + *(s++) - '0';
@@ -90,7 +90,7 @@ int strtoi(char * s, char ** end) {
 	return num;
 }
 
-void strcpy(char * dest, char * src) {
+void strcpy(char *dest, char *src) {
 	int i = 0;
 	while (src[i] != 0) {
 		dest[i] = src[i];
@@ -99,7 +99,7 @@ void strcpy(char * dest, char * src) {
 	dest[i] = 0;
 }
 
-int strcmp(const char * s1, const char * s2) {
+int strcmp(const char *s1, const char *s2) {
 	while (*s1 != 0 && *s1 == *s2) {
 		s1++;
 		s2++;
@@ -107,7 +107,7 @@ int strcmp(const char * s1, const char * s2) {
 	return *s1 - *s2;
 }
 
-unsigned int strlen(char * str) {
+unsigned int strlen(char *str) {
 	unsigned int i = 0;
 	while (str[i] != 0) {
 		i++;
@@ -115,7 +115,7 @@ unsigned int strlen(char * str) {
 	return i;
 }
 
-unsigned int array_strlen(char ** array) {
+unsigned int array_strlen(char **array) {
 	int len = 0;
 	while (*(array++) != (void *) 0)
 		len++;
