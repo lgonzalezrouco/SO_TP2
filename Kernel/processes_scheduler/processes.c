@@ -65,14 +65,9 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 
 	addProcess(process);
 
-	/*
-	process->fds[0] = fds[0];
-	openPipe(0, fds[0], process->pid);
-	process->fds[1] = fds[1];
-	openPipe(1, fds[1], process->pid);
-	process->fds[2] = fds[2];
-	openPipe(2, fds[2], process->pid);
-	*/
+	process->fds[STDIN] = fds[STDIN];
+	process->fds[STDOUT] = fds[STDOUT];
+	process->fds[STDERR] = fds[STDERR];
 
 	return process->pid;
 }
