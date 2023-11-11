@@ -20,17 +20,17 @@ static void testReader(int argc, char **argv) {
 	printf("Esperando mensaje...\n");
 	openPipe(TEST_PIPE, READ, getPid());
 	char dst[TEST_BUFFER_LEN] = {0};
-	read(TEST_PIPE, dst, 7);
+	read(TEST_PIPE, dst, TEST_BUFFER_LEN);
 	printf("Leyendo mensaje: %s\n", dst);
 	closePipe(TEST_PIPE, getPid());
 }
 
 int testNamedPipes() {
-	char *paramsWriter[] = {"test_writer", NULL};
-	uint16_t pidWriter = createProcess(1, (void *) &testWriter, paramsWriter, "test_writer", 4);
 	char *paramsReader[] = {"test_reader", NULL};
 	uint16_t pidReader = createProcess(1, (void *) &testReader, paramsReader, "test_reader", 4);
-	waitpid(pidWriter);
+	char *paramsWriter[] = {"test_writer", NULL};
+	uint16_t pidWriter = createProcess(1, (void *) &testWriter, paramsWriter, "test_writer", 4);
 	waitpid(pidReader);
+	waitpid(pidWriter);
 	return 0;
 }

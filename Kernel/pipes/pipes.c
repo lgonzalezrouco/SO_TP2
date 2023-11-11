@@ -60,9 +60,10 @@ int8_t closePipe(uint16_t id, uint16_t pid) {
 	if (pipe == NULL || (pipe->inPid != pid && pipe->outPid != pid))
 		return PIPE_ERROR;
 
-	if (pipe->inPid == pid)
-		pipe->inPid = DEV_NULL;
-	else{
+	if (pipe->inPid == pid) {
+		char buf[] = {EOF};
+		writePipe(id, buf, 1, pid);
+	} else {
 		pipe->outPid = DEV_NULL;
 		freePipe(id);
 	}
@@ -101,7 +102,7 @@ int64_t writePipe(uint16_t id, char *src, uint64_t len, uint16_t pid) {
 
 int64_t readPipe(uint16_t id, char *dst, uint64_t len, uint16_t pid) {
 	Pipe *pipe = getPipe(id);
-	if (pipe == NULL || pipe->outPid != pid || len == 0 /* || pipe->buffer[pipe->readPosition] == EOF */)
+	if (pipe == NULL || pipe->outPid != pid || len == 0)
 		return PIPE_ERROR;
 
 	uint64_t qtyRead = 0;
@@ -170,9 +171,9 @@ static Pipe *getPipe(uint16_t id) {
 	return pipes[index];
 }
 
-static void freePipe(uint16_t id){
+static void freePipe(uint16_t id) {
 	Pipe *pipe = getPipe(id);
-	if(pipe == NULL)
+	if (pipe == NULL)
 		return;
 	free(pipe);
 	pipes[getIndex(id)] = NULL;
