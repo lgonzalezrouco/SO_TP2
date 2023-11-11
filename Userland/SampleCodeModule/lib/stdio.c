@@ -148,14 +148,17 @@ int scanf(char *fmt, ...) {
 				case 's':
 					end = &buffer[bIdx] + strcpychar((char *) va_arg(v, char *), &buffer[bIdx], ' ');
 					break;
+				case 'i':
+					end = &buffer[bIdx] + strcpychar((char *) va_arg(v, char *), &buffer[bIdx], '\n');
+					break;
 			}
 			bIdx += end - &buffer[bIdx];
 			qtyParams++;
-		} else if (*fmtPtr == buffer[bIdx]) {
+		} else if (*fmtPtr == buffer[bIdx])
 			bIdx++;
-		} else {
+		else
 			printErr("Error!!!");
-		}
+
 		fmtPtr++;
 	}
 	buffer[bIdx - 1] = 0;
