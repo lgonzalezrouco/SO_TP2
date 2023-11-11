@@ -5,14 +5,14 @@
 #include <stdint.h>
 
 typedef enum status {
-	INVALID_PID = -8,
+	PIPE_ERROR = -8,
+	INVALID_PID,
 	SAME_STATUS,
 	INVALID_STATUS,
 	SAME_PRIORITY,
 	INVALID_PRIORITY,
 	NOT_FOUND,
 	INVALID_PROCESS,
-	PROBLEM,
 	SUCCESS
 } status;
 
@@ -23,15 +23,15 @@ typedef enum status {
 #define IDLE_PRIORITY    0
 
 // 3 (stdin, stdout, stderr)
-#define STDIN     0
-#define STDOUT    1
-#define STDERR    2
-#define STD_PIPES 3
-#define READ      0
-#define WRITE     1
-#define EOF       -1
+#define STDIN   0
+#define STDOUT  1
+#define STDERR  2
+#define STD_FDS 3
+#define EOF     -1
 
 typedef enum processStatus { RUNNING, BLOCKED, KILLED, READY } processStatus;
+
+typedef enum pipeModes { READ, WRITE } pipeModes;
 
 typedef int (*ProcessCode)(int argc, char **args);
 
@@ -44,18 +44,18 @@ typedef struct memoryBlock {
 } memoryBlock;
 
 typedef struct PCB {
-	int16_t pid;
-	int16_t parentPid;
-	int16_t pidToWait;
-	char *name;
-	char **argv;
-	memoryBlock *stack;
-	uint8_t priority;
-	uint16_t quantum;
 	processStatus status;
 	int retValue;
 	int childRetValue;
-	int fds[STD_PIPES];
+	int16_t pid;
+	int16_t parentPid;
+	int16_t pidToWait;
+	uint16_t quantum;
+	uint8_t priority;
+	char *name;
+	char **argv;
+	memoryBlock *stack;
+	int fds[STD_FDS];
 } PCB;
 
 typedef struct processInfo {

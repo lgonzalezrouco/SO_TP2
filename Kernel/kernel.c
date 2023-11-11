@@ -5,6 +5,7 @@
 #include <lib.h>
 #include <memoryManager.h>
 #include <moduleLoader.h>
+#include <pipes.h>
 #include <processes.h>
 #include <scheduler.h>
 #include <semaphores.h>
@@ -51,6 +52,7 @@ int main() {
 	initializeScheduler();
 	initializeSemaphores();
 	initializeKeyboardDriver();
+	initializePipes();
 
 	int fdsIdle[] = {-1, -1, STDERR};
 	int fdsShell[] = {STDIN, STDOUT, STDERR};
