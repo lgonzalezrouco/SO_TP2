@@ -2,6 +2,7 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <keyboard.h>
 #include <lib.h>
+#include <scheduler.h>
 #include <semaphores.h>
 #include <stdint.h>
 #include <time.h>
@@ -59,7 +60,7 @@ void keyboardHandler() {
 				case _C:
 					_bufferStart = 0;
 					_bufferSize = 0;
-					// killForegroundProcess();
+					killForegroundProcess();
 					break;
 				case _R:
 					saveRegisters();
