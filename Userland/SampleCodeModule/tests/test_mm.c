@@ -33,7 +33,7 @@ int test_mm(int argc, char **argv) {
 	uint64_t max_memory;
 
 	if (argc != 2) {
-		printf("test_mm: Invalid number of arguments\n");
+		printf("test_mm: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

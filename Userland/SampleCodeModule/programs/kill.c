@@ -7,7 +7,7 @@
 
 int kill(int argc, char **argv) {
 	if (argc != 2) {
-		printErr("kill: Invalid number of arguments\n");
+		printErr("kill: Numero invalido de argumentos.\n");
 		return -1;
 	}
 	char pid[10];

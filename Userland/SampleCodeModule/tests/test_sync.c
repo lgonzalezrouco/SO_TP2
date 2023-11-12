@@ -56,7 +56,7 @@ uint64_t my_process_inc(int argc, char *argv[]) {
 
 uint64_t test_sync(int argc, char **argv) {
 	if (argc != 3) {
-		printErr("test_sync: Invalid number of arguments\n");
+		printErr("test_sync: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

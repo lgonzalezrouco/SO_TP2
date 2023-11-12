@@ -5,7 +5,7 @@
 
 int printProcesses(int argc, char **argv) {
 	if (argc != 1) {
-		printErr("ps: Invalid number of arguments\n");
+		printErr("ps: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

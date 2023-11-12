@@ -15,7 +15,7 @@ typedef struct P_rq {
 
 int test_processes(int argc, char **argv) {
 	if (argc != 2) {
-		printErr("test_processes: Invalid number of arguments\n");
+		printErr("test_processes: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

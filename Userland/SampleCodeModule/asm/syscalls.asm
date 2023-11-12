@@ -32,6 +32,7 @@ GLOBAL semPost
 GLOBAL openPipe
 GLOBAL closePipe
 GLOBAL unblockProcess
+GLOBAL sleep
 
 read:
     mov rax, 0
@@ -196,5 +197,10 @@ closePipe:
 
 unblockProcess:
     mov rax, 32
+    int 80h
+    ret
+
+sleep:
+    mov rax, 33
     int 80h
     ret

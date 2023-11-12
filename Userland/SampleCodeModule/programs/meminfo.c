@@ -5,7 +5,7 @@
 
 int printMemInfo(int argc, char **argv) {
 	if (argc != 1) {
-		printErr("meminfo: Invalid number of arguments\n");
+		printErr("meminfo: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

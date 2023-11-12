@@ -6,23 +6,23 @@
 #include <uStdio.h>
 #include <uStdlib.h>
 
-#define MINOR_WAIT "500000000"  // TODO: Change this value to prevent a process from flooding the screen
-#define WAIT \
-	1000000000  // TODO: Change this value to make the wait long enough to see theese processes beeing run at least
-	            // twice
+#define MINOR_WAIT "25000000"
+#define WAIT       50000000
 
 #define TOTAL_PROCESSES 3
-#define LOWEST          1  // TODO: Change as required
-#define MEDIUM          3  // TODO: Change as required
-#define HIGHEST         5  // TODO: Change as required
+#define LOWEST          1
+#define MEDIUM          3
+#define HIGHEST         5
 
 int64_t prio[TOTAL_PROCESSES] = {LOWEST, MEDIUM, HIGHEST};
 
 int test_prio(int argc, char **argv) {
 	if (argc != 1) {
-		printErr("test_prio: Invalid number of arguments\n");
+		printErr("test_prio: Numero invalido de argumentos.\n");
 		return -1;
 	}
+
+	printf("STARTING TEST...\n");
 
 	int64_t pids[TOTAL_PROCESSES];
 	char *args[] = {"endless_loop_print", MINOR_WAIT, "0", NULL};
@@ -59,5 +59,6 @@ int test_prio(int argc, char **argv) {
 	for (i = 0; i < TOTAL_PROCESSES; i++)
 		killProcess(pids[i]);
 
+	printf("TEST FINISHED\n");
 	return 0;
 }

@@ -4,7 +4,7 @@
 
 int time(int argc, char **argv) {
 	if (argc != 1) {
-		printErr("time: Invalid number of arguments\n");
+		printErr("time: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

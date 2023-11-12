@@ -240,4 +240,10 @@ int closePipe(uint16_t id, uint16_t pid);
  */
 uint64_t unblockProcess(int16_t pid);
 
+/**
+ * @brief Hace un sleep de la cantidad de segundos recibidos
+ * @param seconds: Cantidad de segundos a mimir
+*/
+void sleep(int seconds);
+
 #endif

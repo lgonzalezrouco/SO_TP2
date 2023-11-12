@@ -7,7 +7,7 @@
 
 int toggleBlock(int argc, char **argv) {
 	if (argc != 2) {
-		printErr("toggleBlock: Invalid number of arguments\n");
+		printErr("toggleBlock: Numero invalido de argumentos.\n");
 		return -1;
 	}
 

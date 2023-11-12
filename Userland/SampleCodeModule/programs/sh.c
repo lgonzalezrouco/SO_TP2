@@ -53,7 +53,11 @@ const static Command commands[] = {
     {"tp", "Corre el test de procesos, ingresar cantidad de procesos", false, (ProcessCode) test_processes},
     {"ts", "Corre el test de sincronizacion, ", false, (ProcessCode) test_sync},
     {"tprio", "Corre el test de prioridades, ", false, (ProcessCode) test_prio},
-    {"tpipe", "Corre el test de pipes.", false, (ProcessCode) testNamedPipes}};
+    {"tpipe", "Corre el test de pipes.", false, (ProcessCode) testNamedPipes},
+	{"wc", "Cuenta la cantidad de lineas del input", false, (ProcessCode) wc},
+	{"cat", "Imprime el STDIN tal como lo recibe", false, (ProcessCode) cat},
+	{"filter", "Filtra las vocales del input", false, (ProcessCode) filter},
+	{"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", false, (ProcessCode) loop},};
 
 void shell() {
 	puts(WELCOME);
@@ -87,18 +91,20 @@ static void analizeInput(char *input) {
 		runProcess(input, len);
 }
 
-static void runProcess(char *input, int len) {
+static void runProcess(char *in, int len) {
 	char program[MAX_CHARS] = {0};
 	char arg1[MAX_CHARS] = {0};
 	char arg2[MAX_CHARS] = {0};
 	char isForeground = 1;
 
-	if (len > 0 && input[len - 1] == '&') {
+	if (len > 0 && in[len - 1] == '&') {
 		isForeground = 0;
-		input[--len] = 0;
-		if (len > 0 && input[len - 1] == ' ')
-			input[--len] = 0;
+		in[--len] = 0;
+		if (len > 0 && in[len - 1] == ' ')
+			in[--len] = 0;
 	}
+
+	char *input = in;
 
 	int i = 0;
 	for (i = 0; isValid(input[i]); i++)

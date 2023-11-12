@@ -6,7 +6,7 @@
 
 int nice(int argc, char **argv) {
 	if (argc != 3) {
-		printErr("nice: Invalid number of arguments\n");
+		printErr("nice: Numero invalido de argumentos.\n");
 		return -1;
 	}
 	char *pid = argv[1];

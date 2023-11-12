@@ -52,6 +52,7 @@ static uint64_t syscall_semPost(char *name);
 static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid);
 static uint64_t syscall_closePipe(uint16_t id, uint16_t pid);
 static uint64_t syscall_unblockProcess(int16_t pid);
+static void syscall_sleep(int seconds);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -89,6 +90,7 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions) syscall_openPipe,
     (sysFunctions) syscall_closePipe,
     (sysFunctions) syscall_unblockProcess,
+	(sysFunctions) syscall_sleep,
 };
 
 uint64_t syscallDispatcher(
@@ -140,9 +142,7 @@ static void syscall_clear() {
 
 // Get time in seconds
 static uint32_t syscall_seconds() {
-	uint8_t h, m, s;
-	getTime(&h, &m, &s);
-	return s + m * 60 + ((h + 24 - 3) % 24) * 3600;
+	return getSeconds();
 }
 
 // Get register snapshot array
@@ -275,4 +275,8 @@ static uint64_t syscall_closePipe(uint16_t id, uint16_t pid) {
 
 static uint64_t syscall_unblockProcess(int16_t pid) {
 	return (uint64_t) unblockProcess(pid);
+}
+
+static void syscall_sleep(int seconds) {
+	sleep(seconds);
 }

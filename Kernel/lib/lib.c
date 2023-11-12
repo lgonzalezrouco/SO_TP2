@@ -3,6 +3,7 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <video.h>
+#include <scheduler.h>
 
 static unsigned int log(uint64_t n, int base);
 

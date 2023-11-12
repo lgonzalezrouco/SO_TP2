@@ -38,7 +38,7 @@ static void testReader(int argc, char **argv) {
 
 int testNamedPipes(int argc, char **argv) {
 	if (argc != 1) {
-		printErr("testNamedPipes: Invalid number of arguments\n");
+		printErr("testNamedPipes: Numero invalido de argumentos.\n");
 		return -1;
 	}
 	char *paramsReader[] = {"test_reader", NULL};

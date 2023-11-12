@@ -31,7 +31,7 @@ void exceptionDispatcher(int ex, uint64_t *rip, uint64_t *rsp) {
 			msg = PAGE_FAULT_DESCRIPTION;
 			break;
 	}
-	printError(msg, *rip, rsp);
+	//printError(msg, *rip, rsp);
 }
 
 static void printError(char *msg, uint64_t rip, uint64_t *rsp) {
