@@ -104,7 +104,7 @@ void phylo() {
 	char *philArgs[6] = {"philosopher", "1", "2", "3", "4", NULL};
 
 	for (i = 0; i < N; i++) {
-		createProcess(1, (ProcessCode) &philosopher, philArgs, "philosopher", 5);
+		createProcess((ProcessCode) &philosopher, philArgs, "philosopher", 1);
 		printf("Philosopher %d is thinking\n", i + 1);
 	}
 }

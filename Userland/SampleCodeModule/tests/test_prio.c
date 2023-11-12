@@ -29,7 +29,7 @@ int test_prio(int argc, char **argv) {
 	uint64_t i;
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
-		pids[i] = createProcess(1, (ProcessCode) &endless_loop, args, "endless_loop_print", 5);
+		pids[i] = createProcess((ProcessCode) &endless_loop, args, "endless_loop_print", 1);
 
 	busyWait(WAIT);
 	printf("\nCHANGING PRIORITIES...\n");

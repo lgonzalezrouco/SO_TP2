@@ -1,6 +1,7 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
+#include <video.h>
 
 static int16_t nextPid = 0;
 
@@ -9,12 +10,14 @@ void resetPIDCounter() {
 }
 
 void processWrapper(ProcessCode function, char **args) {
+	/* for(int i = 0; args[i] != NULL; i++)
+	    printf("%s ", args[i]); */
 	size_t len = array_strlen(args);
 	int retValue = function(len, args);
 	killProcess(getCurrentPid(), retValue);
 }
 
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]) {
+int createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]) {
 	PCB *process = (PCB *) malloc(sizeof(PCB));
 	if (process == NULL)
 		return -1;
@@ -24,7 +27,7 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 		return -1;
 	}
 
-	process->parentPid = parentPid;
+	process->parentPid = getCurrentPid();
 
 	process->pidToWait = -1;
 
@@ -52,8 +55,8 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 	process->stack->size = STACK_SIZE;
 	process->status = READY;
 	process->quantum = 1;
-	priority = priority > MAX_PRIORITY ? MAX_PRIORITY : priority;
-	process->priority = priority;
+	process->priority = process->pid == IDLE_PRIORITY ? IDLE_PRIORITY : MAX_PRIORITY;
+	process->isForeground = isForeground;
 	process->retValue = -1;
 	process->childRetValue = -1;
 	process->argv = args;
@@ -65,15 +68,12 @@ int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, 
 	addProcess(process);
 
 	for (int i = 0; i < STD_FDS; i++) {
-		if (process->fds[i] == DEV_NULL) {
-			process->fds[i] = fds[i];
-
-			if (fds[i] >= STD_FDS) {
-				if (i == STDIN)
-					openPipe(fds[i], READ, process->pid);
-				else
-					openPipe(fds[i], WRITE, process->pid);
-			}
+		process->fds[i] = fds[i];
+		if (fds[i] >= STD_FDS) {
+			if (i == STDIN)
+				openPipe(fds[i], READ, process->pid);
+			else
+				openPipe(fds[i], WRITE, process->pid);
 		}
 	}
 

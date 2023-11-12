@@ -37,8 +37,7 @@ static uint64_t syscall_getMemoryInfo();
 // static processInfo * syscall_getProcessInfo();
 static PCB **syscall_getProcessesInfo();
 static void syscall_freeProcessesInfo(uint64_t infoArray);
-static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
+static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 static uint64_t syscall_killProcess(int16_t pid);
 static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(int16_t pid);
@@ -124,17 +123,14 @@ static void syscall_write(int32_t fd, char c) {
 		return;
 
 	uint16_t fdValue = getFdValue(fd);
-	if (fdValue == STDIN || fdValue == STDERR) {
+	if (fdValue == STDOUT || fdValue == STDERR) {
 		Color prevColor = getFontColor();
-		if (fd == STDERR)
+		if (fdValue == STDERR)
 			setFontColor(ERROR_COLOR);
-		else if (fd != STDOUT)
-			return;
 		printChar(c);
 		setFontColor(prevColor);
-	} else if (fdValue >= STD_FDS) {
+	} else if (fdValue >= STD_FDS)
 		writePipe(fdValue, &c, 1, getCurrentPid());
-	}
 }
 
 // Clear
@@ -219,9 +215,8 @@ static void syscall_freeProcessesInfo(uint64_t infoArray) {
 	freeProcessesInfo((PCB **) infoArray);
 }
 
-static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]) {
-	return (uint64_t) createProcess(parentPid, code, args, name, priority, fds);
+static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]) {
+	return (uint64_t) createProcess(code, args, name, isForeground, fds);
 }
 
 static uint64_t syscall_killProcess(int16_t pid) {

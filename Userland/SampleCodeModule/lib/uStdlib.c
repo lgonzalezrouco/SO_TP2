@@ -8,9 +8,9 @@
 #define isNumber(n) ((n) >= '0' && (n) <= '9')
 #define isHex(n)    ((n) >= 'a' && (n) <= 'f')
 
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority) {
-	int fds[] = {STDIN, STDOUT, STDERR};
-	return createProcessFds(parentPid, code, args, name, priority, fds);
+int createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground) {
+	int fds[] = {isForeground ? STDIN : DEV_NULL, STDOUT, STDERR};
+	return createProcessFds(code, args, name, isForeground, fds);
 }
 
 static unsigned int log(uint64_t n, int base) {

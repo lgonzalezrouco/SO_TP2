@@ -54,11 +54,11 @@ int main() {
 	initializeKeyboardDriver();
 	initializePipes();
 
-	int fdsIdle[] = {-1, -1, STDERR};
+	int fdsIdle[] = {DEV_NULL, DEV_NULL, STDERR};
 	int fdsShell[] = {STDIN, STDOUT, STDERR};
 
-	createProcess(0, (ProcessCode) &idle, idleArgs, "idle", IDLE_PRIORITY, fdsIdle);
-	int shellPid = createProcess(0, (ProcessCode) sampleCodeModuleAddress, shellArgs, "shell", MAX_PRIORITY, fdsShell);
+	createProcess((ProcessCode) &idle, idleArgs, "idle", 0, fdsIdle);
+	int shellPid = createProcess((ProcessCode) sampleCodeModuleAddress, shellArgs, "shell", 1, fdsShell);
 
 	startShell(shellPid);
 	return 0;

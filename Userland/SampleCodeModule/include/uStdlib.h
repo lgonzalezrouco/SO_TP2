@@ -11,9 +11,10 @@
  * @param args: Arreglo de cadenas de caracteres con los argumentos de la
  * funcion
  * @param name: Nombre del proceso
- * @param priority: Prioridad del proceso
+ * @param isForeground: Si es foreground o no
  */
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority);
+int createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground);
+
 /**
  * @brief Convierte un arreglo de caracteres en numero entero en formato decimal
  * @param s: Cadena de caracteres

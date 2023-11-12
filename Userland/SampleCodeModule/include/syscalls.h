@@ -136,14 +136,13 @@ void freeProcessesInfo(PCB **infoArray);
 
 /**
  * @brief Crea un proceso
- * @param parentPid: PID del proceso padre
  * @param code: Codigo del proceso
  * @param args: Argumentos del proceso
  * @param name: Nombre del proceso
- * @param priority: Prioridad del proceso
+ * @param isForeground: Si es foreground o no
  * @param fds: File descriptors del proceso
  */
-int createProcessFds(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
+int createProcessFds(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 
 /**
  * @brief Mata a un proceso

@@ -1,6 +1,8 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+#include <stddef.h>
 #include <stdint.h>
+#include <video.h>
 
 static unsigned int log(uint64_t n, int base);
 
@@ -109,15 +111,14 @@ int strcmp(const char *s1, const char *s2) {
 
 unsigned int strlen(char *str) {
 	unsigned int i = 0;
-	while (str[i] != 0) {
+	while (str[i] != 0)
 		i++;
-	}
 	return i;
 }
 
 unsigned int array_strlen(char **array) {
 	int len = 0;
-	while (*(array++) != (void *) 0)
+	while (*(array++) != NULL)
 		len++;
 	return len;
 }

@@ -14,7 +14,7 @@ void resetPIDCounter();
 
 void processWrapper(ProcessCode code, char **args);
 
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
+int createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 
 int idle(int argc, char **argv);
 

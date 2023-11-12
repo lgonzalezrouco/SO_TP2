@@ -42,9 +42,9 @@ int testNamedPipes(int argc, char **argv) {
 		return -1;
 	}
 	char *paramsReader[] = {"test_reader", NULL};
-	uint16_t pidReader = createProcess(1, (void *) &testReader, paramsReader, "test_reader", 5);
 	char *paramsWriter[] = {"test_writer", NULL};
-	uint16_t pidWriter = createProcess(1, (void *) &testWriter, paramsWriter, "test_writer", 5);
+	uint16_t pidReader = createProcess((ProcessCode) testReader, paramsReader, "test_reader", 1);
+	uint16_t pidWriter = createProcess((ProcessCode) testWriter, paramsWriter, "test_writer", 1);
 	waitpid(pidReader);
 	waitpid(pidWriter);
 	return 0;

@@ -93,10 +93,10 @@ static void runProcess(char *input, int len) {
 	char arg2[MAX_CHARS] = {0};
 	char isForeground = 1;
 
-	if (input[len - 1] == '&') {
+	if (len > 0 && input[len - 1] == '&') {
 		isForeground = 0;
 		input[--len] = 0;
-		if (input[len - 1] == ' ')
+		if (len > 0 && input[len - 1] == ' ')
 			input[--len] = 0;
 	}
 
@@ -144,15 +144,16 @@ static void runProcess(char *input, int len) {
 				return;
 			}
 
-			// todo hacer que no sea necesaria la prioridad
-			// todo mandar isForeground y modificar los FDS estandard
-			int16_t pid = createProcess(getPid(), commands[i].code, args, program, 5);
+			// printf("ARGS: _%s_ _%s_ _%s_ _%s_\n", args[0], args[1] == NULL ? "NULL" : args[1], args[2] == NULL ?
+			// "NULL" : args[2], args[3] == NULL ? "NULL" : args[3]);
+
+			int16_t pid = createProcess(commands[i].code, args, program, isForeground);
 			if (pid == -1) {
 				printErr("No se pudo crear el proceso\n");
 				return;
 			}
 			if (isForeground)
-				waitpid(pid);
+				waitpid(pid);  // todo si esta esperando la shell un pid no desbloquear con teclado!!!
 		}
 	}
 	if (!found)

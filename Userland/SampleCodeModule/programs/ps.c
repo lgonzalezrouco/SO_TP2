@@ -13,7 +13,8 @@ int printProcesses(int argc, char **argv) {
 	int i = 0;
 
 	// Encabezados de la tabla
-	printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
+	printf(
+	    "PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tFOREGROUND\t\t\tNAME\n");
 
 	while (info[i] != NULL) {
 		printf("%d\t\t\t", info[i]->pid);
@@ -48,6 +49,7 @@ int printProcesses(int argc, char **argv) {
 		}
 		printf("0x%x\t\t\t\t\t", info[i]->stack->base);
 		printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
+		printf("%d\t\t\t\t\t\t\t\t\t\t\t\t", info[i]->isForeground ? 1 : 0);
 		printf("%s", info[i]->name);
 		putchar('\n');
 		i++;
