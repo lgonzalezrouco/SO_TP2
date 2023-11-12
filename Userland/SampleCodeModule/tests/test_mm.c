@@ -3,10 +3,11 @@
 #include "syscalls.h"
 #include "test_util.h"
 
+#include <shellPrograms.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <test_mm.h>
 
 #define MAX_BLOCKS 128
 
@@ -25,14 +26,19 @@ void *my_memset(void *destination, int32_t c, uint64_t length) {
 	return destination;
 }
 
-uint64_t test_mm(char *cant) {
+int test_mm(int argc, char **argv) {
 	printf("test_mm: Starting\n");
 	mm_rq mm_rqs[MAX_BLOCKS];
 	uint8_t rq;
 	uint32_t total;
 	uint64_t max_memory;
 
-	if ((max_memory = atoi(cant)) <= 0)
+	if (argc != 2) {
+		printf("test_mm: Invalid number of arguments\n");
+		return -1;
+	}
+
+	if ((max_memory = atoi(argv[1])) <= 0)
 		return -1;
 
 	while (1) {

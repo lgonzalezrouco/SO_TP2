@@ -89,7 +89,7 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions) syscall_semPost,
     (sysFunctions) syscall_openPipe,
     (sysFunctions) syscall_closePipe,
-	(sysFunctions) syscall_unblockProcess,
+    (sysFunctions) syscall_unblockProcess,
 };
 
 uint64_t syscallDispatcher(

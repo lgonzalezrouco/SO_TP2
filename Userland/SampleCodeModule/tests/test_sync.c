@@ -1,4 +1,10 @@
-#include <test_sync.h>
+#include "syscalls.h"
+#include "test_util.h"
+#include "types.h"
+
+#include <stdint.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 int64_t global;  // shared memory
 
@@ -49,7 +55,15 @@ uint64_t my_process_inc(int argc, char *argv[]) {
 	return 0;
 }
 
-uint64_t test_sync(char *n, char *use_sem) {
+uint64_t test_sync(int argc, char **argv) {
+	if (argc != 3) {
+		printErr("test_sync: Invalid number of arguments\n");
+		return -1;
+	}
+
+	char *n = argv[1];
+	char *use_sem = argv[2];
+
 	if (satoi(n) <= 0) {
 		printf("test_sync: ERROR in first parameter, should be greater than 0.\n");
 		return -1;

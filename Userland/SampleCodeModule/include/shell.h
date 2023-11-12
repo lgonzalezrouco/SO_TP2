@@ -6,5 +6,5 @@
  * @brief Corre la terminal
  *
  */
-void run_shell();
+// void run_shell();
 #endif

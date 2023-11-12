@@ -65,6 +65,6 @@ int intToBase(unsigned long long num, int base, char *buffer);
  * @brief Convierte un numero entero a una cadena de caracteres en base 10
  * @param num: Numero que se desea convertir
  * @param buffer: Buffer para ir guardando la conversion
-*/
+ */
 int intToString(unsigned long long num, char *buffer);
 #endif

@@ -1,29 +1,33 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "test_processes.h"
-
-#include "syscalls.h"
-#include "test_util.h"
-#include "types.h"
-
+#include <shellPrograms.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <syscalls.h>
+#include <test_util.h>
+#include <types.h>
 
 typedef struct P_rq {
 	int32_t pid;
 	enum processStatus state;
 } p_rq;
 
-int64_t test_processes(char *cant) {
+int test_processes(int argc, char **argv) {
+	if (argc != 2) {
+		printErr("test_processes: Invalid number of arguments\n");
+		return -1;
+	}
+
 	printf("test_processes: Starting\n");
 	uint8_t rq;
 	uint8_t alive = 0;
 	uint8_t action;
-	if (cant == NULL) {
+	if (argv[1] == NULL) {
 		printErr("test_processes: No se ingreso la cantidad de procesos a crear\n");
 		return -1;
 	}
-	uint64_t max_processes = atoi(cant);
+	uint64_t max_processes = atoi(argv[1]);
 	char *argvAux[] = {0};
 
 	p_rq p_rqs[max_processes];

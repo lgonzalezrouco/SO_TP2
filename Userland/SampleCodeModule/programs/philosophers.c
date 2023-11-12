@@ -69,13 +69,13 @@ void put_fork(int phnum) {
 }
 
 void philosopher(int argc, char **argv) {
-    printf("argc: %d\n", argc);
-    for (int i = 0; i < argc; i++) {
-        printf("argv[%d]: %s\n", i, argv[i]);
-    }
-    int8_t phnum = atoi(argv[3]);
-    printf("num: aksx %d\n", phnum);
-    while (1) {
+	printf("argc: %d\n", argc);
+	for (int i = 0; i < argc; i++) {
+		printf("argv[%d]: %s\n", i, argv[i]);
+	}
+	int8_t phnum = atoi(argv[3]);
+	printf("num: aksx %d\n", phnum);
+	while (1) {
 		int i = atoi(argv[3]);
 
 		busyWait(THINKING_TIME);
@@ -89,22 +89,22 @@ void philosopher(int argc, char **argv) {
 void phylo() {
 	int i;
 
-	if(semInit(mutex, 1) == -1) {
-        printf("Error creating mutex\n");
-        return;
-    }
-
-	for (i = 0; i < N; i++){
-		if(semInit(philosopherSemaphore(i), 0) == -1) {
-            printf("Error creating S[%d]\n", i);
-            return;
-        }
-    }
-    
-    char* philArgs[6] = {"philosopher", "1", "2", "3", "4", NULL};
+	if (semInit(mutex, 1) == -1) {
+		printf("Error creating mutex\n");
+		return;
+	}
 
 	for (i = 0; i < N; i++) {
-	    createProcess(1, (ProcessCode) &philosopher, philArgs, "philosopher", 5);
+		if (semInit(philosopherSemaphore(i), 0) == -1) {
+			printf("Error creating S[%d]\n", i);
+			return;
+		}
+	}
+
+	char *philArgs[6] = {"philosopher", "1", "2", "3", "4", NULL};
+
+	for (i = 0; i < N; i++) {
+		createProcess(1, (ProcessCode) &philosopher, philArgs, "philosopher", 5);
 		printf("Philosopher %d is thinking\n", i + 1);
 	}
 }
