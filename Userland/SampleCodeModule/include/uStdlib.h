@@ -1,5 +1,6 @@
-#ifndef _STDLIB_H
-#define _STDLIB_H
+#ifndef _U_STDLIB_H
+#define _U_STDLIB_H
+
 #include <stdint.h>
 #include <syscalls.h>
 #include <types.h>

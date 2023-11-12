@@ -1,6 +1,6 @@
 #include <shellPrograms.h>
-#include <stdio.h>
 #include <syscalls.h>
+#include <uStdio.h>
 
 int time(int argc, char **argv) {
 	if (argc != 1) {

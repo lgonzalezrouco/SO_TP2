@@ -1,10 +1,9 @@
-#include "syscalls.h"
-#include "test_util.h"
-#include "types.h"
-
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <syscalls.h>
+#include <test_util.h>
+#include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 int64_t global;  // shared memory
 

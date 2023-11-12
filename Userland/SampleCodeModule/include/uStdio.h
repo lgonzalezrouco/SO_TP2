@@ -1,5 +1,5 @@
-#ifndef _STDIO_H
-#define _STDIO_H
+#ifndef _U_STDIO_H
+#define _U_STDIO_H
 
 #define STDIN  0
 #define STDOUT 1

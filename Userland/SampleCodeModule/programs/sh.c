@@ -2,10 +2,10 @@
 #include <sh.h>
 #include <shellPrograms.h>
 #include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <syscalls.h>
+#include <uStdio.h>
+#include <uStdlib.h>
+#include <uString.h>
 
 #define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
 #define isValid(c) ((c) != ' ' && (c) != '|' && (c) != '&' && (c) != 0 && (c) != '\n')
@@ -145,7 +145,6 @@ static void runProcess(char *input, int len) {
 			}
 
 			// todo hacer que no sea necesaria la prioridad
-			// todo cambiar los nombres a las archivos para que no nos coincidan con librerias standard
 			// todo mandar isForeground y modificar los FDS estandard
 			int16_t pid = createProcess(getPid(), commands[i].code, args, program, 5);
 			if (pid == -1) {

@@ -1,6 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include <string.h>
+#include <uString.h>
 
 int strcmp(const char *s1, const char *s2) {
 	while (*s1 != 0 && *s1 == *s2) {

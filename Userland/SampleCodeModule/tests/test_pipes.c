@@ -1,12 +1,11 @@
-#include "shellPrograms.h"
-#include "syscalls.h"
-#include "test_util.h"
-#include "types.h"
-
+#include <shellPrograms.h>
 #include <stddef.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <syscalls.h>
+#include <test_util.h>
+#include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 #define TEST_PIPE       100
 #define TEST_BUFFER_LEN 100
@@ -43,9 +42,9 @@ int testNamedPipes(int argc, char **argv) {
 		return -1;
 	}
 	char *paramsReader[] = {"test_reader", NULL};
-	uint16_t pidReader = createProcess(1, (void *) &testReader, paramsReader, "test_reader", 4);
+	uint16_t pidReader = createProcess(1, (void *) &testReader, paramsReader, "test_reader", 5);
 	char *paramsWriter[] = {"test_writer", NULL};
-	uint16_t pidWriter = createProcess(1, (void *) &testWriter, paramsWriter, "test_writer", 4);
+	uint16_t pidWriter = createProcess(1, (void *) &testWriter, paramsWriter, "test_writer", 5);
 	waitpid(pidReader);
 	waitpid(pidWriter);
 	return 0;

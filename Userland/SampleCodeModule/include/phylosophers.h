@@ -1,8 +1,8 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <syscalls.h>
 #include <test_util.h>
+#include <uStdio.h>
+#include <uStdlib.h>
+#include <uString.h>
 
 //#define THINKING           0
 //#define HUNGRY             1

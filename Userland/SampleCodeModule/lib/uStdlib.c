@@ -1,8 +1,8 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 #define toLower(n)  ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
 #define isNumber(n) ((n) >= '0' && (n) <= '9')

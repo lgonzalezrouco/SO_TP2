@@ -1,9 +1,9 @@
 #include <shellPrograms.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <syscalls.h>
 #include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
+#include <uString.h>
 
 int kill(int argc, char **argv) {
 	if (argc != 2) {

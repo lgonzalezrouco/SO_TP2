@@ -1,8 +1,8 @@
 #include <shellPrograms.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <syscalls.h>
 #include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 int nice(int argc, char **argv) {
 	if (argc != 3) {

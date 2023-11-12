@@ -1,11 +1,10 @@
-#include "syscalls.h"
-#include "test_util.h"
-#include "types.h"
-
 #include <shellPrograms.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <syscalls.h>
+#include <test_util.h>
+#include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 #define MINOR_WAIT "500000000"  // TODO: Change this value to prevent a process from flooding the screen
 #define WAIT \
@@ -30,7 +29,7 @@ int test_prio(int argc, char **argv) {
 	uint64_t i;
 
 	for (i = 0; i < TOTAL_PROCESSES; i++)
-		pids[i] = createProcess(1, (ProcessCode) &endless_loop, args, "endless_loop_print", 0);
+		pids[i] = createProcess(1, (ProcessCode) &endless_loop, args, "endless_loop_print", 5);
 
 	busyWait(WAIT);
 	printf("\nCHANGING PRIORITIES...\n");

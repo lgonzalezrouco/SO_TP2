@@ -2,11 +2,11 @@
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <shellPrograms.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
 #include <syscalls.h>
 #include <test_util.h>
 #include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 typedef struct P_rq {
 	int32_t pid;
@@ -36,7 +36,7 @@ int test_processes(int argc, char **argv) {
 		// Create max_processes processes
 		for (rq = 0; rq < max_processes; rq++) {
 			// printf("Creating process\n");
-			p_rqs[rq].pid = createProcess(1, (ProcessCode) &endless_loop, argvAux, "endless_loop", 0);
+			p_rqs[rq].pid = createProcess(1, (ProcessCode) &endless_loop, argvAux, "endless_loop", 5);
 			if (p_rqs[rq].pid == -1) {
 				printf("test_processes: ERROR creating process\n");
 				return -1;
