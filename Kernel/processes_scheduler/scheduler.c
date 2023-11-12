@@ -7,6 +7,7 @@ PCB *currentProcess = NULL;
 uint16_t quantumRemaining = 0;
 QueueADT queues[PRIORITY_LEVELS];
 int processesQty = 0;
+uint8_t killForeground;
 
 static PCB *getNextProcess();
 static void killChildren(int16_t parentPid);
@@ -56,6 +57,12 @@ void *schedule(void *currentSP) {
 
 	if (currentProcess->status != BLOCKED)
 		stopProcess(currentProcess->pid);
+
+	if (killForeground && currentProcess->pid != SHELL_PID && currentProcess->pid != IDLE_PID &&
+	    currentProcess->isForeground) {
+		killForeground = 0;
+		killProcess(currentProcess->pid, -1);
+	}
 
 	PCB *nextProcess = getNextProcess();
 	runProcess(nextProcess->pid);
@@ -220,6 +227,10 @@ int unblockProcess(int16_t pid) {
 int16_t getFileDescriptor(uint8_t index) {
 	PCB *process = getProcess(getCurrentPid());
 	return process->fds[index];
+}
+
+void killForegroundProcess() {
+	killForeground = 1;
 }
 
 static PCB *getNextProcess() {
