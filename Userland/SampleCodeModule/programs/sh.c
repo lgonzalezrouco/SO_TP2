@@ -9,6 +9,7 @@
 
 #define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
 #define isValid(c) ((c) != ' ' && (c) != '|' && (c) != '&' && (c) != 0 && (c) != '\n')
+#define isValidWcCatFilter(c) ((c) != '|' && (c) != '&' && (c) != 0 && (c) != '\n')
 
 #define QTY_BYTES         32 /* Cantidad de bytes de respuesta del printmem */
 #define DEFAULT_FONT_SIZE 1
@@ -54,10 +55,12 @@ const static Command commands[] = {
     {"ts", "Corre el test de sincronizacion, ", false, (ProcessCode) test_sync},
     {"tprio", "Corre el test de prioridades, ", false, (ProcessCode) test_prio},
     {"tpipe", "Corre el test de pipes.", false, (ProcessCode) testNamedPipes},
-	{"wc", "Cuenta la cantidad de lineas del input", false, (ProcessCode) wc},
-	{"cat", "Imprime el STDIN tal como lo recibe", false, (ProcessCode) cat},
-	{"filter", "Filtra las vocales del input", false, (ProcessCode) filter},
-	{"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", false, (ProcessCode) loop},};
+    {"wc", "Cuenta la cantidad de lineas del input", false, (ProcessCode) wc},
+    {"cat", "Imprime el STDIN tal como lo recibe", false, (ProcessCode) cat},
+    {"filter", "Filtra las vocales del input", false, (ProcessCode) filter},
+    {"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", false, (ProcessCode) loop},
+	{"philo", "Corre el problema de los filosofos comensales", false, (ProcessCode) philo},
+};
 
 void shell() {
 	puts(WELCOME);
@@ -93,7 +96,7 @@ static void analizeInput(char *input) {
 
 static void runProcess(char *in, int len) {
 	char program[MAX_CHARS] = {0};
-	char arg1[MAX_CHARS] = {0};
+	char arg1[MAX_CHARS_ARG1] = {0};
 	char arg2[MAX_CHARS] = {0};
 	char isForeground = 1;
 
@@ -110,15 +113,11 @@ static void runProcess(char *in, int len) {
 	for (i = 0; isValid(input[i]); i++)
 		program[i] = input[i];
 
-	if (input[i] == ' ') {
-		i++;
-		for (int j = 0; isValid(input[i]); i++, j++)
-			arg1[j] = input[i];
-
+	if (strcmp(program, "wc") == 0 || strcmp(program, "cat") == 0 || strcmp(program, "filter") == 0 || strcmp(program, "loop") == 0) {
 		if (input[i] == ' ') {
 			i++;
-			for (int k = 0; isValid(input[i]); i++, k++)
-				arg2[k] = input[i];
+			for (int j = 0; isValidWcCatFilter(input[i]); i++, j++)
+				arg1[j] = input[i];
 
 			if (input[i] != 0) {
 				printErr(INVALID_COMMAND);
@@ -128,9 +127,29 @@ static void runProcess(char *in, int len) {
 			printErr(INVALID_COMMAND);
 			return;
 		}
-	} else if (input[i] != 0) {
-		printErr(INVALID_COMMAND);
-		return;
+	} else {
+		if (input[i] == ' ') {
+			i++;
+			for (int j = 0; isValid(input[i]); i++, j++)
+				arg1[j] = input[i];
+
+			if (input[i] == ' ') {
+				i++;
+				for (int k = 0; isValid(input[i]); i++, k++)
+					arg2[k] = input[i];
+
+				if (input[i] != 0) {
+					printErr(INVALID_COMMAND);
+					return;
+				}
+			} else if (input[i] != 0) {
+				printErr(INVALID_COMMAND);
+				return;
+			}
+		} else if (input[i] != 0) {
+			printErr(INVALID_COMMAND);
+			return;
+		}
 	}
 
 	bool found = false;

@@ -16,5 +16,6 @@ int wc(int argc, char **argv);
 int cat(int argc, char **argv);
 int filter(int argc, char **argv);
 int loop(int argc, char **argv);
+int philo(int argc, char **argv);
 
 #endif
