@@ -11,11 +11,16 @@ int cat(int argc, char **argv) {
 	char c;
 	char buffer[MAX_CHARS];
 	uint64_t bIdx = 0;
+
+	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
+	fds = getFds();
+
 	while ((c = getchar()) != EOF && bIdx < MAX_CHARS - 1) {
 		if (c != 0) {
 			if (c != '\b') {
 				buffer[bIdx++] = c;
-				putchar(c);
+				if (fds[STDIN] < STD_FDS)
+					putchar(c);
 				if (c == '\n') {
 					buffer[bIdx] = 0;
 					printf("%s", buffer);
@@ -23,11 +28,12 @@ int cat(int argc, char **argv) {
 				}
 			} else if (bIdx > 0) {
 				bIdx--;
-				putchar(c);
+				if (fds[STDIN] < STD_FDS)
+					putchar(c);
 			}
 		}
 	}
 	putchar('\n');
-
+	free(fds);
 	return 0;
 }

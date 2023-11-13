@@ -18,27 +18,34 @@ int filter(int argc, char **argv) {
 	char buffer[MAX_SIZE];
 	int bIdx = 0;
 	int lIdx = 0;
+
+	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
+	fds = getFds();
+
 	while ((c = getchar()) != EOF && bIdx < MAX_SIZE - 1) {
 		if (c != 0) {
 			if (c != '\b') {
 				if (c == '\n' && lIdx > 0) {
-					putchar(c);
+					if (fds[STDIN] < STD_FDS)
+						putchar(c);
 					lIdx = 0;
 					buffer[bIdx++] = c;
 				} else if (c != '\n') {
-					putchar(c);
+					if (fds[STDIN] < STD_FDS)
+						putchar(c);
 					lIdx++;
 					if (isVowel(c))
 						buffer[bIdx++] = c;
 				}
 			} else if (lIdx > 0) {
 				lIdx--;
-				putchar(c);
+				if (fds[STDIN] < STD_FDS)
+					putchar(c);
 			}
 		}
 	}
 	buffer[bIdx] = 0;
 	printf("\nTEXTO FILTRADO:\n\n%s\n", buffer);
-
+	free(fds);
 	return 0;
 }

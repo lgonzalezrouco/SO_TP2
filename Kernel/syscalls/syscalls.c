@@ -54,6 +54,7 @@ static uint64_t syscall_closePipe(uint16_t id, uint16_t pid);
 static uint64_t syscall_unblockProcess(int16_t pid);
 static void syscall_sleep(int seconds);
 static int syscall_getNextPipeId();
+static int *syscall_getFds();
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -91,7 +92,8 @@ static sysFunctions sysfunctions[] = {(sysFunctions) syscall_read,
                                       (sysFunctions) syscall_closePipe,
                                       (sysFunctions) syscall_unblockProcess,
                                       (sysFunctions) syscall_sleep,
-                                      (sysFunctions) syscall_getNextPipeId};
+                                      (sysFunctions) syscall_getNextPipeId,
+                                      (sysFunctions) syscall_getFds};
 
 uint64_t syscallDispatcher(
     uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -282,4 +284,8 @@ static void syscall_sleep(int seconds) {
 
 static int syscall_getNextPipeId() {
 	return getNextPipeId();
+}
+
+static int *syscall_getFds() {
+	return getFds();
 }

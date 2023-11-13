@@ -200,7 +200,7 @@ static void help(int argc, char **args) {
 	}
 
 	for (int i = 0; i < sizeof(commands) / sizeof(Command); i++)
-		printfc(SILVER, "%s: %s\r\n", commands[i].name, commands[i].description);
+		printf("%s: %s\r\n", commands[i].name, commands[i].description);
 }
 
 static int div(int argc, char **args) {

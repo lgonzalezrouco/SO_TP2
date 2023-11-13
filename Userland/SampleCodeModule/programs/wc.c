@@ -12,23 +12,32 @@ int wc(int argc, char **argv) {
 	int cIdx = 0;
 	int counter = 0;
 
+	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
+	fds = getFds();
+
 	while ((c = getchar()) != EOF) {
 		if (c != 0) {
 			if (c != '\b') {
 				if (c == '\n' && cIdx > 0) {
-					putchar(c);
+					if (fds[STDIN] < STD_FDS)
+						putchar(c);
 					counter++;
 					cIdx = 0;
 				} else if (c != '\n') {
-					putchar(c);
+					if (fds[STDIN] < STD_FDS)
+						putchar(c);
 					cIdx++;
 				}
 			} else if (cIdx > 0) {
 				cIdx--;
-				putchar(c);
+				if (fds[STDIN] < STD_FDS)
+					putchar(c);
 			}
 		}
 	}
 	printf("El texto ingresado tiene %d %s.\n", counter, counter == 1 ? "linea" : "lineas");
+	putchar('\n');
+
+	free(fds);
 	return 0;
 }

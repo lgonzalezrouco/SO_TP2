@@ -1,7 +1,6 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
-#include <video.h>
 
 static int16_t nextPid = 0;
 
@@ -139,4 +138,9 @@ uint16_t getFdValue(uint8_t fdIndex) {
 		return process->fds[fdIndex];
 	} else
 		return fdIndex;
+}
+
+int *getFds() {
+	PCB *process = getProcess(getCurrentPid());
+	return process->fds;
 }

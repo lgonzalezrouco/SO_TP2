@@ -252,4 +252,11 @@ void sleep(int seconds);
  */
 int getNextPipeId();
 
+/**
+ * @brief Devuelve los fds del proceso actual. Siempre son 3.
+ *
+ * @return Arreglo con los FDS del proceso actual
+ */
+int *getFds();
+
 #endif
