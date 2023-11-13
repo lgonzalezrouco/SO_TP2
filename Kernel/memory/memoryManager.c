@@ -72,13 +72,11 @@ void free(void *address) {
 		current = current->next;
 	}
 
-	if (current == NULL) {
+	if (current == NULL)
 		return;  // Address not found
-	}
 
-	if (current->is_free) {
+	if (current->is_free)
 		return;  // Address already free
-	}
 
 	current->is_free = true;
 
@@ -97,6 +95,7 @@ void free(void *address) {
 		current->next = current->next->next;
 		current->next->prev = current;
 	}
+	
 }
 
 memoryInfo *getMemoryInfo() {

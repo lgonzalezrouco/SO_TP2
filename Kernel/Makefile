@@ -1,5 +1,7 @@
 include Makefile.inc
 
+MM=STANDARD
+
 KERNEL=kernel.bin
 SOURCES=$(wildcard *.c drivers/*.c interruptions/*.c lib/*.c memory/*.c processes_scheduler/*.c pipes/*.c sharedMemory/*.c syscalls/*.c semaphores/*.c)
 SOURCES_ASM=$(wildcard asm/*.asm)
@@ -17,7 +19,7 @@ $(KERNEL): $(LOADEROBJECT) $(OBJECTS) $(STATICLIBS) $(OBJECTS_ASM)
 	$(LD) $(LDFLAGS) -T kernel.ld --oformat=elf64-x86-64 -o kernel.elf $(LOADEROBJECT) $(OBJECTS) $(OBJECTS_ASM) $(STATICLIBS)
 
 %.o: %.c
-	$(GCC) $(GCCFLAGS) -I./include $(MM) -c $< -o $@
+	$(GCC) $(GCCFLAGS) -I./include -D $(MM) -c $< -o $@
 
 %.o : %.asm
 	$(ASM) $(ASMFLAGS) $< -o $@
