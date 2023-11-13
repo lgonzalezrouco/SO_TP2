@@ -259,10 +259,6 @@ static void writeSharedMemory(int argc, char **args) {
 		printErr(WRONG_PARAMS);
 		return;
 	}
-	if (!semInit("sharedMemory", 1)) {
-		printErr("No se pudo inicializar el semaforo\n");
-		return;
-	}
 
 	char *mem = (char *) openSharedMemory(0, 100);
 	if (mem == NULL) {
