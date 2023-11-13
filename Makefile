@@ -1,11 +1,13 @@
-MM=BUDDY
 all:  bootloader kernel userland image
 
 bootloader:
 	cd Bootloader; make all
 
+buddy: 
+	make MM=BUDDY all
+
 kernel:
-	cd Kernel; make all MM=-D$(MM)
+	cd Kernel; make all
 
 userland:
 	cd Userland; make all
