@@ -34,8 +34,7 @@ static uint32_t syscall_getFontColor();
 static uint64_t syscall_malloc(uint64_t size);
 static void syscall_free(uint64_t ptr);
 static uint64_t syscall_getMemoryInfo();
-// static processInfo * syscall_getProcessInfo();
-static PCB **syscall_getProcessesInfo();
+static processInfo **syscall_getProcessesInfo();
 static void syscall_freeProcessesInfo(uint64_t infoArray);
 static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 static uint64_t syscall_killProcess(int16_t pid);
@@ -208,12 +207,12 @@ static uint64_t syscall_getMemoryInfo() {
 	return (uint64_t) getMemoryInfo();
 }
 
-static PCB **syscall_getProcessesInfo() {
-	return (PCB **) getProcessesInfo();
+static processInfo **syscall_getProcessesInfo() {
+	return (processInfo **) getProcessesInfo();
 }
 
 static void syscall_freeProcessesInfo(uint64_t infoArray) {
-	freeProcessesInfo((PCB **) infoArray);
+	freeProcessesInfo((processInfo **) infoArray);
 }
 
 static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]) {

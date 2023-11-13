@@ -126,13 +126,13 @@ memoryInfo *getMemoryInfo();
  * @brief Devuelve informacion sobre los procesos
  * @return Informacion sobre los procesos
  */
-PCB **getProcessesInfo();
+processInfo **getProcessesInfo();
 
 /**
  * @brief Libera la memoria reservada para la informacion de los procesos
  * @param infoArray: Informacion de los procesos
  */
-void freeProcessesInfo(PCB **infoArray);
+void freeProcessesInfo(processInfo **infoArray);
 
 /**
  * @brief Crea un proceso

@@ -11,6 +11,9 @@
 #define REMOVE_PHILOSOPHER 'r'
 #define QUIT_PHILOSOPHERS  'q'
 
+#define IS_RUNNING 1
+#define NOT_RUNNING 0
+
 #define THINKING_TIME 10000000
 
 #define MUTEX "mutex"
@@ -56,11 +59,11 @@ int philo(int argc, char **argv) {
 		if (c == ADD_PHILOSOPHER)
 			addPhilosopher(qtyPhilos);
 		else if (c == REMOVE_PHILOSOPHER)
-			removePhilosopher();
+			removePhilosopher(IS_RUNNING);
 	}
 
-	for (int i = 0; i < qtyPhilos; i++)
-		removePhilosopher(qtyPhilos);
+	for (int i = qtyPhilos - 1; i >= 0; i--)
+		removePhilosopher(NOT_RUNNING);
 
 	semClose(MUTEX);
 	return 0;
@@ -73,12 +76,12 @@ static int addPhilosopher(int philoNum) {
 	}
 
 	semWait(MUTEX);
-	if (semInit(philoNames[qtyPhilos], 0) == -1) {
+	if (semInit(philoNames[philoNum], 0) == -1) {
 		printf("Error creating philosopher semaphore\n");
 		return -1;
 	}
 
-	char phNumStr[2] = {0};
+	char phNumStr[3] = {0};
 	intToString(philoNum, phNumStr);
 	char *args[] = {philoNames[philoNum], phNumStr, NULL};
 	pidPhilos[philoNum] = createProcess((ProcessCode) &philosopher, args, "philosopher", 0);
@@ -92,13 +95,15 @@ static int addPhilosopher(int philoNum) {
 	return 0;
 }
 
-static int removePhilosopher() {
-	if (qtyPhilos <= START_PHILOS) {
+static int removePhilosopher(int running) {
+	if (qtyPhilos <= START_PHILOS && running) {
 		printf("No es posible eliminar filosofos\n");
 		return -1;
 	}
 
 	semWait(MUTEX);
+
+	printf("Se retira %s de la mesa\n", philoNames[qtyPhilos - 1]);
 
 	killProcess(pidPhilos[qtyPhilos - 1]);
 	waitpid(pidPhilos[qtyPhilos - 1]);
@@ -108,8 +113,6 @@ static int removePhilosopher() {
 	pidPhilos[qtyPhilos - 1] = -1;
 	state[qtyPhilos - 1] = NOT_SET;
 	qtyPhilos--;
-
-	printf("Se retira %s de la mesa\n", philoNames[qtyPhilos]);
 
 	printPhilos();
 

@@ -3,6 +3,7 @@
 #include <processes.h>
 
 static int16_t nextPid = 0;
+static processInfo *getProcessInfo();
 
 void resetPIDCounter() {
 	nextPid = 0;
@@ -111,8 +112,8 @@ void freeProcess(PCB *process) {
 	free(process);
 }
 
-PCB **getProcessesInfo() {
-	PCB **info = malloc(sizeof(PCB *) * (getProcessesQty() + 1));
+processInfo **getProcessesInfo() {
+	processInfo **info = malloc(sizeof(processInfo *) * (getProcessesQty() + 1));
 	if (info == NULL)
 		return NULL;
 
@@ -120,15 +121,21 @@ PCB **getProcessesInfo() {
 	PCB *process = NULL;
 	for (int j = 0; j < MAX_PROCESSES; j++) {
 		process = getProcess(j);
-		if (process != NULL)
-			info[i++] = process;
+		if (process != NULL){
+			processInfo *pInfo = getProcessInfo(process);
+			info[i++] = pInfo;
+		}
 	}
 
 	info[i] = NULL;
 	return info;
 }
 
-void freeProcessesInfo(PCB **infoArray) {
+void freeProcessesInfo(processInfo **infoArray) {
+	for (int i = 0; infoArray[i] != NULL; i++) {
+		free(infoArray[i]->name);
+		free(infoArray[i]);
+	}
 	free(infoArray);
 }
 
@@ -143,4 +150,26 @@ uint16_t getFdValue(uint8_t fdIndex) {
 int *getFds() {
 	PCB *process = getProcess(getCurrentPid());
 	return process->fds;
+}
+
+static processInfo *getProcessInfo(PCB *process) {
+	processInfo *info = malloc(sizeof(processInfo));
+	if (info == NULL)
+		return NULL;
+
+	info->pid = process->pid;
+	info->parentPid = process->parentPid;
+	info->name = malloc(strlen(process->name) + 1);
+	if (info->name == NULL) {
+		free(info);
+		return NULL;
+	}
+	strcpy(info->name, process->name);
+	info->base = process->stack->base;
+	info->current = process->stack->current;
+	info->priority = process->priority;
+	info->isForeground = process->isForeground;
+	info->status = process->status;
+
+	return info;
 }

@@ -20,9 +20,9 @@ int idle(int argc, char **argv);
 
 void freeProcess(PCB *process);
 
-PCB **getProcessesInfo();
+processInfo **getProcessesInfo();
 
-void freeProcessesInfo(PCB **infoArray);
+void freeProcessesInfo(processInfo **infoArray);
 
 uint16_t getFdValue(uint8_t fdIndex);
 

@@ -9,7 +9,7 @@ int printProcesses(int argc, char **argv) {
 		return -1;
 	}
 
-	PCB **info = getProcessesInfo();
+	processInfo **info = getProcessesInfo();
 	int i = 0;
 
 	// Encabezados de la tabla
@@ -47,8 +47,8 @@ int printProcesses(int argc, char **argv) {
 				printf("UNKNOWN\t\t");
 				break;
 		}
-		printf("0x%x\t\t\t\t\t", info[i]->stack->base);
-		printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
+		printf("0x%x\t\t\t\t\t", info[i]->base);
+		printf("0x%x\t\t\t\t\t\t\t\t", info[i]->current);
 		printf("%d\t\t\t\t\t\t\t\t\t\t\t\t", info[i]->isForeground ? 1 : 0);
 		printf("%s", info[i]->name);
 		putchar('\n');

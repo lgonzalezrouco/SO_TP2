@@ -58,7 +58,6 @@ typedef struct PCB {
 	int fds[STD_FDS];
 } PCB;
 
-// todo pasar a processInfo
 typedef struct processInfo {
 	uint16_t pid;
 	uint16_t parentPid;
