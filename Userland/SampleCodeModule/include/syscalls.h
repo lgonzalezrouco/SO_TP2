@@ -259,4 +259,6 @@ int getNextPipeId();
  */
 int *getFds();
 
+void *openSharedMemory(int id, int size);
+
 #endif

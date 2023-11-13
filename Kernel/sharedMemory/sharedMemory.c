@@ -1,3 +1,4 @@
+#include <lib.h>
 #include <sharedMemory.h>
 
 void *sharedMemoryNames[MAX_SHARED_MEMORY];
@@ -14,6 +15,7 @@ void *openSharedMemory(int id, int size) {
 	sharedMemoryNames[id] = malloc(size);
 	if (sharedMemoryNames[id] == NULL)
 		return NULL;
+	memset(sharedMemoryNames[id], 0, size);
 
 	return sharedMemoryNames[id];
 }

@@ -34,6 +34,8 @@ static void help(int argc, char **args);
 static int div(int argc, char **args);
 static void printMem(int argc, char **args);
 static void infoReg(int argc, char **args);
+static void writeSharedMemory(int argc, char **args);
+static void readSharedMemory(int argc, char **args);
 
 // todo buddy
 // todo pvs
@@ -60,8 +62,9 @@ const static Command commands[] = {
     {"filter", "Filtra las vocales del input", (ProcessCode) filter},
     {"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", (ProcessCode) loop},
     {"philo", "Corre el problema de los filosofos comensales", (ProcessCode) philo},
-	{"yield", "Renunciar a la CPU", (ProcessCode) yield}
-};
+    {"yield", "Renunciar a la CPU", (ProcessCode) yield},
+    {"write", "Escribo en la shared memory", (ProcessCode) writeSharedMemory},
+    {"read", "Leo de la shared memory", (ProcessCode) readSharedMemory}};
 
 void shell() {
 	puts(WELCOME);
@@ -252,4 +255,39 @@ static void infoReg(int argc, char **args) {
 	for (int i = 0; i < len; i++) {
 		printf("%s: 0x%x\n", _regNames[i], regSnapshot[i]);
 	}
+}
+
+static void writeSharedMemory(int argc, char **args) {
+	if (argc != 1) {
+		printErr(WRONG_PARAMS);
+		return;
+	}
+
+	char *mem = (char *) openSharedMemory(0, 100);
+	if (mem == NULL) {
+		printErr("No se pudo abrir la memoria compartida\n");
+		return;
+	}
+
+	char string[] = "BemaluOS";
+
+	for (int i = 0; string[i]; i++)
+		mem[i] = string[i];
+}
+
+static void readSharedMemory(int argc, char **args) {
+	if (argc != 1) {
+		printErr(WRONG_PARAMS);
+		return;
+	}
+
+	char *mem = (char *) openSharedMemory(0, 100);
+	if (mem == NULL) {
+		printErr("No se pudo abrir la memoria compartida\n");
+		return;
+	}
+
+	for (int i = 0; mem[i]; i++)
+		printf("%c", mem[i]);
+	printf("\n");
 }

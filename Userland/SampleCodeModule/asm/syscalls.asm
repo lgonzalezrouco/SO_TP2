@@ -35,6 +35,8 @@ GLOBAL unblockProcess
 GLOBAL sleep
 GLOBAL getNextPipeId
 GLOBAL getFds
+GLOBAL openSharedMemory
+GLOBAL closeSharedMemory
 
 read:
     mov rax, 0
@@ -214,5 +216,10 @@ getNextPipeId:
 
 getFds:
     mov rax, 35
+    int 80h
+    ret
+
+openSharedMemory:
+    mov rax, 36
     int 80h
     ret
