@@ -104,10 +104,12 @@ static void analizeInput(char *input) {
 			writeInput[--writeLen] = 0;
 
 		int writePid = createPipedProcess(writeInput, writeLen, writeFds);
-		int readPid = createPipedProcess(readInput, readLen, readFds);
+		if (writePid == -1)
+			return;
 
-		if (writePid == -1 || readPid == -1) {
-			printErr("No se pudo crear el proceso\n");
+		int readPid = createPipedProcess(readInput, readLen, readFds);
+		if (readPid == -1) {
+			killProcess(writePid);
 			return;
 		}
 

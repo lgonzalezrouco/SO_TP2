@@ -67,10 +67,10 @@ int semPost(const char *name);
 
 /**
  * @brief Cambia el valor del semaforo indicado
- * 
+ *
  * @param name: nombre del semaforo a cambiar
  * @param value: nuevo valor del semaforo
-*/
+ */
 void semSetValue(const char *name, uint32_t value);
 
 #endif

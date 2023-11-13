@@ -1,5 +1,3 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <processes.h>
 
 static int16_t nextPid = 0;
@@ -121,7 +119,7 @@ processInfo **getProcessesInfo() {
 	PCB *process = NULL;
 	for (int j = 0; j < MAX_PROCESSES; j++) {
 		process = getProcess(j);
-		if (process != NULL){
+		if (process != NULL) {
 			processInfo *pInfo = getProcessInfo(process);
 			info[i++] = pInfo;
 		}

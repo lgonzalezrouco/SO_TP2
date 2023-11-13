@@ -11,7 +11,7 @@
 #define REMOVE_PHILOSOPHER 'r'
 #define QUIT_PHILOSOPHERS  'q'
 
-#define IS_RUNNING 1
+#define IS_RUNNING  1
 #define NOT_RUNNING 0
 
 #define THINKING_TIME 10000000

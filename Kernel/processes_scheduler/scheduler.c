@@ -1,5 +1,3 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <scheduler.h>
 
 PCB *processes[MAX_PROCESSES];
@@ -58,10 +56,10 @@ void *schedule(void *currentSP) {
 	if (currentProcess->status != BLOCKED)
 		stopProcess(currentProcess->pid);
 
-	if (killForeground && currentProcess->pid != SHELL_PID && currentProcess->pid != IDLE_PID &&
-	    currentProcess->isForeground) {
+	if (killForeground && currentProcess->isForeground) {
 		killForeground = 0;
-		killProcess(currentProcess->pid, -1);
+		if (currentProcess->pid != SHELL_PID && currentProcess->pid != IDLE_PID)
+			killProcess(currentProcess->pid, -1);
 	}
 
 	PCB *nextProcess = getNextProcess();

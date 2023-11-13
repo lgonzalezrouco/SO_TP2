@@ -4,7 +4,6 @@
 #include <processes.h>
 #include <scheduler.h>
 #include <stdbool.h>
-#include <video.h>
 
 #define MAX_PIPES 512
 

@@ -1,7 +1,7 @@
 #ifndef _TIME_H_
 #define _TIME_H_
-#include <stdint.h>
 #include <scheduler.h>
+#include <stdint.h>
 
 /**
  * @brief Handler del timer tick
