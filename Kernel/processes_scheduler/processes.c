@@ -60,6 +60,14 @@ int createProcess(ProcessCode code, char **args, char *name, uint8_t isForegroun
 
 	size_t len = array_strlen(args);
 	process->argv = (char **) malloc(sizeof(char *) * (len + 1));
+	if (process->argv == NULL) {
+		free(process->stack->base);
+		free(process->stack);
+		free(process->name);
+		free(process);
+		return -1;
+	}
+
 	for (int i = 0; i < len; i++) {
 		process->argv[i] = malloc(strlen(args[i]) + 1);
 		if (process->argv[i] == NULL) {

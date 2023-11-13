@@ -20,8 +20,8 @@
 
 #define MUTEX "mutex"
 
-#define left(i)  ((i + qtyPhilos - 1) % qtyPhilos)
-#define right(i) ((i + 1) % qtyPhilos)
+#define left(i)  (((i) + qtyPhilos - 1) % qtyPhilos)
+#define right(i) (((i) + 1) % qtyPhilos)
 
 typedef enum { NOT_SET, EATING, HUNGRY, THINKING } State;
 
@@ -176,8 +176,7 @@ static void putFork(int phnum) {
 
 static void printPhilos() {
 	int sameAsPrev = 1;
-	int someoneEating = 0;
-	for (int i = 0; i < qtyPhilos && sameAsPrev && !someoneEating; i++) {
+	for (int i = 0; i < qtyPhilos && sameAsPrev; i++) {
 		if ((state[i] == EATING && prev[i] != EATING) || (state[i] != EATING && prev[i] == EATING))
 			sameAsPrev = 0;
 	}
@@ -187,13 +186,14 @@ static void printPhilos() {
 			case EATING:
 				printf(" E ");
 				break;
-			case HUNGRY:
+			/* case HUNGRY:
 				printf(" . ");
 				break;
 			case THINKING:
 				printf(" . ");
-				break;
+				break; */
 			default:
+				printf(" . ");
 				break;
 		}
 	}

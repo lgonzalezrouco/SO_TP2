@@ -82,7 +82,7 @@ int64_t writePipe(uint16_t id, char *src, uint64_t len, uint16_t pid) {
 		return PIPE_ERROR;
 
 	uint64_t qtyWritten = 0;
-	while (qtyWritten < len && pipe->buffer[pipe->writePosition] != EOF) {
+	while (qtyWritten < len && (int) pipe->buffer[pipe->writePosition] != EOF) {
 		if (pipe->charRemaining == PIPE_SIZE)
 			blockPipe(pipe, WRITE);
 
@@ -93,7 +93,7 @@ int64_t writePipe(uint16_t id, char *src, uint64_t len, uint16_t pid) {
 			pipe->buffer[pipe->writePosition] = src[qtyWritten];
 			pipe->writePosition = (pipe->writePosition + 1) % PIPE_SIZE;
 			pipe->charRemaining++;
-			if (src[qtyWritten++] == EOF)
+			if ((int) src[qtyWritten++] == EOF)
 				break;
 		}
 
@@ -117,7 +117,7 @@ int64_t readPipe(uint16_t id, char *dst, uint64_t len, uint16_t pid) {
 			dst[qtyRead] = pipe->buffer[pipe->readPosition];
 			pipe->readPosition = (pipe->readPosition + 1) % PIPE_SIZE;
 			pipe->charRemaining--;
-			if (dst[qtyRead++] == EOF)
+			if ((int) dst[qtyRead++] == EOF)
 				break;
 		}
 

@@ -6,9 +6,9 @@
 
 #define MAX_SIZE 1024
 
-#define isVowel(c)                                                                                               \
-	(c == 'a' || c == 'A' || c == 'e' || c == 'E' || c == 'i' || c == 'I' || c == 'o' || c == 'O' || c == 'u' || \
-	 c == 'U')
+#define isVowel(c)                                                                                                   \
+	((c) == 'a' || (c) == 'A' || (c) == 'e' || (c) == 'E' || (c) == 'i' || (c) == 'I' || (c) == 'o' || (c) == 'O' || \
+	 (c) == 'u' || (c) == 'U')
 
 int filter(int argc, char **argv) {
 	if (argc != 1) {
@@ -22,9 +22,10 @@ int filter(int argc, char **argv) {
 	int lIdx = 0;
 
 	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
-	fds = getFds();
+	for (int i = 0; i < STD_FDS; i++)
+		fds[i] = getFds()[i];
 
-	while ((c = getchar()) != EOF && bIdx < MAX_SIZE - 1) {
+	while ((int) (c = getchar()) != EOF && bIdx < MAX_SIZE - 1) {
 		if (c != 0) {
 			if (c != '\b') {
 				if (c == '\n' && lIdx > 0) {

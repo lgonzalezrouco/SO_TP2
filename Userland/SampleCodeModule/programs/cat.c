@@ -15,9 +15,10 @@ int cat(int argc, char **argv) {
 	uint64_t bIdx = 0;
 
 	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
-	fds = getFds();
+	for (int i = 0; i < STD_FDS; i++)
+		fds[i] = getFds()[i];
 
-	while ((c = getchar()) != EOF && bIdx < MAX_CHARS - 1) {
+	while ((int) (c = getchar()) != EOF && bIdx < MAX_CHARS - 1) {
 		if (c != 0) {
 			if (c != '\b') {
 				buffer[bIdx++] = c;

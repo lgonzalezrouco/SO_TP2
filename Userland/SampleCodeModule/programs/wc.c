@@ -15,9 +15,10 @@ int wc(int argc, char **argv) {
 	int counter = 0;
 
 	int *fds = (int *) malloc(sizeof(int) * STD_FDS);
-	fds = getFds();
+	for (int i = 0; i < STD_FDS; i++)
+		fds[i] = getFds()[i];
 
-	while ((c = getchar()) != EOF) {
+	while ((int) (c = getchar()) != EOF) {
 		if (c != 0) {
 			if (c != '\b') {
 				if (c == '\n' && cIdx > 0) {
