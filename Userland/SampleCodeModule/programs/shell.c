@@ -34,8 +34,6 @@ static int div(int argc, char **args);
 static void printMem(int argc, char **args);
 static void infoReg(int argc, char **args);
 
-// todo CTRL C en procesos que bloquean por keyboard tiene bug
-// todo mostrar en procesos pipeados muestra doble
 // todo buddy
 // todo pvs
 
@@ -160,19 +158,13 @@ int createSingleProcess(char *input, int len) {
 	return -1;
 }
 
-// todo foreground background
 int createPipedProcess(char *input, int len, int fds[]) {
 	char program[MAX_CHARS] = {0};
 	char arg1[MAX_CHARS_ARG1] = {0};
 	char arg2[MAX_CHARS] = {0};
-	char isForeground = 1;
 
-	if (len > 0 && input[len - 1] == '&') {
-		isForeground = 0;
-		input[--len] = 0;
-		if (len > 0 && input[len - 1] == ' ')
-			input[--len] = 0;
-	}
+	if (len > 0 && input[len - 1] == '&')
+		return -1;
 
 	int programLen = strcpychar(program, input, ' ');
 	int arg1Len = 0;
@@ -185,7 +177,7 @@ int createPipedProcess(char *input, int len, int fds[]) {
 		if (strcmp(commands[i].name, program) == 0) {
 			char *args[] = {program, (arg1[0] == 0) ? NULL : arg1, (arg2[0] == 0) ? NULL : arg2, NULL};
 
-			int16_t pid = createProcessFds(commands[i].code, args, program, isForeground, fds);
+			int16_t pid = createProcessFds(commands[i].code, args, program, true, fds);
 			return pid;
 		}
 	}
