@@ -5,6 +5,9 @@ GLOBAL picMasterMask
 GLOBAL picSlaveMask
 GLOBAL haltcpu
 GLOBAL _hlt
+GLOBAL forceTimerTick
+GLOBAL forceChangeOfProcess
+GLOBAL setup_stack
 
 GLOBAL _irq00Handler
 GLOBAL _irq01Handler
@@ -23,6 +26,7 @@ EXTERN irqDispatcher
 EXTERN syscallDispatcher
 EXTERN exceptionDispatcher
 EXTERN load_main
+EXTERN schedule
 
 SECTION .text
 
@@ -126,10 +130,43 @@ picSlaveMask:
     pop     rbp
     retn
 
+setup_stack:
+	mov r8, rsp
+	mov r9, rbp
+	mov rsp, rdx
+	mov rbp, rdx
+	push 0x0
+	push rdx
+	push 0x202
+	push 0x8
+	push rdi
+	mov rdi, rsi
+	mov rsi, rcx
+	pushState
+	mov rax, rsp
+	mov rsp, r8
+	mov rbp, r9
+	ret
 
 ;8254 Timer (Timer Tick)
 _irq00Handler:
-	irqHandlerMaster 0
+
+	pushState
+
+	mov rdi, 0 ; pasaje de parametro
+	call irqDispatcher
+
+	mov rdi, rsp
+	call schedule
+	mov rsp, rax
+
+	; Send EOI
+	mov al, 20h
+	out 20h, al
+
+	popState
+
+	iretq
 
 ;Keyboard
 _irq01Handler:
@@ -158,7 +195,7 @@ _syscallHandler:
 
 	push r9
 	mov r9, r8
-	mov r8, r10
+	mov r8, rcx
 	mov rcx, rdx
 	mov rdx, rsi
 	mov rsi, rdi
@@ -195,6 +232,15 @@ haltcpu:
 	cli
 	hlt
 	ret
+
+forceTimerTick:
+	int 20h
+	ret
+
+forceChangeOfProcess:
+	mov rsp, rdi
+	popState
+	iretq
 
 SECTION .bss
 	aux resq 1

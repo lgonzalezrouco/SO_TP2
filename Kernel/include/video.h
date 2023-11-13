@@ -1,21 +1,22 @@
 #ifndef _VIDEO_H_
 #define _VIDEO_H_
 
-#include <stdint.h>
 #include <color.h>
+#include <stdint.h>
 
 /* Tamaños de fuente disponibles */
-typedef enum {FONT_12 = 0, FONT_24, FONT_36} fontSize;
+typedef enum { FONT_12 = 0, FONT_24, FONT_36 } fontSize;
 
 /**
- * @brief  Pone todos los pixeles de la pantalla en negro y limpia el buffer de video
+ * @brief  Pone todos los pixeles de la pantalla en negro y limpia el buffer de
+ * video
  */
 void videoClear();
 
 /**
  * @brief  Dibuja un rectangulo
- * @param  x: Origen en x 
- * @param  y: Origen en y 
+ * @param  x: Origen en x
+ * @param  y: Origen en y
  * @param  width: Ancho
  * @param  height: Alto
  * @param  color: Color de relleno
@@ -41,7 +42,7 @@ void printNewline();
 
 /**
  * @brief  Imprime un caracter en pantalla
- * @param  c: Caracter a imprimir 
+ * @param  c: Caracter a imprimir
  */
 void printChar(char c);
 
@@ -49,22 +50,21 @@ void printChar(char c);
  * @brief  Imprime una cadena de caracteres en pantalla
  * @param  s: Cadena de caracteres a imprimir
  */
-void print(const char* s);
+void print(const char *s);
 
 /**
  * @brief  Imprime una cadena de caracteres con formato en pantalla
- * @note   No confundir con la funcion printf definida en userland 
+ * @note   No confundir con la funcion printf definida en userland
  * @param  fmt: Formato
  */
-void printf(char * fmt, ...);
-
+void printf(char *fmt, ...);
 
 /**
  * @brief  Imprime n caracteres de un string
  * @param  s: String origen
  * @param  n: Cantidad de caracteres a imprimir
  */
-void printN(const char * s, uint32_t n);
+void printN(const char *s, uint32_t n);
 
 /**
  * @brief  Imprime n veces un caracter
@@ -75,8 +75,8 @@ void printNChars(char c, int n);
 
 /**
  * @brief  Devuelve las dimensiones de la pantalla
- * @note   
- * @return 32 bits menos significativos el ancho, 32 el alto 
+ * @note
+ * @return 32 bits menos significativos el ancho, 32 el alto
  */
 uint32_t getScreenResolution();
 
