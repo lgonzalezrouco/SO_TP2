@@ -10,8 +10,6 @@ void resetPIDCounter() {
 }
 
 void processWrapper(ProcessCode function, char **args) {
-	/* for(int i = 0; args[i] != NULL; i++)
-	    printf("%s ", args[i]); */
 	size_t len = array_strlen(args);
 	int retValue = function(len, args);
 	killProcess(getCurrentPid(), retValue);
@@ -59,7 +57,24 @@ int createProcess(ProcessCode code, char **args, char *name, uint8_t isForegroun
 	process->isForeground = isForeground;
 	process->retValue = -1;
 	process->childRetValue = -1;
-	process->argv = args;
+
+	size_t len = array_strlen(args);
+	process->argv = (char **) malloc(sizeof(char *) * (len + 1));
+	for (int i = 0; i < len; i++) {
+		process->argv[i] = malloc(strlen(args[i]) + 1);
+		if (process->argv[i] == NULL) {
+			free(process->stack->base);
+			free(process->stack);
+			free(process->name);
+			for (int j = 0; j < i; j++)
+				free(process->argv[j]);
+			free(process->argv);
+			free(process);
+			return -1;
+		}
+		strcpy(process->argv[i], args[i]);
+	}
+	process->argv[len] = NULL;
 
 	void *stackEnd = (void *) ((uint64_t) process->stack->base + STACK_SIZE);
 
@@ -88,6 +103,9 @@ int idle(int argc, char **argv) {
 }
 
 void freeProcess(PCB *process) {
+	for (int i = 0; process->argv[i] != NULL; i++)
+		free(process->argv[i]);
+	free(process->argv);
 	free(process->stack->base);
 	free(process->stack);
 	free(process->name);
