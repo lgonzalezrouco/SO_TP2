@@ -12,33 +12,18 @@ pvs-studio.com/en/docs/warnings/	1	err	Help: The documentation for all analyzer 
 /root/Bootloader/BMFS/bmfs.c	522	warn	V1032 The pointer 'dir_copy' is cast to a more strictly aligned pointer type.
 /root/Bootloader/BMFS/bmfs.c	569	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The SIGNED integer type argument is expected.
 /root/Bootloader/BMFS/bmfs.c	574	warn	V1032 The pointer 'Directory' is cast to a more strictly aligned pointer type.
-/root/Kernel/kernel.c	26	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x400000
-/root/Kernel/kernel.c	27	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x500000
-/root/Kernel/pipes/pipes.c	85	err	V739 EOF should not be compared with a value of the 'char' type. The 'pipe->buffer[pipe->writePosition]' should be of the 'int' type.
-/root/Kernel/pipes/pipes.c	96	err	V739 EOF should not be compared with a value of the 'char' type. The 'src[qtyWritten ++]' should be of the 'int' type.
-/root/Kernel/pipes/pipes.c	120	err	V739 EOF should not be compared with a value of the 'char' type. The 'dst[qtyRead ++]' should be of the 'int' type.
-/root/Kernel/processes_scheduler/processes.c	64	warn	V522 There might be dereferencing of a potential null pointer 'process->argv'. Check lines: 64, 62.
-/root/Userland/SampleCodeModule/lib/uStdio.c	134	err	V781 The value of the 'bIdx' index is checked after it was used. Perhaps there is a mistake in program logic.
 /root/Userland/SampleCodeModule/lib/uStdio.c	173	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Userland/SampleCodeModule/lib/uStdlib.c	32	note	V560 A part of conditional expression is always false: n < 0. Unsigned type value is never < 0.
-/root/Userland/SampleCodeModule/programs/cat.c	18	err	V773 The 'fds' pointer was assigned values twice without releasing the memory. A memory leak is possible.
-/root/Userland/SampleCodeModule/programs/cat.c	20	err	V739 EOF should not be compared with a value of the 'char' type. The '(c = getchar())' should be of the 'int' type.
-/root/Userland/SampleCodeModule/programs/filter.c	25	err	V773 The 'fds' pointer was assigned values twice without releasing the memory. A memory leak is possible.
-/root/Userland/SampleCodeModule/programs/filter.c	27	err	V739 EOF should not be compared with a value of the 'char' type. The '(c = getchar())' should be of the 'int' type.
-/root/Userland/SampleCodeModule/programs/filter.c	9	note	V1003 The macro 'isVowel' is a dangerous expression. The parameter 'c' must be surrounded by parentheses.
+/root/Userland/SampleCodeModule/programs/cat.c	19	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 19, 17.
+/root/Userland/SampleCodeModule/programs/filter.c	26	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 26, 24.
 /root/Userland/SampleCodeModule/programs/kill.c	16	warn	V755 Copying potentially tainted data from 'argv' to buffer 'pid'. Buffer overflow is possible.
-/root/Userland/SampleCodeModule/programs/philosophers.c	180	warn	V560 A part of conditional expression is always true: !someoneEating.
-/root/Userland/SampleCodeModule/programs/philosophers.c	191	warn	V1037 Two or more case-branches perform the same actions. Check lines: 191, 194
-/root/Userland/SampleCodeModule/programs/philosophers.c	23	note	V1003 The macro 'left' is a dangerous expression. The parameter 'i' must be surrounded by parentheses.
-/root/Userland/SampleCodeModule/programs/philosophers.c	24	note	V1003 The macro 'right' is a dangerous expression. The parameter 'i' must be surrounded by parentheses.
 /root/Userland/SampleCodeModule/programs/ps.c	52	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
 /root/Userland/SampleCodeModule/programs/ps.c	53	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
-/root/Userland/SampleCodeModule/programs/shell.c	72	err	V576 Incorrect format. Consider checking the second actual argument of the 'scanf' function. A pointer to the signed int type is expected.
-/root/Userland/SampleCodeModule/programs/shell.c	69	note	V776 Potentially infinite loop.
-/root/Userland/SampleCodeModule/programs/shell.c	254	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Userland/SampleCodeModule/programs/shell.c	71	err	V576 Incorrect format. Consider checking the second actual argument of the 'scanf' function. A pointer to the signed int type is expected.
+/root/Userland/SampleCodeModule/programs/shell.c	68	note	V776 Potentially infinite loop.
+/root/Userland/SampleCodeModule/programs/shell.c	253	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Userland/SampleCodeModule/programs/toggleBlock.c	17	warn	V755 Copying potentially tainted data from 'argv' to buffer 'pid'. Buffer overflow is possible.
-/root/Userland/SampleCodeModule/programs/wc.c	18	err	V773 The 'fds' pointer was assigned values twice without releasing the memory. A memory leak is possible.
-/root/Userland/SampleCodeModule/programs/wc.c	20	err	V739 EOF should not be compared with a value of the 'char' type. The '(c = getchar())' should be of the 'int' type.
+/root/Userland/SampleCodeModule/programs/wc.c	19	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 19, 17.
 /root/Userland/SampleCodeModule/tests/test_mm.c	44	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
 /root/Userland/SampleCodeModule/tests/test_processes.c	64	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
 /root/Userland/SampleCodeModule/tests/test_processes.c	67	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
