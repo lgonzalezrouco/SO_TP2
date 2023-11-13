@@ -14,7 +14,7 @@ typedef struct BuddySystem {
 
 BuddySystem buddy;
 
-memoryInfo memory_data;
+memoryInfo memoryInfo;
 
 static uint64_t computeBuddySize(uint64_t memSize, uint64_t minPageSize);
 static unsigned int getLevel(uint64_t size);
@@ -26,9 +26,9 @@ static void allocateBranch(unsigned int level, unsigned int offset);
 static void *getPtr(unsigned int level, unsigned int offset);
 
 void initializeMemoryManager() {
-    uint64_t memBase = 0x600000;
-    uint64_t memSize = 0x1000000;
-    uint64_t minPageSize = 0x1000;
+	uint64_t memBase = HEAP_ADDRESS;
+	uint64_t memSize = HEAP_SIZE;
+	uint64_t minPageSize = 0x1000;
 	memSize = memSize - (uint64_t) memBase;
 
 	uint64_t virtualSize = computeVirtualSize(memSize);
@@ -92,10 +92,10 @@ void free(void *address) {
 }
 
 memoryInfo *getMemoryInfo() {
-    memory_data.totalMemory = buddy.virtualSize;
-    memory_data.freeMemory = buddy.virtualSize - buddy.reserved;
-    memory_data.usedMemory = buddy.reserved;
-    return &memory_data;
+	memoryInfo.totalMemory = buddy.virtualSize;
+	memoryInfo.freeMemory = buddy.virtualSize - buddy.reserved;
+	memoryInfo.usedMemory = buddy.reserved;
+	return &memoryInfo;
 }
 
 static uint64_t computeBuddySize(uint64_t memSize, uint64_t minPageSize) {

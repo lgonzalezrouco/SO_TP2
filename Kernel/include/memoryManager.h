@@ -5,12 +5,9 @@
 #include <stddef.h>
 #include <stdint.h>
 
-#ifndef BUDDY
-
-#else
-
-#endif
-
+#define HEAP_SIZE         ((size_t) (128 * 1024 * 1024))
+#define HEAP_ADDRESS_LIST 0x600000
+#define HEAP_ADDRESS      HEAP_ADDRESS_LIST + 0x100000
 
 typedef struct memoryInfo {
 	int totalMemory;
