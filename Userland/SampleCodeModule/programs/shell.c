@@ -37,9 +37,6 @@ static void infoReg(int argc, char **args);
 static void writeSharedMemory(int argc, char **args);
 static void readSharedMemory(int argc, char **args);
 
-// todo buddy
-// todo pvs
-
 const static Command commands[] = {
     {"help", "Listado de comandos", (ProcessCode) help},
     {"inforeg", "Muestra la informacion de los registros", (ProcessCode) infoReg},
@@ -262,7 +259,7 @@ static void writeSharedMemory(int argc, char **args) {
 		printErr(WRONG_PARAMS);
 		return;
 	}
-	if(!semInit("sharedMemory", 1)){
+	if (!semInit("sharedMemory", 1)) {
 		printErr("No se pudo inicializar el semaforo\n");
 		return;
 	}

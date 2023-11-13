@@ -34,8 +34,6 @@ typedef struct memoryInfo {
 	int totalMemory;
 	int usedMemory;
 	int freeMemory;
-	int mallocQty;
-	int freeQty;
 } memoryInfo;
 
 typedef struct memoryBlock {
