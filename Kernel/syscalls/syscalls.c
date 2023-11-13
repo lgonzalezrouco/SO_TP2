@@ -7,11 +7,11 @@
 #include <processes.h>
 #include <registers.h>
 #include <semaphores.h>
+#include <sharedMemory.h>
 #include <speaker.h>
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
-#include <sharedMemory.h>
 
 /* File Descriptors*/
 #define STDIN  0

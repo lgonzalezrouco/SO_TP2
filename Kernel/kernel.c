@@ -9,8 +9,8 @@
 #include <processes.h>
 #include <scheduler.h>
 #include <semaphores.h>
-#include <stdint.h>
 #include <sharedMemory.h>
+#include <stdint.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
