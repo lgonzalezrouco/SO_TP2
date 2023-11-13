@@ -10,6 +10,7 @@
 #include <scheduler.h>
 #include <semaphores.h>
 #include <stdint.h>
+#include <sharedMemory.h>
 
 extern uint8_t text;
 extern uint8_t rodata;
@@ -52,6 +53,7 @@ int main() {
 	initializeSemaphores();
 	initializeKeyboardDriver();
 	initializePipes();
+	initializeSharedMemory();
 
 	int fdsIdle[] = {DEV_NULL, DEV_NULL, STDERR};
 	int fdsShell[] = {STDIN, STDOUT, STDERR};

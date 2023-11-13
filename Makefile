@@ -1,4 +1,4 @@
-MM=BUDDYjj
+MM=BUDDY
 all:  bootloader kernel userland image
 
 bootloader:

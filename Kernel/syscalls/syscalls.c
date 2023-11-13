@@ -11,6 +11,7 @@
 #include <stdint.h>
 #include <time.h>
 #include <video.h>
+#include <sharedMemory.h>
 
 /* File Descriptors*/
 #define STDIN  0
@@ -54,45 +55,49 @@ static uint64_t syscall_unblockProcess(int16_t pid);
 static void syscall_sleep(int seconds);
 static int syscall_getNextPipeId();
 static int *syscall_getFds();
+static void *openSharedMem(int id, int size);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
-static sysFunctions sysfunctions[] = {(sysFunctions) syscall_read,
-                                      (sysFunctions) syscall_write,
-                                      (sysFunctions) syscall_clear,
-                                      (sysFunctions) syscall_seconds,
-                                      (sysFunctions) syscall_registerArray,
-                                      (sysFunctions) syscall_fontSize,
-                                      (sysFunctions) syscall_resolution,
-                                      (sysFunctions) syscall_drawRect,
-                                      (sysFunctions) syscall_getTicks,
-                                      (sysFunctions) syscall_getMemory,
-                                      (sysFunctions) syscall_playSound,
-                                      (sysFunctions) syscall_setFontColor,
-                                      (sysFunctions) syscall_getFontColor,
-                                      (sysFunctions) syscall_malloc,
-                                      (sysFunctions) syscall_free,
-                                      (sysFunctions) syscall_getMemoryInfo,
-                                      (sysFunctions) syscall_getProcessesInfo,
-                                      (sysFunctions) syscall_freeProcessesInfo,
-                                      (sysFunctions) syscall_createProcess,
-                                      (sysFunctions) syscall_killProcess,
-                                      (sysFunctions) syscall_setPriority,
-                                      (sysFunctions) syscall_waitpid,
-                                      (sysFunctions) syscall_toggleBlock,
-                                      (sysFunctions) syscall_getPid,
-                                      (sysFunctions) syscall_yield,
-                                      (sysFunctions) syscall_semInit,
-                                      (sysFunctions) syscall_semOpen,
-                                      (sysFunctions) syscall_semClose,
-                                      (sysFunctions) syscall_semWait,
-                                      (sysFunctions) syscall_semPost,
-                                      (sysFunctions) syscall_openPipe,
-                                      (sysFunctions) syscall_closePipe,
-                                      (sysFunctions) syscall_unblockProcess,
-                                      (sysFunctions) syscall_sleep,
-                                      (sysFunctions) syscall_getNextPipeId,
-                                      (sysFunctions) syscall_getFds};
+static sysFunctions sysfunctions[] = {
+    (sysFunctions) syscall_read,
+    (sysFunctions) syscall_write,
+    (sysFunctions) syscall_clear,
+    (sysFunctions) syscall_seconds,
+    (sysFunctions) syscall_registerArray,
+    (sysFunctions) syscall_fontSize,
+    (sysFunctions) syscall_resolution,
+    (sysFunctions) syscall_drawRect,
+    (sysFunctions) syscall_getTicks,
+    (sysFunctions) syscall_getMemory,
+    (sysFunctions) syscall_playSound,
+    (sysFunctions) syscall_setFontColor,
+    (sysFunctions) syscall_getFontColor,
+    (sysFunctions) syscall_malloc,
+    (sysFunctions) syscall_free,
+    (sysFunctions) syscall_getMemoryInfo,
+    (sysFunctions) syscall_getProcessesInfo,
+    (sysFunctions) syscall_freeProcessesInfo,
+    (sysFunctions) syscall_createProcess,
+    (sysFunctions) syscall_killProcess,
+    (sysFunctions) syscall_setPriority,
+    (sysFunctions) syscall_waitpid,
+    (sysFunctions) syscall_toggleBlock,
+    (sysFunctions) syscall_getPid,
+    (sysFunctions) syscall_yield,
+    (sysFunctions) syscall_semInit,
+    (sysFunctions) syscall_semOpen,
+    (sysFunctions) syscall_semClose,
+    (sysFunctions) syscall_semWait,
+    (sysFunctions) syscall_semPost,
+    (sysFunctions) syscall_openPipe,
+    (sysFunctions) syscall_closePipe,
+    (sysFunctions) syscall_unblockProcess,
+    (sysFunctions) syscall_sleep,
+    (sysFunctions) syscall_getNextPipeId,
+    (sysFunctions) syscall_getFds,
+    (sysFunctions) openSharedMem,
+};
 
 uint64_t syscallDispatcher(
     uint64_t id, uint64_t arg0, uint64_t arg1, uint64_t arg2, uint64_t arg3, uint64_t arg4, uint64_t arg5) {
@@ -287,4 +292,8 @@ static int syscall_getNextPipeId() {
 
 static int *syscall_getFds() {
 	return getFds();
+}
+
+static void *openSharedMem(int id, int size) {
+	return (void *) openSharedMemory(id, size);
 }
