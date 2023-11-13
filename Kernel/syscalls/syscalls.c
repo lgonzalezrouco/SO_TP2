@@ -90,7 +90,7 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions) syscall_openPipe,
     (sysFunctions) syscall_closePipe,
     (sysFunctions) syscall_unblockProcess,
-	(sysFunctions) syscall_sleep,
+    (sysFunctions) syscall_sleep,
 };
 
 uint64_t syscallDispatcher(
@@ -106,7 +106,7 @@ static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count) {
 	}
 
 	uint16_t fdValue = getFdValue(fd);
-	if (fd == STDIN) {
+	if (fdValue == STDIN) {
 		for (uint64_t i = 0; i < count; i++) {
 			buffer[i] = getAscii();
 			if ((int) buffer[i] == EOF)

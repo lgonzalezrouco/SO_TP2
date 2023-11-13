@@ -65,6 +65,8 @@ int8_t closePipe(uint16_t id, uint16_t pid) {
 		writePipe(id, buf, 1, pid);
 	} else {
 		pipe->outPid = DEV_NULL;
+		PCB *process = getProcess(pipe->inPid);
+		process->fds[STDOUT] = STDOUT;
 		freePipe(id);
 	}
 

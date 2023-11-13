@@ -4,12 +4,9 @@
 
 #define MAX_SIZE 1024
 
-#define isVowel(c) \
-	(c == 'a' || c == 'A' || \
-	c == 'e' || c == 'E' || \
-	c == 'i' || c == 'I' || \
-	c == 'o' || c == 'O' || \
-	c == 'u' || c == 'U')
+#define isVowel(c)                                                                                               \
+	(c == 'a' || c == 'A' || c == 'e' || c == 'E' || c == 'i' || c == 'I' || c == 'o' || c == 'O' || c == 'u' || \
+	 c == 'U')
 
 int filter(int argc, char **argv) {
 	if (argc != 1) {
@@ -17,22 +14,31 @@ int filter(int argc, char **argv) {
 		return -1;
 	}
 
+	char c;
 	char buffer[MAX_SIZE];
+	int bIdx = 0;
+	int lIdx = 0;
+	while ((c = getchar()) != EOF && bIdx < MAX_SIZE - 1) {
+		if (c != 0) {
+			if (c != '\b') {
+				if (c == '\n' && lIdx > 0) {
+					putchar(c);
+					lIdx = 0;
+					buffer[bIdx++] = c;
+				} else if (c != '\n') {
+					putchar(c);
+					lIdx++;
+					if (isVowel(c))
+						buffer[bIdx++] = c;
+				}
+			} else if (lIdx > 0) {
+				lIdx--;
+				putchar(c);
+			}
+		}
+	}
+	buffer[bIdx] = 0;
+	printf("\nTEXTO FILTRADO:\n\n%s\n", buffer);
 
-    int count;
-    int index = 0;
-
-    while ((count = read(0, buffer, MAX_SIZE - 1))) {
-        buffer[count] = 0;
-        for (int i = 0; i < count ; i++){
-            if (!isVowel(buffer[i])) {
-                buffer[index] = buffer[i];
-                index++;
-            }
-        }
-        buffer[index] = 0;
-        index = 0;
-        puts(buffer);
-    }
-    return 0;
+	return 0;
 }
