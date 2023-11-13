@@ -1,9 +1,8 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-#include "syscalls.h"
-
 #include <stdint.h>
-#include <stdio.h>
+#include <syscalls.h>
+#include <uStdio.h>
 
 // Random
 static uint32_t m_z = 362436069;
@@ -56,7 +55,7 @@ int64_t satoi(char *str) {
 }
 
 // Dummies
-void bussy_wait(uint64_t n) {
+void busyWait(uint64_t n) {
 	uint64_t i;
 	for (i = 0; i < n; i++)
 		;
@@ -72,6 +71,6 @@ void endless_loop_print(uint64_t wait) {
 
 	while (1) {
 		printf("%d ", pid);
-		bussy_wait(wait);
+		busyWait(wait);
 	}
 }

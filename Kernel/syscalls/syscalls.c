@@ -7,6 +7,7 @@
 #include <processes.h>
 #include <registers.h>
 #include <semaphores.h>
+#include <sharedMemory.h>
 #include <speaker.h>
 #include <stdint.h>
 #include <time.h>
@@ -19,7 +20,7 @@
 #define KBDIN  3
 
 static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count);
-static void syscall_write(uint32_t fd, char c);
+static void syscall_write(int32_t fd, char c);
 static void syscall_clear();
 static uint32_t syscall_seconds();
 static uint64_t *syscall_registerArray(uint64_t *regarr);
@@ -34,11 +35,9 @@ static uint32_t syscall_getFontColor();
 static uint64_t syscall_malloc(uint64_t size);
 static void syscall_free(uint64_t ptr);
 static uint64_t syscall_getMemoryInfo();
-// static processInfo * syscall_getProcessInfo();
-static PCB **syscall_getProcessesInfo();
+static processInfo **syscall_getProcessesInfo();
 static void syscall_freeProcessesInfo(uint64_t infoArray);
-static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
+static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 static uint64_t syscall_killProcess(int16_t pid);
 static uint64_t syscall_setPriority(int16_t pid, uint8_t priority);
 static uint64_t syscall_waitpid(int16_t pid);
@@ -51,7 +50,12 @@ static uint64_t syscall_semClose(char *name);
 static uint64_t syscall_semWait(char *name);
 static uint64_t syscall_semPost(char *name);
 static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid);
-static uint64_t syscall_closePipe(uint16_t id, uint8_t mode);
+static uint64_t syscall_closePipe(uint16_t id, uint16_t pid);
+static uint64_t syscall_unblockProcess(int16_t pid);
+static void syscall_sleep(int seconds);
+static int syscall_getNextPipeId();
+static int *syscall_getFds();
+static void *openSharedMem(int id, int size);
 
 typedef uint64_t (*sysFunctions)(uint64_t, uint64_t, uint64_t, uint64_t, uint64_t, uint64_t);
 
@@ -88,6 +92,11 @@ static sysFunctions sysfunctions[] = {
     (sysFunctions) syscall_semPost,
     (sysFunctions) syscall_openPipe,
     (sysFunctions) syscall_closePipe,
+    (sysFunctions) syscall_unblockProcess,
+    (sysFunctions) syscall_sleep,
+    (sysFunctions) syscall_getNextPipeId,
+    (sysFunctions) syscall_getFds,
+    (sysFunctions) openSharedMem,
 };
 
 uint64_t syscallDispatcher(
@@ -97,26 +106,38 @@ uint64_t syscallDispatcher(
 
 // Read char
 static int64_t syscall_read(int16_t fd, char *buffer, uint64_t count) {
-	if (fd == STDIN) {
+	if (fd == DEV_NULL) {
+		buffer[0] = EOF;
+		return 0;
+	}
+
+	uint16_t fdValue = getFdValue(fd);
+	if (fdValue == STDIN) {
 		for (uint64_t i = 0; i < count; i++) {
 			buffer[i] = getAscii();
 			if ((int) buffer[i] == EOF)
 				return i + 1;
 		}
 		return count;
-	}
+	} else if (fdValue >= STD_FDS)
+		return readPipe(fdValue, buffer, count, getCurrentPid());
 	return -1;
 }
 
 // Write char
-static void syscall_write(uint32_t fd, char c) {
-	Color prevColor = getFontColor();
-	if (fd == STDERR)
-		setFontColor(ERROR_COLOR);
-	else if (fd != STDOUT)
+static void syscall_write(int32_t fd, char c) {
+	if (fd <= DEV_NULL)
 		return;
-	printChar(c);
-	setFontColor(prevColor);
+
+	uint16_t fdValue = getFdValue(fd);
+	if (fdValue == STDOUT || fdValue == STDERR) {
+		Color prevColor = getFontColor();
+		if (fdValue == STDERR)
+			setFontColor(ERROR_COLOR);
+		printChar(c);
+		setFontColor(prevColor);
+	} else if (fdValue >= STD_FDS)
+		writePipe(fdValue, &c, 1, getCurrentPid());
 }
 
 // Clear
@@ -126,9 +147,7 @@ static void syscall_clear() {
 
 // Get time in seconds
 static uint32_t syscall_seconds() {
-	uint8_t h, m, s;
-	getTime(&h, &m, &s);
-	return s + m * 60 + ((h + 24 - 3) % 24) * 3600;
+	return getSeconds();
 }
 
 // Get register snapshot array
@@ -193,17 +212,16 @@ static uint64_t syscall_getMemoryInfo() {
 	return (uint64_t) getMemoryInfo();
 }
 
-static PCB **syscall_getProcessesInfo() {
-	return (PCB **) getProcessesInfo();
+static processInfo **syscall_getProcessesInfo() {
+	return (processInfo **) getProcessesInfo();
 }
 
 static void syscall_freeProcessesInfo(uint64_t infoArray) {
-	freeProcessesInfo((PCB **) infoArray);
+	freeProcessesInfo((processInfo **) infoArray);
 }
 
-static uint64_t
-syscall_createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]) {
-	return (uint64_t) createProcess(parentPid, code, args, name, priority, fds);
+static uint64_t syscall_createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]) {
+	return (uint64_t) createProcess(code, args, name, isForeground, fds);
 }
 
 static uint64_t syscall_killProcess(int16_t pid) {
@@ -256,6 +274,26 @@ static uint64_t syscall_openPipe(uint16_t id, uint8_t mode, uint16_t pid) {
 	return (uint64_t) openPipe(id, mode, pid);
 }
 
-static uint64_t syscall_closePipe(uint16_t id, uint8_t mode) {
-	return (uint64_t) closePipe(id, mode);
+static uint64_t syscall_closePipe(uint16_t id, uint16_t pid) {
+	return (uint64_t) closePipe(id, pid);
+}
+
+static uint64_t syscall_unblockProcess(int16_t pid) {
+	return (uint64_t) unblockProcess(pid);
+}
+
+static void syscall_sleep(int seconds) {
+	sleep(seconds);
+}
+
+static int syscall_getNextPipeId() {
+	return getNextPipeId();
+}
+
+static int *syscall_getFds() {
+	return getFds();
+}
+
+static void *openSharedMem(int id, int size) {
+	return (void *) openSharedMemory(id, size);
 }

@@ -1,97 +1,32 @@
 pvs-studio.com/en/docs/warnings/	1	err	Help: The documentation for all analyzer warnings is available here: https://pvs-studio.com/en/docs/warnings/.
-/root/Bootloader/BMFS/bmfs.c	192	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The SIGNED integer type argument is expected.
-/root/Bootloader/BMFS/bmfs.c	208	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The SIGNED integer type argument is expected.
-/root/Bootloader/BMFS/bmfs.c	208	note	V576 Incorrect format. Consider checking the fourth actual argument of the 'printf' function. The SIGNED integer type argument is expected.
-/root/Bootloader/BMFS/bmfs.c	297	note	V584 The 'diskSize' value is present on both sides of the '>' operator. The expression is incorrect or it can be simplified.
-/root/Bootloader/BMFS/bmfs.c	329	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. Under certain conditions the pointer can be null.
-/root/Bootloader/BMFS/bmfs.c	366	note	V575 The potential null pointer is passed into 'memset' function. Inspect the first argument.
-/root/Bootloader/BMFS/bmfs.c	393	note	V575 The potential null pointer is passed into 'rewind' function. Inspect the first argument.
-/root/Bootloader/BMFS/bmfs.c	407	note	V1004 The 'mbr' pointer was used unsafely after it was verified against nullptr. Check lines: 317, 407.
-/root/Bootloader/BMFS/bmfs.c	445	err	V595 The 'disk' pointer was utilized before it was verified against nullptr. Check lines: 445, 464.
-/root/Bootloader/BMFS/bmfs.c	440	err	V595 The 'buffer' pointer was utilized before it was verified against nullptr. Check lines: 440, 470.
+/root/Bootloader/BMFS/bmfs.c	190	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The SIGNED integer type argument is expected.
+/root/Bootloader/BMFS/bmfs.c	204	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The SIGNED integer type argument is expected.
+/root/Bootloader/BMFS/bmfs.c	204	note	V576 Incorrect format. Consider checking the fourth actual argument of the 'printf' function. The SIGNED integer type argument is expected.
+/root/Bootloader/BMFS/bmfs.c	301	note	V584 The 'diskSize' value is present on both sides of the '>' operator. The expression is incorrect or it can be simplified.
+/root/Bootloader/BMFS/bmfs.c	334	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. Under certain conditions the pointer can be null.
+/root/Bootloader/BMFS/bmfs.c	371	note	V575 The potential null pointer is passed into 'memset' function. Inspect the first argument.
+/root/Bootloader/BMFS/bmfs.c	396	note	V575 The potential null pointer is passed into 'rewind' function. Inspect the first argument.
+/root/Bootloader/BMFS/bmfs.c	410	note	V1004 The 'mbr' pointer was used unsafely after it was verified against nullptr. Check lines: 322, 410.
+/root/Bootloader/BMFS/bmfs.c	448	err	V595 The 'disk' pointer was utilized before it was verified against nullptr. Check lines: 448, 467.
+/root/Bootloader/BMFS/bmfs.c	443	err	V595 The 'buffer' pointer was utilized before it was verified against nullptr. Check lines: 443, 473.
 /root/Bootloader/BMFS/bmfs.c	522	warn	V1032 The pointer 'dir_copy' is cast to a more strictly aligned pointer type.
-/root/Bootloader/BMFS/bmfs.c	574	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The SIGNED integer type argument is expected.
-/root/Bootloader/BMFS/bmfs.c	579	warn	V1032 The pointer 'Directory' is cast to a more strictly aligned pointer type.
-/root/Kernel/include/font.h	15	note	V569 Transformation of constant value 206. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	15	note	V569 Transformation of constant value 254. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	15	note	V569 Transformation of constant value 195. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	15	note	V569 Transformation of constant value 194. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 192. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 128. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 224. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 254. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 240. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 248. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 156. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 140. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 184. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 132. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 252. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 152. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 230. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 198. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 134. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 142. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 196. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 158. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 188. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 204. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 236. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 246. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 222. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 206. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	1622	note	V569 Transformation of constant value 216. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 240. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 193. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 224. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 129. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 128. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 195. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 252. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 255. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 192. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 225. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 136. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 232. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 248. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 135. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 199. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 227. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 241. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 184. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 142. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 156. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 254. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 188. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 158. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 143. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 131. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 220. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 231. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 176. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 247. The value range of signed char type: [-128, 127].
-/root/Kernel/include/font.h	7741	note	V569 Transformation of constant value 207. The value range of signed char type: [-128, 127].
-/root/Kernel/drivers/video.c	58	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x5C00
-/root/Kernel/drivers/video.c	59	warn	V707 Giving short names to global variables is considered to be bad practice. It is suggested to rename '_X', '_Y' variables.
-/root/Kernel/interruptions/exceptions.c	26	err	V614 Potentially uninitialized pointer 'msg' used. Consider checking the first actual argument of the 'printError' function.
-/root/Kernel/kernel.c	24	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x400000
-/root/Kernel/kernel.c	25	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x500000
-/root/Kernel/memory/memoryManager.c	22	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *) 0x600000
-/root/Kernel/memory/memoryManager.c	23	note	V566 The integer constant is converted to pointer. Possibly an error or a bad coding style: (void *)(0x600000 + 0x100000)
-/root/Kernel/memory/registers.c	34	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Kernel/memory/registers.c	34	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Kernel/memory/registers.c	36	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Userland/SampleCodeModule/lib/stdio.c	122	note	V547 The 'A = !cursorDrawn' expression is equivalent to the 'A = 0' expression.
-/root/Userland/SampleCodeModule/lib/stdio.c	144	err	V781 The value of the 'bIdx' index is checked after it was used. Perhaps there is a mistake in program logic.
-/root/Userland/SampleCodeModule/lib/stdio.c	178	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Userland/SampleCodeModule/lib/stdlib.c	27	note	V560 A part of conditional expression is always false: n < 0. Unsigned type value is never < 0.
-/root/Userland/SampleCodeModule/programs/shell.c	122	warn	V576 Incorrect format. Consider checking the second actual argument of the 'scanf' function. It's dangerous to use string specifier without width specification. Buffer overflow is possible.
-/root/Userland/SampleCodeModule/programs/shell.c	122	warn	V576 Incorrect format. Consider checking the third actual argument of the 'scanf' function. It's dangerous to use string specifier without width specification. Buffer overflow is possible.
-/root/Userland/SampleCodeModule/programs/shell.c	122	warn	V576 Incorrect format. Consider checking the fourth actual argument of the 'scanf' function. It's dangerous to use string specifier without width specification. Buffer overflow is possible.
-/root/Userland/SampleCodeModule/programs/shell.c	198	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Userland/SampleCodeModule/programs/shell.c	264	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
-/root/Userland/SampleCodeModule/programs/shell.c	265	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
-/root/Userland/SampleCodeModule/tests/test_mm.c	39	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
-/root/Userland/SampleCodeModule/tests/test_processes.c	57	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
-/root/Userland/SampleCodeModule/tests/test_processes.c	60	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
-/root/Userland/SampleCodeModule/tests/test_util.c	74	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Bootloader/BMFS/bmfs.c	569	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The SIGNED integer type argument is expected.
+/root/Bootloader/BMFS/bmfs.c	574	warn	V1032 The pointer 'Directory' is cast to a more strictly aligned pointer type.
+/root/Userland/SampleCodeModule/lib/uStdio.c	173	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Userland/SampleCodeModule/lib/uStdlib.c	32	note	V560 A part of conditional expression is always false: n < 0. Unsigned type value is never < 0.
+/root/Userland/SampleCodeModule/programs/cat.c	19	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 19, 17.
+/root/Userland/SampleCodeModule/programs/filter.c	26	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 26, 24.
+/root/Userland/SampleCodeModule/programs/kill.c	16	warn	V755 Copying potentially tainted data from 'argv' to buffer 'pid'. Buffer overflow is possible.
+/root/Userland/SampleCodeModule/programs/ps.c	52	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
+/root/Userland/SampleCodeModule/programs/ps.c	53	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. To print the value of pointer the '%p' should be used.
+/root/Userland/SampleCodeModule/programs/shell.c	71	err	V576 Incorrect format. Consider checking the second actual argument of the 'scanf' function. A pointer to the signed int type is expected.
+/root/Userland/SampleCodeModule/programs/shell.c	68	note	V776 Potentially infinite loop.
+/root/Userland/SampleCodeModule/programs/shell.c	253	note	V576 Incorrect format. Consider checking the third actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Userland/SampleCodeModule/programs/toggleBlock.c	17	warn	V755 Copying potentially tainted data from 'argv' to buffer 'pid'. Buffer overflow is possible.
+/root/Userland/SampleCodeModule/programs/wc.c	19	warn	V522 There might be dereferencing of a potential null pointer 'fds'. Check lines: 19, 17.
+/root/Userland/SampleCodeModule/tests/test_mm.c	44	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Userland/SampleCodeModule/tests/test_processes.c	64	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
+/root/Userland/SampleCodeModule/tests/test_processes.c	67	err	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The pointer to string of char type symbols is expected.
+/root/Userland/SampleCodeModule/tests/test_sync.c	28	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The argument is expected to be not greater than 32-bit.
+/root/Userland/SampleCodeModule/tests/test_sync.c	103	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.
+/root/Userland/SampleCodeModule/tests/test_util.c	73	note	V576 Incorrect format. Consider checking the second actual argument of the 'printf' function. The integer argument of 32-bit size is expected.

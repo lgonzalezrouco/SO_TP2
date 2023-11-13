@@ -1,10 +1,8 @@
-#ifndef _SHELL_H
-#define _SHELL_H
-#define QTY_COMMANDS 19
+#ifndef _SH_H_
+#define _SH_H_
 
-/**
- * @brief Corre la terminal
- *
- */
-void run_shell();
+#include <types.h>
+
+void shell();
+
 #endif

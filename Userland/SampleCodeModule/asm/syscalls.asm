@@ -31,6 +31,12 @@ GLOBAL semWait
 GLOBAL semPost
 GLOBAL openPipe
 GLOBAL closePipe
+GLOBAL unblockProcess
+GLOBAL sleep
+GLOBAL getNextPipeId
+GLOBAL getFds
+GLOBAL openSharedMemory
+GLOBAL closeSharedMemory
 
 read:
     mov rax, 0
@@ -190,5 +196,30 @@ openPipe:
 
 closePipe:
     mov rax, 31
+    int 80h
+    ret
+
+unblockProcess:
+    mov rax, 32
+    int 80h
+    ret
+
+sleep:
+    mov rax, 33
+    int 80h
+    ret
+
+getNextPipeId:
+    mov rax, 34
+    int 80h
+    ret
+
+getFds:
+    mov rax, 35
+    int 80h
+    ret
+
+openSharedMemory:
+    mov rax, 36
     int 80h
     ret

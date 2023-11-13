@@ -1,16 +1,16 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 #define toLower(n)  ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
 #define isNumber(n) ((n) >= '0' && (n) <= '9')
 #define isHex(n)    ((n) >= 'a' && (n) <= 'f')
 
-int createProcess(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority) {
-	int fds[] = {STDIN, STDOUT, STDERR};
-	return createProcessFds(parentPid, code, args, name, priority, fds);
+int createProcess(ProcessCode code, char **args, char *name, uint8_t isForeground) {
+	int fds[] = {isForeground ? STDIN : DEV_NULL, STDOUT, STDERR};
+	return createProcessFds(code, args, name, isForeground, fds);
 }
 
 static unsigned int log(uint64_t n, int base) {
@@ -71,4 +71,38 @@ int strtoh(char *s, char **end) {
 	}
 	*end = s;
 	return num;
+}
+
+void *stringToPtr(char *buffer) {
+	uint64_t res = 0;
+	for (int i = 0; buffer[i] != '\0'; i++)
+		res = res * 10 + buffer[i] - '0';
+	return (void *) res;
+}
+
+int intToBase(unsigned long long num, int base, char *buffer) {
+	char stack[11];
+	int c = 0;
+	int i = 0;
+	if (num == 0)
+		stack[i++] = '0';
+	while (num != 0) {
+		int remainder = num % base;
+		stack[i] = remainder >= 10 ? remainder + 'A' - 10 : remainder + '0';
+		num = num / base;
+		i++;
+	}
+	c = i;
+	i--;
+	while (i >= 0) {
+		*buffer = stack[i];
+		buffer++;
+		i--;
+	}
+	*buffer = 0;
+	return c;
+}
+
+int intToString(unsigned long long num, char *buffer) {
+	return intToBase(num, 10, buffer);
 }

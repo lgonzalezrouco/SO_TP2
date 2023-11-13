@@ -1,4 +1,11 @@
-#include <test_sync.h>
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+#include <stdint.h>
+#include <syscalls.h>
+#include <test_util.h>
+#include <types.h>
+#include <uStdio.h>
+#include <uStdlib.h>
 
 int64_t global;  // shared memory
 
@@ -49,7 +56,15 @@ uint64_t my_process_inc(int argc, char *argv[]) {
 	return 0;
 }
 
-uint64_t test_sync(char *n, char *use_sem) {
+uint64_t test_sync(int argc, char **argv) {
+	if (argc != 3) {
+		printErr("test_sync: Numero invalido de argumentos.\n");
+		return -1;
+	}
+
+	char *n = argv[1];
+	char *use_sem = argv[2];
+
 	if (satoi(n) <= 0) {
 		printf("test_sync: ERROR in first parameter, should be greater than 0.\n");
 		return -1;
@@ -76,8 +91,8 @@ uint64_t test_sync(char *n, char *use_sem) {
 
 	uint64_t i;
 	for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {
-		pids[i] = createProcess(1, (ProcessCode) &my_process_inc, argvDec, "my_process_inc", 5);
-		pids[i + TOTAL_PAIR_PROCESSES] = createProcess(1, (ProcessCode) &my_process_inc, argvInc, "my_process_inc", 5);
+		pids[i] = createProcess((ProcessCode) &my_process_inc, argvDec, "my_process_inc", 1);
+		pids[i + TOTAL_PAIR_PROCESSES] = createProcess((ProcessCode) &my_process_inc, argvInc, "my_process_inc", 1);
 	}
 
 	for (i = 0; i < TOTAL_PAIR_PROCESSES; i++) {

@@ -10,6 +10,13 @@
 int strcmp(const char *s1, const char *s2);
 
 /**
+ * @brief Determina la longitud de una cadena de caracteres
+ * @param s: Cadena de caracteres
+ * @return Longitud de la cadena
+ */
+int strlen(const char *s);
+
+/**
  * @brief Copia los caracteres de la cadena origin en la cadena dest hasta que
  * aparezca un caracter limit
  * @param dest: Cadena de destino

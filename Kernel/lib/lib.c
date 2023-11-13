@@ -1,6 +1,9 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
+#include <scheduler.h>
+#include <stddef.h>
 #include <stdint.h>
+#include <video.h>
 
 static unsigned int log(uint64_t n, int base);
 
@@ -109,15 +112,44 @@ int strcmp(const char *s1, const char *s2) {
 
 unsigned int strlen(char *str) {
 	unsigned int i = 0;
-	while (str[i] != 0) {
+	while (str[i] != 0)
 		i++;
-	}
 	return i;
 }
 
 unsigned int array_strlen(char **array) {
 	int len = 0;
-	while (*(array++) != (void *) 0)
+	while (*(array++) != NULL)
 		len++;
 	return len;
+}
+
+uint64_t pow(uint32_t base, uint32_t exp) {
+	uint64_t ret = 1;
+	for (int i = 0; i < exp; i++)
+		ret *= base;
+	return ret;
+}
+
+uint32_t Log2n(uint32_t n) {
+	return (n > 1) ? 1 + Log2n(n >> 1) : 0;
+}
+
+void setBit(uint8_t *byte, int bitNumber) {
+	uint8_t mask = 1;
+	mask = mask << bitNumber;
+	*byte = *byte | mask;
+}
+
+char getBit(uint8_t *byte, int bitNumber) {
+	uint8_t ret = *byte;
+	ret = ret >> bitNumber;
+	return ret % 2;
+}
+
+void clearBit(uint8_t *byte, int bitNumber) {
+	uint8_t mask = 1;
+	mask = mask << bitNumber;
+	mask = 255 - mask;
+	*byte = *byte & mask;
 }

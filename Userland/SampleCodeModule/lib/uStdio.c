@@ -3,10 +3,10 @@
 #include <sound.h>
 #include <stdarg.h>
 #include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 #include <syscalls.h>
+#include <uStdio.h>
+#include <uStdlib.h>
+#include <uString.h>
 
 #define CURSOR_FREQ 10 /* Frecuencia en Ticks del dibujo del cursor*/
 
@@ -131,7 +131,7 @@ int scanf(char *fmt, ...) {
 	bIdx = 0;
 
 	int qtyParams = 0;
-	while (*fmtPtr && buffer[bIdx] && bIdx < MAX_CHARS) {
+	while (*fmtPtr && bIdx < MAX_CHARS && buffer[bIdx]) {
 		if (*fmtPtr == '%') {
 			fmtPtr++;
 			switch (*fmtPtr) {
@@ -148,14 +148,17 @@ int scanf(char *fmt, ...) {
 				case 's':
 					end = &buffer[bIdx] + strcpychar((char *) va_arg(v, char *), &buffer[bIdx], ' ');
 					break;
+				case 'i':
+					end = &buffer[bIdx] + strcpychar((char *) va_arg(v, char *), &buffer[bIdx], '\n');
+					break;
 			}
 			bIdx += end - &buffer[bIdx];
 			qtyParams++;
-		} else if (*fmtPtr == buffer[bIdx]) {
+		} else if (*fmtPtr == buffer[bIdx])
 			bIdx++;
-		} else {
+		else
 			printErr("Error!!!");
-		}
+
 		fmtPtr++;
 	}
 	buffer[bIdx - 1] = 0;

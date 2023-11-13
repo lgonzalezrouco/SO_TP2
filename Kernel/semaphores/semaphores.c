@@ -1,3 +1,5 @@
+// This is a personal academic project. Dear PVS-Studio, please check it.
+// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <semaphores.h>
 
 #define MAX_SEMAPHORES 1024
@@ -97,6 +99,19 @@ int semPost(const char *name) {
 
 	releaseExclusiveAccess(semaphore);
 	return 0;
+}
+
+void semSetValue(const char *name, uint32_t value) {
+	Semaphore *semaphore = getSemaphore(name);
+	if (semaphore == NULL)
+		return;
+
+	getExclusiveAccess(semaphore);
+
+	semaphore->value = value;
+	resumeUnblockedProcess(semaphore->blockedProcesses);
+
+	releaseExclusiveAccess(semaphore);
 }
 
 static Semaphore *getSemaphore(const char *name) {

@@ -1,5 +1,5 @@
-#ifndef _STDIO_H
-#define _STDIO_H
+#ifndef _U_STDIO_H
+#define _U_STDIO_H
 
 #define STDIN  0
 #define STDOUT 1
@@ -7,7 +7,8 @@
 #define KBDIN  3
 
 /* Cantidad maxima de caracteres para los buffers */
-#define MAX_CHARS 256
+#define MAX_CHARS      256
+#define MAX_CHARS_ARG1 1024
 
 #include <color.h>
 #include <stdarg.h>

@@ -15,7 +15,9 @@ void write(int fd, char c);
 
 /**
  * @brief Lee un byte a partir del descriptor recibido
- * @param fd: FileDescriptor (STDIN | KBDIN)
+ * @param fd: FileDescriptor
+ * @param buffer: Buffer donde se guarda el byte leido
+ * @param count: Cantidad de bytes a leer
  * @return Byte leido
  */
 int64_t read(int16_t fd, char *buffer, uint64_t count);
@@ -124,24 +126,23 @@ memoryInfo *getMemoryInfo();
  * @brief Devuelve informacion sobre los procesos
  * @return Informacion sobre los procesos
  */
-PCB **getProcessesInfo();
+processInfo **getProcessesInfo();
 
 /**
  * @brief Libera la memoria reservada para la informacion de los procesos
  * @param infoArray: Informacion de los procesos
  */
-void freeProcessesInfo(PCB **infoArray);
+void freeProcessesInfo(processInfo **infoArray);
 
 /**
  * @brief Crea un proceso
- * @param parentPid: PID del proceso padre
  * @param code: Codigo del proceso
  * @param args: Argumentos del proceso
  * @param name: Nombre del proceso
- * @param priority: Prioridad del proceso
+ * @param isForeground: Si es foreground o no
  * @param fds: File descriptors del proceso
  */
-int createProcessFds(int16_t parentPid, ProcessCode code, char **args, char *name, uint8_t priority, int fds[]);
+int createProcessFds(ProcessCode code, char **args, char *name, uint8_t isForeground, int fds[]);
 
 /**
  * @brief Mata a un proceso
@@ -231,6 +232,33 @@ int openPipe(uint16_t id, uint8_t mode, uint16_t pid);
  * @param id: ID del pipe
  * @param mode: Modo de cierre
  */
-int closePipe(uint16_t id, uint8_t mode);
+int closePipe(uint16_t id, uint16_t pid);
+
+/**
+ * @brief Desbloquea un proceso que esta bloqueado
+ * @param pid: PID del proceso a desbloquear
+ */
+uint64_t unblockProcess(int16_t pid);
+
+/**
+ * @brief Hace un sleep de la cantidad de segundos recibidos
+ * @param seconds: Cantidad de segundos a mimir
+ */
+void sleep(int seconds);
+
+/**
+ * @brief Devuelve el proximo ID de pipe disponible
+ * @return Proximo ID de pipe disponible o NOT_FOUND si no hay
+ */
+int getNextPipeId();
+
+/**
+ * @brief Devuelve los fds del proceso actual. Siempre son 3.
+ *
+ * @return Arreglo con los FDS del proceso actual
+ */
+int *getFds();
+
+void *openSharedMemory(int id, int size);
 
 #endif
