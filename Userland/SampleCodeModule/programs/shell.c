@@ -10,10 +10,7 @@
 #define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
 #define isValid(c) ((c) != ' ' && (c) != '|' && (c) != '&' && (c) != 0 && (c) != '\n')
 
-#define QTY_BYTES         32 /* Cantidad de bytes de respuesta del printmem */
-#define DEFAULT_FONT_SIZE 1
-#define MIN_FONT_SIZE     1
-#define MAX_FONT_SIZE     3
+#define QTY_BYTES 32 /* Cantidad de bytes de respuesta del printmem */
 
 #define WELCOME         "\n\nBienvenido a bemaluOS!\n"
 #define INVALID_COMMAND "Comando invalido!\n"
