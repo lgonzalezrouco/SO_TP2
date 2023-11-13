@@ -4,6 +4,7 @@
 #include <processes.h>
 #include <scheduler.h>
 #include <stdbool.h>
+#include <video.h>
 
 #define MAX_PIPES 512
 
@@ -52,7 +53,7 @@ int8_t openPipe(uint16_t id, pipeModes mode, uint16_t pid) {
 	else
 		return PIPE_ERROR;
 
-	return SUCCESS;
+	return index;
 }
 
 int8_t closePipe(uint16_t id, uint16_t pid) {
@@ -89,11 +90,10 @@ int64_t writePipe(uint16_t id, char *src, uint64_t len, uint16_t pid) {
 
 		while (pipe->charRemaining < PIPE_SIZE && qtyWritten < len) {
 			pipe->buffer[pipe->writePosition] = src[qtyWritten];
-			if (src[qtyWritten++] == EOF)
-				break;
-
 			pipe->writePosition = (pipe->writePosition + 1) % PIPE_SIZE;
 			pipe->charRemaining++;
+			if (src[qtyWritten++] == EOF)
+				break;
 		}
 
 		if (pipe->isBlocking)
@@ -108,23 +108,29 @@ int64_t readPipe(uint16_t id, char *dst, uint64_t len, uint16_t pid) {
 		return PIPE_ERROR;
 
 	uint64_t qtyRead = 0;
-	while (qtyRead < len && pipe->buffer[pipe->readPosition] != EOF) {
+	while (qtyRead < len) {
 		if (pipe->charRemaining == 0)
 			blockPipe(pipe, READ);
 
-		while ((pipe->charRemaining > 0 || pipe->buffer[pipe->readPosition] == EOF) && qtyRead < len) {
+		while (pipe->charRemaining > 0 && qtyRead < len) {
 			dst[qtyRead] = pipe->buffer[pipe->readPosition];
-			if (dst[qtyRead++] == EOF)
-				break;
-
 			pipe->readPosition = (pipe->readPosition + 1) % PIPE_SIZE;
 			pipe->charRemaining--;
+			if (dst[qtyRead++] == EOF)
+				break;
 		}
 
 		if (pipe->isBlocking)
 			unblockPipe(pipe, WRITE);
 	}
 	return qtyRead;
+}
+
+int getNextPipeId() {
+	for (int i = 0; i < MAX_PIPES; i++)
+		if (pipes[i] == NULL)
+			return i + STD_FDS;
+	return NOT_FOUND;
 }
 
 static void blockPipe(Pipe *pipe, pipeModes mode) {

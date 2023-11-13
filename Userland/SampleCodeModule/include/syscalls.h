@@ -243,7 +243,13 @@ uint64_t unblockProcess(int16_t pid);
 /**
  * @brief Hace un sleep de la cantidad de segundos recibidos
  * @param seconds: Cantidad de segundos a mimir
-*/
+ */
 void sleep(int seconds);
+
+/**
+ * @brief Devuelve el proximo ID de pipe disponible
+ * @return Proximo ID de pipe disponible o NOT_FOUND si no hay
+ */
+int getNextPipeId();
 
 #endif

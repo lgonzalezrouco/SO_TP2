@@ -36,8 +36,6 @@ typedef enum pipeModes { READ, WRITE } pipeModes;
 
 typedef int (*ProcessCode)(int argc, char **args);
 
-// todo cambiar los tipos de pid por pid_t
-
 typedef struct memoryBlock {
 	uint64_t *base;
 	uint64_t *current;
@@ -60,6 +58,7 @@ typedef struct PCB {
 	int fds[STD_FDS];
 } PCB;
 
+// todo pasar a processInfo
 typedef struct processInfo {
 	uint16_t pid;
 	uint16_t parentPid;
@@ -69,7 +68,6 @@ typedef struct processInfo {
 	uint8_t priority;
 	uint8_t isForeground;
 	processStatus status;
-	// todo agregar FOREGROUND o BACKGROUND
 } processInfo;
 
 #endif

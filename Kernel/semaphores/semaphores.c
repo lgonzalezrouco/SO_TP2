@@ -99,7 +99,7 @@ int semPost(const char *name) {
 	return 0;
 }
 
-void semSetValue(const char *name, uint32_t value){
+void semSetValue(const char *name, uint32_t value) {
 	Semaphore *semaphore = getSemaphore(name);
 	if (semaphore == NULL)
 		return;
@@ -107,7 +107,7 @@ void semSetValue(const char *name, uint32_t value){
 	getExclusiveAccess(semaphore);
 
 	semaphore->value = value;
-	resumeUnblockedProcess(semaphore->blockedProcesses); // todo estaría bien hacer esto?
+	resumeUnblockedProcess(semaphore->blockedProcesses);
 
 	releaseExclusiveAccess(semaphore);
 }

@@ -33,6 +33,7 @@ GLOBAL openPipe
 GLOBAL closePipe
 GLOBAL unblockProcess
 GLOBAL sleep
+GLOBAL getNextPipeId
 
 read:
     mov rax, 0
@@ -202,5 +203,10 @@ unblockProcess:
 
 sleep:
     mov rax, 33
+    int 80h
+    ret
+
+getNextPipeId:
+    mov rax, 34
     int 80h
     ret

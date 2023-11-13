@@ -29,6 +29,6 @@ int wc(int argc, char **argv) {
 			}
 		}
 	}
-	printf("El texto ingresado tiene %d lineas.\n", counter);
+	printf("El texto ingresado tiene %d %s.\n", counter, counter == 1 ? "linea" : "lineas");
 	return 0;
 }

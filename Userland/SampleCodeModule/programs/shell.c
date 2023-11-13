@@ -1,195 +1,234 @@
-// This is a personal academic project. Dear PVS-Studio, please check it.
-// PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
-/* #include <libasm.h>
-#include <man.h>
-#include <phylosophers.h>
+#include <color.h>
 #include <shell.h>
-#include <stddef.h>
-#include <stdint.h>
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <shellPrograms.h>
+#include <stdbool.h>
 #include <syscalls.h>
-#include <test_mm.h>
-#include <test_pipes.h>
-#include <test_prio.h>
-#include <test_processes.h>
-#include <test_sync.h>
-#include <test_util.h>
-#include <types.h> */
+#include <uStdio.h>
+#include <uStdlib.h>
+#include <uString.h>
 
-/* Enum para la cantidad de argumentos recibidos */
-/* typedef enum { NO_PARAMS = 0, SINGLE_PARAM, DUAL_PARAM } functionType;
-#define QTY_BYTES         32
+#define toLower(n) ((n) >= 'A' && (n) <= 'Z' ? (n) - ('A' - 'a') : (n))
+#define isValid(c) ((c) != ' ' && (c) != '|' && (c) != '&' && (c) != 0 && (c) != '\n')
+
+#define QTY_BYTES         32 /* Cantidad de bytes de respuesta del printmem */
 #define DEFAULT_FONT_SIZE 1
 #define MIN_FONT_SIZE     1
 #define MAX_FONT_SIZE     3
 
-#define WELCOME           "\n\nBienvenido a bemaluOS!\n"
-#define INVALID_COMMAND   "Comando invalido!\n"
-#define WRONG_PARAMS      "La cantidad de parametros ingresada es invalida\n"
-#define INVALID_FONT_SIZE "Dimension invalida de fuente\n"
-#define CHECK_MAN         "Escriba \"man %s\" para ver como funciona el comando\n"
-#define CHECK_MAN_FONT    "Escriba \"man font-size\" para ver las dimensiones validas\n"
+#define WELCOME         "\n\nBienvenido a bemaluOS!\n"
+#define INVALID_COMMAND "Comando invalido!\n"
+#define WRONG_PARAMS    "La cantidad de parametros ingresada es invalida\n"
+#define TAB             "\t\t\t\t"
 
-typedef struct {
-    char *name;         // Nombre del comando
-    char *description;  // Descripcion del comando (para help)
-    union {             // Puntero a la funcion
-        int (*f)(void);
-
-        int (*g)(char *);
-
-        int (*h)(char *, char *);
-    };
-
-    functionType ftype;  // Cantidad de argumentos del comando
+typedef struct Command {
+	char *name;
+	char *description;
+	bool isBuiltin;
+	ProcessCode code;
 } Command;
 
-static void help();
-static void printHelp();
+static void analizeInput(char *input);
+static int createSingleProcess(char *input, int len);
+static int createPipedProcess(char *input, int len, int fds[]);
 
-static void man(char *command);
+/* BUILTIN FUNCTIONS */
+static void help(int argc, char **args);
+static int div(int argc, char **args);
+static void printMem(int argc, char **args);
+static void infoReg(int argc, char **args);
 
-static void printInfoReg();
+// todo CTRL C en procesos que bloquean por keyboard tiene bug
+// todo mostrar en procesos pipeados muestra doble
+// todo buddy
+// todo pvs
 
-static void time();
-
-static int div(char *num, char *div);
-
-static void fontSize(char *size);
-
-static void printMem(char *pos);
-
-static int getCommandIndex(char *command);
-
-static void printMemInfo();
-
-static void printProcesses();
-
-static void testProcesses();
-
-static void kill(char *pid);
-
-static void nice(char *pid, char *priority);
-
-static void ps();
-
-static void toggleBlock(char *pid);
-
-static Command commands[] = {
-    {"help", "Listado de comandos", .f = (void *) &help, NO_PARAMS},
-    {"man", "Manual de uso de los comandos", .g = (void *) &man, SINGLE_PARAM},
-    {"inforeg",
-     "Informacion de los registros que fueron caputrados en un momento arbitrario de ejecucion del sistema",
-     .f = (void *) &printInfoReg,
-     NO_PARAMS},
-    {"time", "Despliega la hora actual UTC -3", .f = (void *) &time, NO_PARAMS},
-    {"div", "Hace la division entera de dos numeros naturales enviados por parametro", .h = (void *) &div, DUAL_PARAM},
-    {"kaboom", "Ejecuta una excepcion de Invalid Opcode", .f = (void *) &kaboom, NO_PARAMS},
-    {"font-size",
-     "Cambio de dimensiones de la fuente. Para hacerlo escribir el comando seguido de un numero",
-     .g = (void *) &fontSize,
-     SINGLE_PARAM},
-    {"printmem",
-     "Realiza un vuelco de memoria de los 32 bytes posteriores a una direccion de memoria en "
-     "formato hexadecimal enviada por parametro",
-     .g = (void *) &printMem,
-     SINGLE_PARAM},
-    {"clear", "Limpia toda la pantalla", .f = (void *) &clear, NO_PARAMS},
-    {"meminfo", "Imprime informacion de la memoria", .f = (void *) &printMemInfo, NO_PARAMS},
-    {"ps", "Imprime la lista de todos los procesos con sus propiedades", .f = (void *) &ps, NO_PARAMS},
-    {"test-proc", "Testea la creacion de procesos", .f = (void *) &testProcesses, NO_PARAMS},
-    {"kill", "Mata un proceso", .g = (void *) &kill, SINGLE_PARAM},
-    {"nice", "Cambia la prioridad de un proceso", .h = (void *) &nice, DUAL_PARAM},
-    {"tm", "Corre el test de memoria, ingresar cantidad de memoria", .g = (void *) &test_mm, SINGLE_PARAM},
-    {"tp", "Corre el test de procesos, ingresar cantidad de procesos", .g = (void *) &test_processes, SINGLE_PARAM},
-    {"block", "Bloquea o desbloquea el proceso del pid dado", .g = (void *) &toggleBlock, SINGLE_PARAM},
-    {"ts", "Corre el test de sincronizacion, ", .h = (void *) &test_sync, DUAL_PARAM},
-    {"tprio", "Corre el test de prioridades, ", .f = (void *) &test_prio, NO_PARAMS},
-    {"tpipe", "Corre el test de pipes.", .f = (void *) &testNamedPipes, NO_PARAMS},
-    {"phylo", "Corre el problema de los filosofos.", .f = (void *) &phylo, NO_PARAMS},
+const static Command commands[] = {
+    {"help", "Listado de comandos", true, (ProcessCode) help},
+    {"inforeg", "Muestra la informacion de los registros", true, (ProcessCode) infoReg},
+    {"time", "Despliega la hora actual UTC -3", false, (ProcessCode) time},
+    {"div", "Hace la division entera de dos numeros naturales enviados por parametro", true, (ProcessCode) div},
+    {"kaboom", "Ejecuta una excepcion de Invalid Opcode", true, (ProcessCode) kaboom},
+    {"printmem", "Muestra el contenido de 32 bytes a partir de la direccion", true, (ProcessCode) printMem},
+    {"clear", "Limpia toda la pantalla", true, (ProcessCode) clear},
+    {"meminfo", "Imprime informacion de la memoria", false, (ProcessCode) printMemInfo},
+    {"ps", "Imprime la lista de todos los procesos con sus propiedades", false, (ProcessCode) printProcesses},
+    {"kill", "Mata un proceso", false, (ProcessCode) kill},
+    {"nice", "Cambia la prioridad de un proceso", false, (ProcessCode) nice},
+    {"block", "Bloquea o desbloquea el proceso del pid dado", false, (ProcessCode) toggleBlock},
+    {"tm", "Corre el test de memoria, ingresar cantidad de memoria", false, (ProcessCode) test_mm},
+    {"tp", "Corre el test de procesos, ingresar cantidad de procesos", false, (ProcessCode) test_processes},
+    {"ts", "Corre el test de sincronizacion, ", false, (ProcessCode) test_sync},
+    {"tprio", "Corre el test de prioridades, ", false, (ProcessCode) test_prio},
+    {"tpipe", "Corre el test de pipes.", false, (ProcessCode) testNamedPipes},
+    {"wc", "Cuenta la cantidad de lineas del input", false, (ProcessCode) wc},
+    {"cat", "Imprime el STDIN tal como lo recibe", false, (ProcessCode) cat},
+    {"filter", "Filtra las vocales del input", false, (ProcessCode) filter},
+    {"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", false, (ProcessCode) loop},
+    {"philo", "Corre el problema de los filosofos comensales", false, (ProcessCode) philo},
 };
 
-void run_shell() {
-    int index;
-    puts(WELCOME);
-    while (1) {
-        putchar('>');
-        char command[MAX_CHARS] = {0};
-        char arg1[MAX_CHARS];
-        char arg2[MAX_CHARS];
-        int qtyParams = scanf("%s %s %s", command, arg1, arg2);
-        index = getCommandIndex(command);
-        if (index == -1) {
-            if (command[0] != 0)
-                printErr(INVALID_COMMAND);
-            continue;
-        }
-        int funcParams = commands[index].ftype;
-        if (qtyParams - 1 != funcParams) {
-            printErr(WRONG_PARAMS);
-            printf(CHECK_MAN, command);
-            continue;
-        }
-        switch (commands[index].ftype) {
-            case NO_PARAMS:
-                commands[index].f();
-                break;
-            case SINGLE_PARAM:
-                commands[index].g(arg1);
-                break;
-            case DUAL_PARAM:
-                commands[index].h(arg1, arg2);
-                break;
-        }
-    }
+void shell() {
+	puts(WELCOME);
+	while (1) {
+		printfc(LIGHT_GREEN, "bemaluOS> ");
+		char input[MAX_CHARS] = {0};
+		scanf("%i", input);
+		analizeInput(input);
+	}
 }
 
-static int getCommandIndex(char *command) {
-    int idx = 0;
-    for (; idx < QTY_COMMANDS; idx++) {
-        if (!strcmp(commands[idx].name, command))
-            return idx;
-    }
-    return -1;
+static void analizeInput(char *input) {
+	char foundPipe = 0;
+	int len;
+	for (len = 0; input[len] != 0; len++) {
+		if (input[len] == '|') {
+			if (foundPipe) {
+				printErr(INVALID_COMMAND);
+				return;
+			} else
+				foundPipe = 1;
+		}
+		input[len] = toLower(input[len]);
+	}
+	if (foundPipe) {
+		int pipeId = getNextPipeId();
+		if (pipeId == NOT_FOUND) {
+			printErr("No hay mas pipes disponibles\n");
+			return;
+		}
+		int writeFds[] = {STDIN, pipeId, STDERR};
+		int readFds[] = {pipeId, STDOUT, STDERR};
+
+		char writeInput[MAX_CHARS] = {0};
+		char readInput[MAX_CHARS] = {0};
+
+		int writeLen = strcpychar(writeInput, input, '|');
+		int readLen = strcpy(readInput, input[writeLen + 1] == ' ' ? input + writeLen + 2 : input + writeLen + 1);
+
+		if (writeInput[writeLen - 1] == ' ')
+			writeInput[--writeLen] = 0;
+
+		int writePid = createPipedProcess(writeInput, writeLen, writeFds);
+		int readPid = createPipedProcess(readInput, readLen, readFds);
+
+		if (writePid == -1 || readPid == -1) {
+			printErr("No se pudo crear el proceso\n");
+			return;
+		}
+
+		waitpid(writePid);
+		waitpid(readPid);
+	} else
+		createSingleProcess(input, len);
 }
 
-static void printHelp() {
-    for (int i = 0; i < QTY_COMMANDS; i++)
-        printf("%s: %s\r\n", commands[i].name, commands[i].description);
+int createSingleProcess(char *input, int len) {
+	char program[MAX_CHARS] = {0};
+	char arg1[MAX_CHARS_ARG1] = {0};
+	char arg2[MAX_CHARS] = {0};
+	char isForeground = 1;
+
+	if (len > 0 && input[len - 1] == '&') {
+		isForeground = 0;
+		input[--len] = 0;
+		if (len > 0 && input[len - 1] == ' ')
+			input[--len] = 0;
+	}
+
+	int programLen = strcpychar(program, input, ' ');
+	int arg1Len = 0;
+
+	if (input[programLen] != 0)
+		arg1Len = strcpychar(arg1, input + programLen + 1, ' ');
+
+	if (input[programLen + arg1Len + 1] != 0)
+		strcpychar(arg2, input + programLen + arg1Len + 2, ' ');
+
+	for (int i = 0; i < sizeof(commands) / sizeof(Command); i++) {
+		if (strcmp(commands[i].name, program) == 0) {
+			char *args[] = {program, (arg1[0] == 0) ? NULL : arg1, (arg2[0] == 0) ? NULL : arg2, NULL};
+
+			int16_t pid = createProcess(commands[i].code, args, program, isForeground);
+			if (pid == -1) {
+				printErr("No se pudo crear el proceso\n");
+				return -1;
+			}
+			if (isForeground)
+				waitpid(pid);
+
+			return pid;
+		}
+	}
+	printErr(INVALID_COMMAND);
+	return -1;
 }
 
-static int div(char *num, char *div) {
-    printf("%s/%s=%d\r\n", num, div, atoi(num) / atoi(div));
-    return 1;
+// todo foreground background
+int createPipedProcess(char *input, int len, int fds[]) {
+	char program[MAX_CHARS] = {0};
+	char arg1[MAX_CHARS_ARG1] = {0};
+	char arg2[MAX_CHARS] = {0};
+	char isForeground = 1;
+
+	if (len > 0 && input[len - 1] == '&') {
+		isForeground = 0;
+		input[--len] = 0;
+		if (len > 0 && input[len - 1] == ' ')
+			input[--len] = 0;
+	}
+
+	int programLen = strcpychar(program, input, ' ');
+	int arg1Len = 0;
+	if (input[programLen] != 0)
+		arg1Len = strcpychar(arg1, input + programLen + 1, ' ');
+	if (input[programLen + arg1Len + 1] != 0)
+		strcpychar(arg2, input + programLen + arg1Len + 2, ' ');
+
+	for (int i = 0; i < sizeof(commands) / sizeof(Command); i++) {
+		if (strcmp(commands[i].name, program) == 0) {
+			char *args[] = {program, (arg1[0] == 0) ? NULL : arg1, (arg2[0] == 0) ? NULL : arg2, NULL};
+
+			int16_t pid = createProcessFds(commands[i].code, args, program, isForeground, fds);
+			return pid;
+		}
+	}
+	printErr(INVALID_COMMAND);
+	return -1;
 }
 
-static void time() {
-    uint32_t secs = getSeconds();
-    uint32_t h = secs / 3600, m = secs % 3600 / 60, s = secs % 3600 % 60;
-    printf("%2d:%2d:%2d\r\n", h, m, s);
+static void help(int argc, char **args) {
+	if (argc != 1) {
+		printErr(WRONG_PARAMS);
+		return;
+	}
+
+	for (int i = 0; i < sizeof(commands) / sizeof(Command); i++)
+		printfc(SILVER, "%s: %s\r\n", commands[i].name, commands[i].description);
 }
 
-static void fontSize(char *size) {
-    int s = atoi(size);
-    if (s >= MIN_FONT_SIZE && s <= MAX_FONT_SIZE)
-        setFontSize((uint8_t) atoi(size));
-    else {
-        printErr(INVALID_FONT_SIZE);
-        puts(CHECK_MAN_FONT);
-    }
+static int div(int argc, char **args) {
+	if (argc != 3 || args[1] == NULL || args[2] == NULL) {
+		printErr(WRONG_PARAMS);
+		return 1;
+	}
+	printf("%s / %s = %d\r\n", args[1], args[2], atoi(args[1]) / atoi(args[2]));
+	return 0;
 }
 
-static void printMem(char *pos) {
-    uint8_t resp[QTY_BYTES];
-    char *end;
-    getMemory(strtoh(pos, &end), resp);
-    for (int i = 0; i < QTY_BYTES; i++) {
-        printf("0x%2x ", resp[i]);
-        if (i % 4 == 3)
-            putchar('\n');
-    }
+static void printMem(int argc, char **args) {
+	if (argc != 2) {
+		printErr(WRONG_PARAMS);
+		return;
+	}
+
+	uint8_t resp[QTY_BYTES];
+	char *end;
+	getMemory(strtoh(args[1], &end), resp);
+	for (int i = 0; i < QTY_BYTES; i++) {
+		printf("0x%2x ", resp[i]);
+		if (i % 4 == 3)
+			putchar('\n');
+	}
 }
 
 static char *_regNames[] = {"RIP",
@@ -210,135 +249,15 @@ static char *_regNames[] = {"RIP",
                             "R14",
                             "R15"};
 
-static void printInfoReg() {
-    int len = sizeof(_regNames) / sizeof(char *);
-    uint64_t regSnapshot[len];
-    getInfoReg(regSnapshot);
-    for (int i = 0; i < len; i++)
-        printf("%s: 0x%x\n", _regNames[i], regSnapshot[i]);
+static void infoReg(int argc, char **args) {
+	if (argc != 1) {
+		printErr(WRONG_PARAMS);
+		return;
+	}
+	int len = sizeof(_regNames) / sizeof(char *);
+	uint64_t regSnapshot[len];
+	getInfoReg(regSnapshot);
+	for (int i = 0; i < len; i++) {
+		printf("%s: 0x%x\n", _regNames[i], regSnapshot[i]);
+	}
 }
-
-static void man(char *command) {
-    int idx = getCommandIndex(command);
-    if (idx != -1)
-        printf("%s\n", usages[idx]);
-    else
-        printErr(INVALID_COMMAND);
-}
-
-static void printMemInfo() {
-    memoryInfo *info = getMemoryInfo();
-
-    printf("Total memory: %d B\n", info->totalMemory);
-    printf("Used memory: %d B\n", info->usedMemory);
-    printf("Free memory: %d B\n", info->freeMemory);
-}
-
-static void ps() {
-    char *psArgs[] = {"ps", NULL};
-    int pid = createProcess((int16_t) 1, (ProcessCode) &printProcesses, psArgs, "ps", (uint8_t) 5);
-    if (pid != -1)
-        waitpid((int16_t) pid);
-}
-
-static void help() {
-    char *helpArgs[] = {"help", NULL};
-    int pid = createProcess((int16_t) 1, (ProcessCode) &printHelp, helpArgs, "help", (uint8_t) 6);
-    if (pid != -1)
-        waitpid((int16_t) pid);
-}
-
-static void printProcesses() {
-    PCB **info = getProcessesInfo();
-    int i = 0;
-
-    // Encabezados de la tabla
-    printf("PID\t\t\tPARENT PID\t\t\tPRIORITY\t\t\tSTATUS\t\t\tSTACK BASE\t\t\tSTACK POINTER\t\t\tNAME\n");
-
-    while (info[i] != NULL) {
-        printf("%d\t\t\t", info[i]->pid);
-        if (info[i]->pid < 100)
-            printf("\t");
-        if (info[i]->pid < 10)
-            printf("\t");
-        printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->parentPid);
-        if (info[i]->parentPid < 100)
-            printf("\t");
-        if (info[i]->parentPid < 10)
-            printf("\t");
-        if (info[i]->priority == 6)
-            printf("BLOCKED\t\t\t\t");
-        else if (info[i]->priority == 0)
-            printf("IDLE\t\t\t\t\t\t\t");
-        else
-            printf("%d\t\t\t\t\t\t\t\t\t\t", info[i]->priority);
-        switch (info[i]->status) {
-            case 0:
-                printf("RUNNING\t\t");
-                break;
-            case 1:
-                printf("BLOCKED\t\t");
-                break;
-            case 3:
-                printf("READY\t\t\t\t");
-                break;
-            default:
-                printf("UNKNOWN\t\t");
-                break;
-        }
-        printf("0x%x\t\t\t\t\t", info[i]->stack->base);
-        printf("0x%x\t\t\t\t\t\t\t\t", info[i]->stack->current);
-        printf("%s", info[i]->name);
-        putchar('\n');
-        i++;
-    }
-    freeProcessesInfo(info);
-}
-
-static void testProcesses() {
-    char *helpArgs[] = {"loop", NULL};
-    createProcess((int16_t) 1, (ProcessCode) &endless_loop, helpArgs, "endless_loop", (uint8_t) 6);
-    // char * helpProp[] = {"5"};
-    // int pid = createProcess((int16_t) 1, (ProcessCode) &test_processes, helpProp, "test_processes", (uint8_t) 6);
-}
-
-static void kill(char *pid) {
-    int result = killProcess((int16_t) atoi(pid));
-    if (result == NOT_FOUND) {
-        printErr("Es inexistente el proceso con pid ");
-        printf("%s\n", pid);
-    } else if (result == INVALID_PROCESS) {
-        printErr("No se puede matar al proceso con pid ");
-        printf("%s\n", pid);
-    } else
-        printf("Se mato al proceso con pid %s\n", pid);
-}
-
-static void nice(char *pid, char *priority) {
-    int result = setPriority((int16_t) atoi(pid), (uint8_t) atoi(priority));
-    if (result == NOT_FOUND) {
-        printErr("Es inexistente el proceso con pid ");
-        printf("%s\n", pid);
-    } else if (result == INVALID_PROCESS) {
-        printErr("No se puede cambiar la prioridad al proceso con pid ");
-        printf("%s\n", pid);
-    } else if (result == INVALID_PRIORITY)
-        printErr("La prioridad ingresada es invalida, debe ser entre 0 y 6\n");
-    else if (result == SAME_PRIORITY)
-        printErr("La prioridad ingresada es la misma que la actual\n");
-    else
-        printf("Se cambio la prioridad del proceso %s a %s\n", pid, priority);
-}
-
-static void toggleBlock(char *pid) {
-    int result = toggleBlockProcess((int16_t) atoi(pid));
-    if (result == NOT_FOUND) {
-        printErr("Es inexistente el proceso con pid ");
-        printf("%s\n", pid);
-    } else if (result == INVALID_PROCESS) {
-        printErr("No se puede bloquear al proceso con pid ");
-        printf("%s\n", pid);
-    } else
-        printf("Se bloqueo al proceso con pid %s\n", pid);
-}
- */
