@@ -11,7 +11,6 @@ int test_mm(int argc, char **argv);
 int test_processes(int argc, char **argv);
 int test_sync(int argc, char **argv);
 int test_prio(int argc, char **argv);
-int testNamedPipes(int argc, char **argv);
 int wc(int argc, char **argv);
 int cat(int argc, char **argv);
 int filter(int argc, char **argv);

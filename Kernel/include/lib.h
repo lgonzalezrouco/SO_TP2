@@ -127,4 +127,14 @@ void forceChangeOfProcess(uint64_t *RSP);
 
 int criticalRegion(int *mutex);
 
+void setBit(uint8_t *byte, int bitNumber);
+
+uint64_t pow(uint32_t base, uint32_t exp);
+
+uint32_t Log2n(uint32_t n);
+
+char getBit(uint8_t *byte, int bitNumber);
+
+void clearBit(uint8_t *byte, int bitNumber);
+
 #endif

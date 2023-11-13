@@ -3,6 +3,7 @@
 #include <scheduler.h>
 #include <stddef.h>
 #include <stdint.h>
+#include <video.h>
 
 static unsigned int log(uint64_t n, int base);
 
@@ -121,4 +122,34 @@ unsigned int array_strlen(char **array) {
 	while (*(array++) != NULL)
 		len++;
 	return len;
+}
+
+uint64_t pow(uint32_t base, uint32_t exp) {
+	uint64_t ret = 1;
+	for (int i = 0; i < exp; i++)
+		ret *= base;
+	return ret;
+}
+
+uint32_t Log2n(uint32_t n) {
+	return (n > 1) ? 1 + Log2n(n >> 1) : 0;
+}
+
+void setBit(uint8_t *byte, int bitNumber) {
+	uint8_t mask = 1;
+	mask = mask << bitNumber;
+	*byte = *byte | mask;
+}
+
+char getBit(uint8_t *byte, int bitNumber) {
+	uint8_t ret = *byte;
+	ret = ret >> bitNumber;
+	return ret % 2;
+}
+
+void clearBit(uint8_t *byte, int bitNumber) {
+	uint8_t mask = 1;
+	mask = mask << bitNumber;
+	mask = 255 - mask;
+	*byte = *byte & mask;
 }

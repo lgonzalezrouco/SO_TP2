@@ -22,7 +22,6 @@
 typedef struct Command {
 	char *name;
 	char *description;
-	bool isBuiltin;
 	ProcessCode code;
 } Command;
 
@@ -40,28 +39,28 @@ static void infoReg(int argc, char **args);
 // todo pvs
 
 const static Command commands[] = {
-    {"help", "Listado de comandos", true, (ProcessCode) help},
-    {"inforeg", "Muestra la informacion de los registros", true, (ProcessCode) infoReg},
-    {"time", "Despliega la hora actual UTC -3", false, (ProcessCode) time},
-    {"div", "Hace la division entera de dos numeros naturales enviados por parametro", true, (ProcessCode) div},
-    {"kaboom", "Ejecuta una excepcion de Invalid Opcode", true, (ProcessCode) kaboom},
-    {"printmem", "Muestra el contenido de 32 bytes a partir de la direccion", true, (ProcessCode) printMem},
-    {"clear", "Limpia toda la pantalla", true, (ProcessCode) clear},
-    {"meminfo", "Imprime informacion de la memoria", false, (ProcessCode) printMemInfo},
-    {"ps", "Imprime la lista de todos los procesos con sus propiedades", false, (ProcessCode) printProcesses},
-    {"kill", "Mata un proceso", false, (ProcessCode) kill},
-    {"nice", "Cambia la prioridad de un proceso", false, (ProcessCode) nice},
-    {"block", "Bloquea o desbloquea el proceso del pid dado", false, (ProcessCode) toggleBlock},
-    {"tm", "Corre el test de memoria, ingresar cantidad de memoria", false, (ProcessCode) test_mm},
-    {"tp", "Corre el test de procesos, ingresar cantidad de procesos", false, (ProcessCode) test_processes},
-    {"ts", "Corre el test de sincronizacion, ", false, (ProcessCode) test_sync},
-    {"tprio", "Corre el test de prioridades, ", false, (ProcessCode) test_prio},
-    {"tpipe", "Corre el test de pipes.", false, (ProcessCode) testNamedPipes},
-    {"wc", "Cuenta la cantidad de lineas del input", false, (ProcessCode) wc},
-    {"cat", "Imprime el STDIN tal como lo recibe", false, (ProcessCode) cat},
-    {"filter", "Filtra las vocales del input", false, (ProcessCode) filter},
-    {"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", false, (ProcessCode) loop},
-    {"philo", "Corre el problema de los filosofos comensales", false, (ProcessCode) philo},
+    {"help", "Listado de comandos", (ProcessCode) help},
+    {"inforeg", "Muestra la informacion de los registros", (ProcessCode) infoReg},
+    {"time", "Despliega la hora actual UTC -3", (ProcessCode) time},
+    {"div", "Hace la division entera de dos numeros naturales enviados por parametro", (ProcessCode) div},
+    {"kaboom", "Ejecuta una excepcion de Invalid Opcode", (ProcessCode) kaboom},
+    {"printmem", "Muestra el contenido de 32 bytes a partir de la direccion", (ProcessCode) printMem},
+    {"clear", "Limpia toda la pantalla", (ProcessCode) clear},
+    {"meminfo", "Imprime informacion de la memoria", (ProcessCode) printMemInfo},
+    {"ps", "Imprime la lista de todos los procesos con sus propiedades", (ProcessCode) printProcesses},
+    {"kill", "Mata un proceso", (ProcessCode) kill},
+    {"nice", "Cambia la prioridad de un proceso", (ProcessCode) nice},
+    {"block", "Bloquea o desbloquea el proceso del pid dado", (ProcessCode) toggleBlock},
+    {"tm", "Corre el test de memoria, ingresar cantidad de memoria", (ProcessCode) test_mm},
+    {"tp", "Corre el test de procesos, ingresar cantidad de procesos", (ProcessCode) test_processes},
+    {"ts", "Corre el test de sincronizacion, ", (ProcessCode) test_sync},
+    {"tprio", "Corre el test de prioridades, ", (ProcessCode) test_prio},
+    {"wc", "Cuenta la cantidad de lineas del input", (ProcessCode) wc},
+    {"cat", "Imprime el STDIN tal como lo recibe", (ProcessCode) cat},
+    {"filter", "Filtra las vocales del input", (ProcessCode) filter},
+    {"loop", "Imprime su ID con un saludo cada una determinada cantidad de segundos", (ProcessCode) loop},
+    {"philo", "Corre el problema de los filosofos comensales", (ProcessCode) philo},
+	{"yield", "Renunciar a la CPU", (ProcessCode) yield}
 };
 
 void shell() {

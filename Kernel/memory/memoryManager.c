@@ -1,6 +1,10 @@
 // This is a personal academic project. Dear PVS-Studio, please check it.
 // PVS-Studio Static Code Analyzer for C, C++ and C#: http://www.viva64.com
 #include <memoryManager.h>
+#ifndef BUDDY
+
+#define HEAP_SIZE    ((size_t)(2 * 1024))
+#define HEAP_ADDRESS (0x600000)
 
 typedef struct Node {
 	void *address;
@@ -98,3 +102,4 @@ void free(void *address) {
 memoryInfo *getMemoryInfo() {
 	return &memory_data;
 }
+#endif

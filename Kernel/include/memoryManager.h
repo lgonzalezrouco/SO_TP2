@@ -5,6 +5,13 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#ifndef BUDDY
+
+#else
+
+#endif
+
+
 typedef struct memoryInfo {
 	int totalMemory;
 	int usedMemory;

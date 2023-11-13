@@ -130,6 +130,7 @@ static int philosopher(int argc, char *argv[]) {
 
 	int phnum = atoi(argv[1]);
 	printf("Se une %s a la mesa\n", philoNames[phnum]);
+
 	state[phnum] = THINKING;
 	while (1) {
 		sleep(2);
