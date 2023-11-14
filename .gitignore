@@ -10,7 +10,6 @@
 #Object files
 *.o
 
-docker.sh
 .idea/
 .vscode/
 *.elf
