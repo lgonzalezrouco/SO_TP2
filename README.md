@@ -9,12 +9,14 @@ Repositorio para el **TP2** de la materia **Sistemas Operativos** en el **ITBA**
   - [Autores](#autores)
   - [Requisitos](#requisitos)
   - [Instalacion](#instalacion)
-    - [Docker](#docker)
     - [QEMU](#qemu)
+    - [Docker](#docker)
       - [Descargar imagen](#descargar-imagen)
       - [Ejecutar el contenedor](#ejecutar-el-contenedor)
       - [Correr el contenedor](#correr-el-contenedor)
     - [Compilación y Ejecución](#compilación-y-ejecución)
+      - [Default Memory Manager](#default-memory-manager)
+      - [Buddy Memory Manager](#buddy-memory-manager)
 
 ## Autores
 
@@ -32,13 +34,13 @@ Para la realizacion del trabajo se requieren los siguientes elementos:
 
 ## Instalacion
 
-### Docker
-
-La opcion mas facil va a ser ir a la pagina oficial de [docker](https://www.docker.com/products/docker-desktop/) donde podran elegir la version a instalar.
-
 ### QEMU
 
 Al igual que con docker, lo mas recomendable es ir a la pagina oficial de [QEMU](https://www.qemu.org/download/) y seleccionar la version a instalar
+
+### Docker
+
+La opcion mas facil va a ser ir a la pagina oficial de [docker](https://www.docker.com/products/docker-desktop/) donde podran elegir la version a instalar.
 
 #### Descargar imagen
 
@@ -73,10 +75,18 @@ docker exec -ti SO bash
 
 ### Compilación y Ejecución
 
+#### Default Memory Manager
+
 Para compilar el proyecto se debe correr el siguiente comando (desde afuera del contenedor), esto ejecutara tambien el proyecto:
 
 ```bash
 ./docker.sh
 ```
 
-> Puede que sea necesario cambiar la configuracion de audio en run.sh
+#### Buddy Memory Manager
+
+Para compilar el proyecto se debe correr el siguiente comando (desde afuera del contenedor), esto ejecutara tambien el proyecto:
+
+```bash
+./docker.sh -b
+```
